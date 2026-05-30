@@ -2265,20 +2265,35 @@
       }
     });
 
+    // Helper: temporarily enable contenteditable for execCommand
+    function withEditable(fn) {
+      var sel = window.getSelection();
+      if (!sel || sel.isCollapsed) return;
+      var node = sel.anchorNode;
+      var container = node && (node.nodeType === 3 ? node.parentElement : node);
+      var editableParent = container && container.closest('.speak, .point-body');
+      if (editableParent) {
+        editableParent.setAttribute('contenteditable', 'true');
+        fn();
+        saveFormatState();
+        setTimeout(function() {
+          editableParent.removeAttribute('contenteditable');
+        }, 50);
+      }
+    }
+
     // Bold
     document.getElementById('fmt-bold').addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      document.execCommand('bold', false, null);
-      saveFormatState();
+      withEditable(function() { document.execCommand('bold', false, null); });
     });
 
     // Underline
     document.getElementById('fmt-underline').addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      document.execCommand('underline', false, null);
-      saveFormatState();
+      withEditable(function() { document.execCommand('underline', false, null); });
     });
 
     // Highlight
@@ -2311,14 +2326,14 @@
       saveFormatState();
     });
 
-    // Make speak and point-body contentEditable on tap (for selection)
+    // Enable selection on speak and point-body without opening keyboard
+    // We use CSS user-select instead of contenteditable to avoid tablet keyboard
     document.querySelectorAll('.speak, .point-body').forEach(function(el) {
-      el.setAttribute('contenteditable', 'true');
       el.style.outline = 'none';
-      el.addEventListener('blur', function() {
-        saveFormatState();
-      });
+      el.style.webkitUserSelect = 'text';
+      el.style.userSelect = 'text';
     });
+
   }
 
   function saveFormatState() {
