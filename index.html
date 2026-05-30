@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fluxograma — Pregação: Amor e Casamento</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface-2: #242836;
+    --border: #2e3344;
+    --text: #e4e7ef;
+    --text-muted: #8b90a3;
+    --accent-1: #6c8cff;
+    --accent-2: #a78bfa;
+    --accent-3: #f59e0b;
+    --accent-4: #34d399;
+    --accent-5: #f87171;
+    --accent-6: #38bdf8;
+    --accent-7: #fb923c;
+    --spring: #34d399;
+    --summer: #f59e0b;
+    --autumn: #fb923c;
+    --winter: #6c8cff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .header {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #1e2235 0%, #2a1f3d 100%);
+    border-radius: 16px;
+    margin-bottom: 30px;
+    border: 1px solid var(--border);
+  }
+
+  .header h1 {
+    font-family: 'Merriweather', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .header .subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .header .meta {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .header .meta span {
+    background: var(--surface);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--accent-4);
+    border: 1px solid var(--border);
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 18px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-4), var(--accent-5), var(--accent-6), var(--accent-2));
+    border-radius: 3px;
+  }
+
+  .block {
+    position: relative;
+    margin-bottom: 24px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+
+  .block:hover {
+    transform: translateX(4px);
+  }
+
+  .block::before {
+    content: '';
+    position: absolute;
+    left: -27px;
+    top: 24px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-1);
+    background: var(--bg);
+    z-index: 1;
+  }
+
+  .block.b1::before { border-color: var(--accent-5); }
+  .block.b2::before { border-color: var(--accent-2); }
+  .block.b3::before { border-color: var(--accent-4); }
+  .block.b4::before { border-color: var(--accent-3); }
+  .block.b5::before { border-color: var(--accent-1); }
+  .block.b6::before { border-color: var(--accent-6); }
+  .block.b7::before { border-color: var(--accent-7); }
+  .block.b8::before { border-color: var(--accent-2); }
+
+  .block-header {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .block.b1 .block-header { background: linear-gradient(90deg, rgba(248,113,113,0.15) 0%, transparent 100%); }
+  .block.b2 .block-header { background: linear-gradient(90deg, rgba(167,139,250,0.15) 0%, transparent 100%); }
+  .block.b3 .block-header { background: linear-gradient(90deg, rgba(52,211,153,0.15) 0%, transparent 100%); }
+  .block.b4 .block-header { background: linear-gradient(90deg, rgba(245,158,11,0.15) 0%, transparent 100%); }
+  .block.b5 .block-header { background: linear-gradient(90deg, rgba(108,140,255,0.15) 0%, transparent 100%); }
+  .block.b6 .block-header { background: linear-gradient(90deg, rgba(56,189,248,0.15) 0%, transparent 100%); }
+  .block.b7 .block-header { background: linear-gradient(90deg, rgba(251,146,60,0.15) 0%, transparent 100%); }
+  .block.b8 .block-header { background: linear-gradient(90deg, rgba(167,139,250,0.15) 0%, transparent 100%); }
+
+  .time-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .block.b1 .time-badge { background: rgba(248,113,113,0.2); color: var(--accent-5); }
+  .block.b2 .time-badge { background: rgba(167,139,250,0.2); color: var(--accent-2); }
+  .block.b3 .time-badge { background: rgba(52,211,153,0.2); color: var(--accent-4); }
+  .block.b4 .time-badge { background: rgba(245,158,11,0.2); color: var(--accent-3); }
+  .block.b5 .time-badge { background: rgba(108,140,255,0.2); color: var(--accent-1); }
+  .block.b6 .time-badge { background: rgba(56,189,248,0.2); color: var(--accent-6); }
+  .block.b7 .time-badge { background: rgba(251,146,60,0.2); color: var(--accent-7); }
+  .block.b8 .time-badge { background: rgba(167,139,250,0.2); color: var(--accent-2); }
+
+  .block-title {
+    font-weight: 700;
+    font-size: 1rem;
+    flex: 1;
+  }
+
+  .toggle-icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+    color: var(--text-muted);
+  }
+
+  .block.open .toggle-icon {
+    transform: rotate(180deg);
+  }
+
+  .block-content {
+    display: none;
+    padding: 0 16px 16px;
+  }
+
+  .block.open .block-content {
+    display: block;
+  }
+
+  /* Sub-items */
+  .point {
+    padding: 10px 12px;
+    margin: 8px 0;
+    background: var(--surface-2);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent-1);
+  }
+
+  .point-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .point-body {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .verse {
+    display: inline-block;
+    background: rgba(108,140,255,0.15);
+    color: var(--accent-1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin: 2px 2px;
+    white-space: nowrap;
+  }
+
+  .verse.primary {
+    background: rgba(245,158,11,0.2);
+    color: var(--accent-3);
+  }
+
+  .speak {
+    font-family: 'Merriweather', serif;
+    font-style: italic;
+    color: var(--accent-4);
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    border-left: 2px solid var(--accent-4);
+    margin: 8px 0;
+    background: rgba(52,211,153,0.05);
+    border-radius: 0 6px 6px 0;
+  }
+
+  .couple-card {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    margin: 6px 0;
+    background: var(--surface-2);
+    border-radius: 8px;
+    align-items: flex-start;
+  }
+
+  .couple-icon {
+    font-size: 1.4rem;
+    min-width: 30px;
+    text-align: center;
+  }
+
+  .couple-info {
+    flex: 1;
+  }
+
+  .couple-name {
+    font-weight: 700;
+    font-size: 0.88rem;
+  }
+
+  .couple-lesson {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .lang-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 12px;
+    padding: 10px 12px;
+    margin: 6px 0;
+    background: var(--surface-2);
+    border-radius: 8px;
+    align-items: center;
+  }
+
+  .lang-icon { font-size: 1.3rem; }
+
+  .lang-info .lang-name {
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  .lang-info .lang-bible {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 12px 0;
+  }
+
+  .note {
+    font-size: 0.78rem;
+    color: var(--accent-3);
+    padding: 6px 10px;
+    background: rgba(245,158,11,0.08);
+    border-radius: 6px;
+    margin-top: 8px;
+  }
+
+  .greek-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin: 8px 0;
+  }
+
+  .greek-item {
+    padding: 8px;
+    background: var(--surface-2);
+    border-radius: 6px;
+    text-align: center;
+  }
+
+  .greek-word {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent-2);
+  }
+
+  .greek-trans {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .greek-meaning {
+    font-size: 0.75rem;
+    color: var(--text);
+    margin-top: 2px;
+  }
+
+  .season-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    margin: 8px 0;
+  }
+
+  .season {
+    text-align: center;
+    padding: 6px 4px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .season.spring { background: rgba(52,211,153,0.15); color: var(--spring); }
+  .season.summer { background: rgba(245,158,11,0.15); color: var(--summer); }
+  .season.autumn { background: rgba(251,146,60,0.15); color: var(--autumn); }
+  .season.winter { background: rgba(108,140,255,0.15); color: var(--winter); }
+
+  .connector {
+    text-align: center;
+    padding: 6px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .connector .arrow {
+    font-size: 1.2rem;
+    display: block;
+    color: var(--accent-2);
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-style: italic;
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; color: #111; max-width: 100%; }
+    .block { break-inside: avoid; border-color: #ddd; }
+    .block-content { display: block !important; }
+    .block-header { background: #f5f5f5 !important; }
+    .header { background: #f0f0f5; }
+    .header h1 { color: #333; -webkit-text-fill-color: #333; }
+    .point { background: #f9f9f9; }
+    .verse { background: #eef; color: #336; }
+    .verse.primary { background: #fef3cd; color: #856404; }
+    .speak { color: #28a745; border-color: #28a745; }
+    .toggle-icon { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 10px; }
+    .header h1 { font-size: 1.3rem; }
+    .timeline { padding-left: 30px; }
+    .timeline::before { left: 12px; }
+    .block::before { left: -23px; width: 12px; height: 12px; }
+    .greek-box { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Amor e Casamento</h1>
+  <div class="subtitle">Fluxograma de Pregacao — Encontro de Jovens</div>
+  <div class="meta">
+    <span>40 min</span>
+    <span>Solteiros</span>
+    <span>Gary Chapman + Biblia</span>
+  </div>
+</div>
+
+<div class="timeline">
+
+  <!-- BLOCO 1: ABERTURA (0-5 min) -->
+  <div class="block b1 open">
+    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="time-badge">0-5 min</span>
+      <span class="block-title">ABERTURA — A Cultura Fala de Amor, Mas Nao Entende</span>
+      <span class="toggle-icon">&#9660;</span>
+    </div>
+    <div class="block-content">
+      <div class="speak">"A cultura fala de amor 24h — musicas, filmes, series, redes sociais. Mas por que tantas pessoas se sentem sozinhas e nao amadas?"</div>
+
+      <div class="point">
+        <div class="point-title">Gancho: Chapman sobre a obsessao cultural</div>
+        <div class="point-body">
+          Das 20 revistas na prateleira, 17 tinham "amor" na capa. Das 12 musicas no radio, 10 falavam de amor. MAS: "milhares de criancas vao para a cama sem se sentir amadas, e milhares de casais tambem."
+        </div>
+      </div>
+
+      <div class="point">
+        <div class="point-title">Diagnostico biblico</div>
+        <div class="point-body">
+          A Biblia ja havia diagnosticado o problema:
+          <br><span class="verse primary">Jr 17:9</span> "Enganoso e o coracao, mais do que todas as coisas"
+          <br><span class="verse">Rm 12:2</span> "Nao vos conformeis com este seculo"
+          <br><span class="verse">1Jo 2:15-16</span> O "amor" que o mundo vende e concupiscencia disfarcada
+        </div>
+      </div>
+
+      <div class="speak">"O problema nao e que falta amor no mundo. O problema e que o mundo chama de amor algo que NAO e amor."</div>
+
+      <div class="note">TRANSICAO: "Mas entao, o que e amor DE VERDADE? Vamos olhar o que a Biblia ensina..."</div>
+    </div>
+  </div>
+
+  <div class="connector"><span class="arrow">&#8595;</span></div>
+
+  <!-- BLOCO 2: AMOR BÍBLICO (5-10 min) -->
+  <div class="block b2">
+    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="time-badge">5-10 min</span>
+      <span class="block-title">O AMOR NA VISAO BIBLICA — Verbo, Nao Sentimento</span>
+      <span class="toggle-icon">&#9660;</span>
+    </div>
+    <div class="block-content">
+
+      <div class="point">
+        <div class="point-title">As 4 palavras gregas para "amor"</div>
+        <div class="point-body">O portugues usa UMA palavra. O grego do NT tem QUATRO:</div>
+      </div>
+
+      <div class="greek-box">
+        <div class="greek-item">
+          <div class="greek-word">agape</div>
+          <div class="greek-trans">agape</div>
+          <div class="greek-meaning">Sacrificial, incondicional</div>
+        </div>
+        <div class="greek-item">
+          <div class="greek-word">phileo</div>
+          <div class="greek-trans">phileo</div>
+          <div class="greek-meaning">Amizade, afeicao</div>
+        </div>
+        <div class="greek-item">
+          <div class="greek-word">storge</div>
+          <div class="greek-trans">storge</div>
+          <div class="greek-meaning">Familiar, pais e filhos</div>
+        </div>
+        <div class="greek-item">
+          <div class="greek-word">eros</div>
+          <div class="greek-trans">eros</div>
+          <div class="greek-meaning">Romantico, sexual</div>
+        </div>
+      </div>
+
+      <div class="speak">"A cultura reduz TODO amor a eros — desejo, paixao, atracao. A Biblia eleva o amor a agape — decisao que permanece quando o sentimento vai embora."</div>
+
+      <div class="point">
+        <div class="point-title">Os 3 pilares do amor biblico</div>
+        <div class="point-body">
+          <strong>1. PACTO</strong> (nao contrato) — "Eu faco independente de voce fazer"
+          <br><span class="verse">Ml 2:14</span> Deus e testemunha da alianca
+          <br><strong>2. DECISAO</strong> (nao emocao) — Se fosse sentimento, nao precisaria ser ensinado
+          <br><span class="verse">Tt 2:4</span> "Ensinem as mais novas a amarem seus maridos"
+          <br><strong>3. SACRIFICIO</strong> (nao consumo) — O amor do mundo consome; o de Deus se entrega
+          <br><span class="verse">Jo 15:13</span> "Dar a propria vida em favor dos seus amigos"
+        </div>
+      </div>
+
+      <div class="point">
+        <div class="point-title">Definicao definitiva — 1 Corintios 13:4-8a</div>
+        <div class="point-body">
+          <span class="verse primary">1Co 13:4-8a</span> 15 caracteristicas. NENHUMA e sentimento. Todas sao VERBO.
+          <br>Paciente, benigno, nao arde em ciumes, nao se ufana, nao se ensoberbece...
+          <br><strong>"Tudo sofre, tudo cre, tudo espera, tudo suporta. O amor JAMAIS acaba."</strong>
+        </div>
+      </div>
+
+      <div class="note">TRANSICAO: "Mas como esse amor se vive na pratica? Vamos ver casais da Biblia que viveram isso..."</div>
+    </div>
+  </div>
+
+  <div class="connector"><span class="arrow">&#8595;</span></div>
+
+  <!-- BLOCO 3: CASAIS BÍBLICOS (10-17 min) -->
+  <div class="block b3">
+    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="time-badge">10-17 min</span>
+      <span class="block-title">CASAIS BIBLICOS — Exemplos Reais de Amor</span>
+      <span class="toggle-icon">&#9660;</span>
+    </div>
+    <div class="block-content">
+
+      <div class="couple-card">
+        <div class="couple-icon">&#128141;</div>
+        <div class="couple-info">
+          <div class="couple-name">Isaque e Rebeca <span class="verse">Gn 24</span></div>
+          <div class="couple-lesson">
+            <strong>Amor no proposito de Deus.</strong> Casamento guiado por oracao (servo orou em Gn 24:12). Rebeca tinha CARATER antes de ter marido (serviu agua para 10 camelos = ~1.000 litros). Amor cresceu DEPOIS do compromisso (Gn 24:67). 20 anos de esterilidade enfrentados com oracao (Gn 25:21). Carinho visivel apos decadas (Gn 26:8).
+            <br><strong>Aplicacao:</strong> Busque a Deus antes de buscar alguem. Desenvolva carater AGORA.
+          </div>
+        </div>
+      </div>
+
+      <div class="couple-card">
+        <div class="couple-icon">&#127793;</div>
+        <div class="couple-info">
+          <div class="couple-name">Boaz e Rute <span class="verse">Rt 2-4</span></div>
+          <div class="couple-lesson">
+            <strong>Amor pelo carater, nao pela aparencia.</strong> Boaz ouviu sobre a fidelidade de Rute ANTES de conhece-la (Rt 2:11). Rute TRABALHAVA — nao ficou esperando (Rt 2:2). Boaz PROTEGEU antes de cortejar (Rt 2:8-9). Processo com honra publica (Rt 4:1-10). Fruto: linhagem de Cristo (Mt 1:5).
+            <br><strong>Aplicacao:</strong> Sua reputacao chega antes de voce. A pessoa certa te encontra no seu proposito.
+          </div>
+        </div>
+      </div>
+
+      <div class="couple-card">
+        <div class="couple-icon">&#9971;</div>
+        <div class="couple-info">
+          <div class="couple-name">Aquila e Priscila <span class="verse">At 18; Rm 16:3-5</span></div>
+          <div class="couple-lesson">
+            <strong>O casal que ministrava junto.</strong> SEMPRE mencionados juntos (6x no NT). Trabalhavam juntos (fabricantes de tendas). Ensinavam juntos (corrigiram Apolo — At 18:26). Arriscaram a vida um pelo outro (Rm 16:4). Igreja em casa (Rm 16:5).
+            <br><strong>Aplicacao:</strong> Casamento e parceria — os dois crescem, servem e arriscam juntos.
+          </div>
+        </div>
+      </div>
+
+      <div class="couple-card">
+        <div class="couple-icon">&#11088;</div>
+        <div class="couple-info">
+          <div class="couple-name">Jose e Maria <span class="verse">Mt 1-2; Lc 1-2</span></div>
+          <div class="couple-lesson">
+            <strong>Obediencia radical.</strong> Jose: justo E misericordioso — protegeu a honra de Maria (Mt 1:19). Maria: disse SIM a Deus sem entender (Lc 1:38). Enfrentaram crise atras de crise JUNTOS (sem hospedaria, fuga ao Egito, pobreza). Criaram filhos na fe (Lc 2:41).
+            <br><strong>Aplicacao:</strong> Ser homem de Deus = proteger. Submissao a Deus vem antes de qualquer relacionamento.
+          </div>
+        </div>
+      </div>
+
+      <div class="couple-card">
+        <div class="couple-icon">&#128148;</div>
+        <div class="couple-info">
+          <div class="couple-name">Abraao e Sara <span class="verse">Gn 12-23; Hb 11:8-12</span></div>
+          <div class="couple-lesson">
+            <strong>Falhou, esperou, foi restaurado.</strong> Abraao mentiu 2x sobre Sara (Gn 12:13; 20:2). Sara deu Agar — impaciencia com Deus (Gn 16:2). MAS Deus restaurou: Isaque nasceu aos 100/90 anos (Gn 21:1-5). Pedro elogia a fe de Sara (1Pe 3:6).
+            <br><strong>Aplicacao:</strong> Ate herois da fe falham. Deus nao descarta quem falha — restaura quem cre.
+          </div>
+        </div>
+      </div>
+
+      <div class="couple-card">
+        <div class="couple-icon">&#128153;</div>
+        <div class="couple-info">
+          <div class="couple-name">Oseias e Gomer <span class="verse">Os 1-3</span> (guardar para o climax!)</div>
+          <div class="couple-lesson">
+            <strong>O amor incondicional = imagem do evangelho.</strong> Deus manda amar mulher infiel (Os 3:1). Oseias COMPRA DE VOLTA sua propria esposa (Os 3:2). Retrato de Rm 5:8 no AT.
+            <br><strong>Usar no BLOCO 7 (climax) — nao aqui!</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="note">TRANSICAO: "Esses casais viveram o amor de verdade — com erros e acertos. Mas existe alguem que passou 30 anos estudando casais modernos e descobriu um padrao poderoso..."</div>
+    </div>
+  </div>
+
+  <div class="connector"><span class="arrow">&#8595;</span></div>
+
+  <!-- BLOCO 4: QUEM É CHAPMAN (17-20 min) -->
+  <div class="block b4">
+    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="time-badge">17-20 min</span>
+      <span class="block-title">QUEM E GARY CHAPMAN — E Por Que Pode Nos Ensinar</span>
+      <span class="toggle-icon">&#9660;</span>
+    </div>
+    <div class="block-content">
+
+      <div class="point">
+        <div class="point-title">Credenciais (30 segundos)</div>
+        <div class="point-body">
+          <strong>Pastor batista ha 55+ anos</strong> (Calvary Baptist Church, NC, desde 1971)
+          <br><strong>Ph.D.</strong> — Southwestern Baptist Theological Seminary
+          <br><strong>Formado no Moody Bible Institute</strong> (seminario evangelico de referencia)
+          <br><strong>30+ anos como conselheiro conjugal</strong> — milhares de casais atendidos
+          <br><strong>20 milhoes de copias</strong> vendidas | <strong>50+ idiomas</strong>
+        </div>
+      </div>
+
+      <div class="speak">"Chapman nao e um psicologo secular que ignora Deus. Ele e pastor, formado em seminario, e no proprio livro cita Romanos 5:8 como base do amor incondicional."</div>
+
+      <div class="point">
+        <div class="point-title">O conceito do Tanque Emocional</div>
+        <div class="point-body">
+          Chapman descobriu que casais se amam mas NAO SE SENTEM amados. Cada pessoa tem um "tanque emocional" que precisa ser enchido. Tanque cheio = harmonia. Tanque vazio = conflito, frieza, comportamento impróprio.
+          <br><br><strong>Conexao biblica:</strong>
+          <br><span class="verse primary">Gn 2:18</span> "Nao e bom que o homem esteja so" — fomos criados para ser amados
+          <br><span class="verse primary">1Jo 4:19</span> "Nos amamos porque Ele nos amou primeiro" — a fonte e Deus
+          <br><span class="verse">Rm 5:5</span> "O amor de Deus e derramado em nosso coracao pelo Espirito Santo"
+        </div>
+      </div>
+
+      <div class="speak">"Antes de buscar alguem para encher seu tanque, deixe DEUS enche-lo primeiro. Quem entra no casamento com tanque vazio vai sugar o conjuge seco."</div>
+
+      <div class="note">TRANSICAO: "Chapman descobriu que existem 5 formas diferentes de expressar e receber amor. E adivinha? A Biblia ja demonstrava todas as 5..."</div>
+    </div>
+  </div>
+
+  <div class="connector"><span class="arrow">&#8595;</span></div>
+
+  <!-- BLOCO 5: AS 5 LINGUAGENS (20-28 min) -->
+  <div class="block b5">
+    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="time-badge">20-28 min</span>
+      <span class="block-title">AS 5 LINGUAGENS DO AMOR — Chapman + Biblia</span>
+      <span class="toggle-icon">&#9660;</span>
+    </div>
+    <div class="block-content">
+
+      <div class="lang-card">
+        <div class="lang-icon">&#128172;</div>
+        <div class="lang-info">
+          <div class="lang-name">1. Palavras de Afirmacao</div>
+          <div class="lang-bible">
+            Elogios, gratidao, reconhecimento verbal
+            <br><strong>Chapman:</strong> "Obrigada por levar o lixo" — genro de Chapman; palavras caem como chuva na terra seca
+            <br><strong>Biblia:</strong> <span class="verse">Pv 16:24</span> "Palavras agradaveis sao favo de mel" | <span class="verse">Pv 18:21</span> "Morte e vida no poder da lingua" | <span class="verse">Ct 4:1,7</span> Salomao afirmando sua esposa | <span class="verse">Ef 4:29</span> Toda palavra deve edificar
+            <br><strong>Deus pratica:</strong> <span class="verse primary">Mc 1:11</span> "Tu es o meu Filho amado; em ti me comprazo"
+          </div>
+        </div>
+      </div>
+
+      <div class="lang-card">
+        <div class="lang-icon">&#128736;</div>
+        <div class="lang-info">
+          <div class="lang-name">2. Atos de Servico</div>
+          <div class="lang-bible">
+            Ajudar, aliviar a carga, atitudes praticas
+            <br><strong>Chapman:</strong> Maxine frustrada — David dizia "amo voce" mas ficava no sofa vendo TV enquanto ela lavava louca. Quando ele aprendeu, casamento mudou em 1 mes
+            <br><strong>Biblia:</strong> <span class="verse primary">Jo 13:14-15</span> Jesus lavou os pes — o Senhor servindo | <span class="verse">Gl 5:13</span> "Servos uns dos outros pelo amor" | <span class="verse">Fp 2:3-4</span> Considerar o outro superior | <span class="verse">Mc 10:45</span> "Veio para servir"
+          </div>
+        </div>
+      </div>
+
+      <div class="lang-card">
+        <div class="lang-icon">&#127873;</div>
+        <div class="lang-info">
+          <div class="lang-name">3. Receber Presentes</div>
+          <div class="lang-bible">
+            Intencao > preco. Simboliza lembranca e valor
+            <br><strong>Chapman:</strong> Nao precisam ser caros — cartao caseiro, flores simples. E a intencao que conta
+            <br><strong>Biblia:</strong> <span class="verse primary">Jo 3:16</span> "Deus amou de tal maneira que DEU seu Filho" — o maior presente | <span class="verse">Mc 12:41-44</span> Viuva pobre — valor no sacrificio, nao no preco | <span class="verse">Mt 2:11</span> Magos: ouro, incenso, mirra
+          </div>
+        </div>
+      </div>
+
+      <div class="lang-card">
+        <div class="lang-icon">&#9201;</div>
+        <div class="lang-info">
+          <div class="lang-name">4. Tempo de Qualidade</div>
+          <div class="lang-bible">
+            Atencao total, sem distracao, estar PRESENTE
+            <br><strong>Chapman:</strong> Desligar TV, guardar celular, olhar nos olhos. 20 min de atencao total = tanque recarregado
+            <br><strong>Biblia:</strong> <span class="verse">Tg 1:19</span> "Pronto para ouvir, tardio para falar" | <span class="verse">Ct 2:14</span> "Mostra-me o teu rosto, faze-me ouvir a tua voz" | <span class="verse">Lc 10:38-42</span> Maria escolheu a boa parte — presenca > produtividade
+            <br><strong>Deus pratica:</strong> <span class="verse primary">Ex 33:11</span> "Falava o SENHOR a Moises face a face, como amigo"
+          </div>
+        </div>
+      </div>
+
+      <div class="lang-card">
+        <div class="lang-icon">&#129309;</div>
+        <div class="lang-info">
+          <div class="lang-name">5. Toque Fisico</div>
+          <div class="lang-bible">
+            Contato fisico afetuoso — abracos, maos dadas, carinho
+            <br><strong>Chapman:</strong> Mao no ombro caminhando, tocar a perna no carro, andar de maos dadas, abracar, beijar
+            <br><strong>Biblia:</strong> <span class="verse">Ct 2:6</span> "Seu braco esquerdo debaixo da minha cabeca, o direito me abraca" | <span class="verse">Gn 26:8</span> Isaque acariciando Rebeca | <span class="verse">Lc 15:20</span> Pai do prodigo: correu, abracou, beijou
+            <br><strong>Deus pratica:</strong> <span class="verse primary">Mc 10:16</span> Jesus tomou criancas nos bracos e abencoo
+          </div>
+        </div>
+      </div>
+
+      <div class="speak">"As 5 linguagens nao sao invencao humana — sao reflexo do carater de Deus. Ele ama em TODAS as 5 porque e amor completo. Nos temos tendencia a uma linguagem primaria — mas somos chamados a crescer em todas."</div>
+
+      <div class="point">
+        <div class="point-title">Como descobrir sua linguagem?</div>
+        <div class="point-body">
+          <strong>Ouca as queixas!</strong> Cada reclamacao esconde uma necessidade:
+          <br>"Voce nunca me elogia" = <em>Palavras de Afirmacao</em>
+          <br>"Voce nunca ajuda em casa" = <em>Atos de Servico</em>
+          <br>"Voce nem lembrou do meu aniversario" = <em>Presentes</em>
+          <br>"Nunca fazemos nada juntos" = <em>Tempo de Qualidade</em>
+          <br>"Voce nao me toca mais" = <em>Toque Fisico</em>
+          <br><span class="verse">Pv 20:5</span> "O prudente sabe descobrir os propositos do coracao"
+          <br><span class="verse">Pv 18:13</span> "O que responde antes de ouvir comete estulticia"
+        </div>
+      </div>
+
+      <div class="note">TRANSICAO: "Mas existe um problema. A paixao inicial nao dura para sempre. Chapman descobriu clinicamente o que a Biblia ja ensinava..."</div>
+    </div>
+  </div>
+
+  <div class="connector"><span class="arrow">&#8595;</span></div>
+
+  <!-- BLOCO 6: TRANSIÇÃO CRÍTICA (28-33 min) -->
+  <div class="block b6">
+    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="time-badge">28-33 min</span>
+      <span class="block-title">A TRANSICAO CRITICA — Paixao Acaba, Amor Fica</span>
+      <span class="toggle-icon">&#9660;</span>
+    </div>
+    <div class="block-content">
+
+      <div class="point">
+        <div class="point-title">A paixao e temporaria (Chapman: media de 2 anos)</div>
+        <div class="point-body">
+          "O estado de euforia do amor romantico e temporario. Pesquisas mostram que a duracao media e de dois anos."
+          <br><br><strong>Biblia confirma:</strong>
+          <br><span class="verse">Pv 31:30</span> "Enganosa e a graca, e va, a formosura"
+          <br><span class="verse">2Sm 13:15</span> Amnon "amou" Tamar — apos satisfazer desejo, odiou. <strong>Paixao sem pacto vira desprezo</strong>
+          <br><span class="verse">Ct 1:2; 2:10-13</span> Cantares celebra paixao — mas dentro do pacto!
+        </div>
+      </div>
+
+      <div class="speak">"As borboletas no estomago sao reais e bonitas. Mas nao case POR borboletas. Case por carater, fe e compromisso — as borboletas sao bonus."</div>
+
+      <div class="season-bar">
+        <div class="season spring">PRIMAVERA<br><small>Paixao</small></div>
+        <div class="season summer">VERAO<br><small>Maturidade</small></div>
+        <div class="season autumn">OUTONO<br><small>Frieza</small></div>
+        <div class="season winter">INVERNO<br><small>Crise</small></div>
+      </div>
+
+      <div class="point">
+        <div class="point-title">O que acontece quando NAO faz a transicao</div>
+        <div class="point-body">
+          Chapman: "60% dos divorciados casam de novo, e 60% desses divorciam de novo. Terceiro casamento: 75% de divorcio."
+          <br><br><strong>Biblia:</strong>
+          <br><span class="verse">Ef 4:26-27</span> Ira nao resolvida = espaco pro diabo
+          <br><span class="verse">Hb 12:15</span> Raiz de amargura cresce e contamina
+          <br><span class="verse">Ml 2:14-16</span> "Deus odeia o repudio" — casamento e alianca com Deus como testemunha
+          <br><span class="verse">Mt 19:6,8</span> "O que Deus ajuntou nao separe o homem" — divorcio existe por dureza de coracao
+        </div>
+      </div>
+
+      <div class="point">
+        <div class="point-title">O amor INTENCIONAL — a solucao biblica</div>
+        <div class="point-body">
+          <span class="verse primary">Ef 5:25</span> "Maridos, AMAI (agapate — imperativo!) vossa mulher como Cristo amou a igreja"
+          <br><span class="verse">Tt 2:4</span> "Ensinem as mais novas a AMAREM seus maridos" — amor se aprende!
+          <br><span class="verse">1Co 13:7</span> "Tudo SOFRE, tudo CRE, tudo ESPERA, tudo SUPORTA" — 4 verbos de esforco
+          <br><span class="verse">Gl 6:9</span> "Nao nos cansemos de fazer o bem" — plantar e esperar
+        </div>
+      </div>
+
+      <div class="point">
+        <div class="point-title">Exemplo do livro: Rick e Brenda</div>
+        <div class="point-body">
+          Rick: caminhoneiro, dizia "amo voce" mas nao ajudava em casa. Linguagem de Brenda = Atos de Servico.
+          Brenda: criticava Rick constantemente. Linguagem dele = Palavras de Afirmacao.
+          <br><strong>Resultado:</strong> Quando aprenderam a falar a linguagem certa, "saimos de uma estacao fria para uma quente de primavera."
+          <br><span class="verse">Ct 2:11-12</span> "Passou o inverno... aparecem as flores na terra"
+        </div>
+      </div>
+
+      <div class="note">TRANSICAO: "Mas e quando o outro NAO corresponde? E quando voce ama e nao recebe de volta? Aqui entramos no coracao do evangelho..."</div>
+    </div>
+  </div>
+
+  <div class="connector"><span class="arrow">&#8595;</span></div>
+
+  <!-- BLOCO 7: CLÍMAX (33-38 min) -->
+  <div class="block b7">
+    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="time-badge">33-38 min</span>
+      <span class="block-title">CLIMAX — O Amor Incondicional (Evangelho)</span>
+      <span class="toggle-icon">&#9660;</span>
+    </div>
+    <div class="block-content">
+
+      <div class="point" style="border-left-color: var(--accent-3);">
+        <div class="point-title" style="color: var(--accent-3);">CHAPMAN APONTA PARA O EVANGELHO</div>
+        <div class="point-body">
+          No proprio livro, Chapman escreve: "O amor incondicional e o tipo de amor que Deus tem por nos. Romanos 5:8 diz que Deus nos amou 'sendo nos ainda pecadores' e enviou Cristo para morrer por nos."
+        </div>
+      </div>
+
+      <div class="speak">"Aqui Chapman para de ser conselheiro e se torna pregador. Ele aponta para a cruz."</div>
+
+      <div class="point" style="border-left-color: var(--accent-5);">
+        <div class="point-title" style="color: var(--accent-5);">ROMANOS 5:8 — O TEXTO CENTRAL</div>
+        <div class="point-body">
+          <span class="verse primary">Rm 5:8</span> "Deus prova o seu proprio amor para conosco pelo fato de ter Cristo morrido por nos, <strong>sendo nos ainda pecadores</strong>."
+          <br><br>Deus NAO esperou que fossemos amaveis para nos amar. Ele nos amou quando eramos INIMIGOS.
+          <br><span class="verse">Rm 5:5</span> "O amor de Deus e DERRAMADO em nosso coracao pelo Espirito Santo" — ekkechytai (perfeito passivo) = acao completa e continua
+          <br><span class="verse">1Jo 4:10-11</span> "Nisto consiste o amor: nao em que nos tenhamos amado a Deus, mas em que Ele nos amou"
+          <br><span class="verse">1Jo 4:19</span> "Nos amamos porque Ele nos amou PRIMEIRO"
+        </div>
+      </div>
+
+      <div class="point" style="border-left-color: var(--accent-7);">
+        <div class="point-title" style="color: var(--accent-7);">OSEIAS E GOMER — A Imagem Mais Radical</div>
+        <div class="point-body">
+          <span class="verse primary">Os 3:1</span> Deus manda: "Vai outra vez, ama uma mulher adultera, como o SENHOR ama Israel"
+          <br><span class="verse">Os 3:2</span> Oseias COMPROU DE VOLTA sua propria esposa — pagou o preco por quem ja era dele
+          <br><br><strong>Isso e a cruz.</strong> Cristo nos comprou de volta. Pagou com sangue por quem ja era dele mas havia se prostituido com o mundo.
+          <br><br><span class="verse">1Pe 3:1-2</span> Amor que nao depende de reciprocidade — o comportamento pode transformar
+          <br><span class="verse">Lc 6:27,35</span> "Amai vossos INIMIGOS" — se devemos amar inimigos, quanto mais o conjuge?
+          <br><span class="verse">Rm 12:21</span> "Vence o mal com o BEM"
+        </div>
+      </div>
+
+      <div class="speak">"O amor que sustenta o casamento nos invernos mais frios nao vem de dentro de nos — vem de Deus derramado pelo Espirito. Se voce nao conhece o amor de Deus por voce, nao tem como amar outra pessoa como Deus ordena."</div>
+
+      <div class="note">TRANSICAO: "Entao, o que isso significa pra voce — que e solteiro — HOJE?"</div>
+    </div>
+  </div>
+
+  <div class="connector"><span class="arrow">&#8595;</span></div>
+
+  <!-- BLOCO 8: APELO (38-40 min) -->
+  <div class="block b8">
+    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="time-badge">38-40 min</span>
+      <span class="block-title">APELO AOS SOLTEIROS — Preparem-se Agora</span>
+      <span class="toggle-icon">&#9660;</span>
+    </div>
+    <div class="block-content">
+
+      <div class="point">
+        <div class="point-title">5 aplicacoes praticas</div>
+        <div class="point-body">
+          <strong>1.</strong> Encha seu tanque em Deus primeiro — quem entra no casamento com tanque vazio vai sugar o conjuge seco
+          <br><span class="verse">Sl 27:10</span> "Se pai e mae me desampararem, o Senhor me acolhera"
+          <br><br><strong>2.</strong> Desenvolva CARATER agora — o casamento revela quem voce e, nao conserta
+          <br><span class="verse">2Pe 1:5-7</span> Escada: fe → virtude → conhecimento → dominio proprio → perseveranca → piedade → amor
+          <br><br><strong>3.</strong> Aprenda a amar intencionalmente HOJE — com pais, irmaos, amigos, irmaos na fe
+          <br><span class="verse">Fp 4:9</span> "O que aprendestes... isso PRATICAI"
+          <br><br><strong>4.</strong> Nao case por borboletas — case por carater, fe e compromisso
+          <br><span class="verse">Pv 4:23</span> "Guarda o coracao, porque dele procedem as fontes da vida"
+          <br><br><strong>5.</strong> Busque a Deus antes de buscar alguem — a pessoa certa te encontra no seu proposito
+          <br><span class="verse">Mt 6:33</span> "Buscai primeiro o Reino de Deus... e todas as coisas vos serao acrescentadas"
+        </div>
+      </div>
+
+      <div class="speak">"Voces estao se preparando AGORA para o casamento que terao. Quem aprende a amar como Deus ama ANTES de casar esta se preparando para um casamento que honra a Deus. Primeiro receba o amor de Deus. Depois transborde."</div>
+
+      <div class="divider"></div>
+
+      <div class="point" style="border-left-color: var(--accent-4);">
+        <div class="point-title">Encerramento — Chapman + Paulo</div>
+        <div class="point-body">
+          <strong>Chapman:</strong> "O amor e a arma mais poderosa no mundo para o bem. Ele pode derreter o mais frio dos invernos e trazer as flores da primavera."
+          <br><br><strong>Paulo:</strong> <span class="verse primary">1Co 13:8a,13</span> "O amor JAMAIS acaba... Agora, pois, permanecem a fe, a esperanca e o amor, estes tres; porem o maior destes e o AMOR."
+          <br><br><span class="verse primary">1Jo 4:12</span> "Se nos amarmos uns aos outros, Deus permanece em nos" — o casamento e vitrine do evangelho
+        </div>
+      </div>
+
+      <div class="speak">"Vamos orar. Pai, ensina esses jovens a amar como o Senhor ama..."</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Elaborado por LOGOS | "Minha autoridade e derivada — venho das Escrituras, nao as substituo."
+  <br>Qualquer esboco que produzo deve ser submetido pelo pregador ao texto biblico e ao Espirito Santo que ilumina.
+</footer>
+
+<script>
+  // All blocks start closed except the first
+  document.querySelectorAll('.block:not(:first-child)').forEach(b => b.classList.remove('open'));
+</script>
+
+</body>
+</html>
