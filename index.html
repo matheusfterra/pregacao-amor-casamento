@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fluxograma — Pregação: Amor e Casamento</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Fluxograma — Pregacao: Amor e Casamento</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap');
 
@@ -13,7 +13,7 @@
     --surface-2: #242836;
     --border: #2e3344;
     --text: #e4e7ef;
-    --text-muted: #8b90a3;
+    --text-muted: #a0a5b8;
     --accent-1: #6c8cff;
     --accent-2: #a78bfa;
     --accent-3: #f59e0b;
@@ -25,26 +25,138 @@
     --summer: #f59e0b;
     --autumn: #fb923c;
     --winter: #6c8cff;
+    --font-scale: 1;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    padding: 20px;
-    max-width: 900px;
-    margin: 0 auto;
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 60px;
+    scroll-padding-bottom: 100px;
+    overscroll-behavior: contain;
   }
 
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0 20px 20px;
+    padding-left: max(20px, env(safe-area-inset-left, 20px));
+    padding-right: max(20px, env(safe-area-inset-right, 20px));
+    padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
+    max-width: 900px;
+    margin: 0 auto;
+    font-size: calc(16px * var(--font-scale));
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ===== PROGRESS BAR GLOBAL ===== */
+  #progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-4), var(--accent-5), var(--accent-6), var(--accent-2));
+    z-index: 102;
+    transition: width 0.5s ease-out;
+  }
+
+  /* ===== TOOLBAR ===== */
+  #toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15, 17, 23, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    padding: 0 8px;
+    margin: 0 -20px;
+    padding-left: max(8px, env(safe-area-inset-left, 8px));
+    padding-right: max(8px, env(safe-area-inset-right, 8px));
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    user-select: none;
+  }
+
+  #toolbar .toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  #toolbar button {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #toolbar button:active {
+    background: var(--surface-2);
+  }
+
+  #toolbar button.active {
+    background: rgba(52, 211, 153, 0.2);
+    border-color: var(--accent-4);
+    color: var(--accent-4);
+  }
+
+  #toolbar .font-display {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    min-width: 36px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  #toolbar .block-indicator {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  #timer-display {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    min-width: 40px;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  #timer-display.overtime {
+    color: var(--accent-5);
+  }
+
+  /* ===== HEADER ===== */
   .header {
     text-align: center;
     padding: 30px 20px;
     background: linear-gradient(135deg, #1e2235 0%, #2a1f3d 100%);
     border-radius: 16px;
     margin-bottom: 30px;
+    margin-top: 12px;
     border: 1px solid var(--border);
   }
 
@@ -80,7 +192,7 @@
     border: 1px solid var(--border);
   }
 
-  /* Timeline */
+  /* ===== TIMELINE ===== */
   .timeline {
     position: relative;
     padding-left: 40px;
@@ -97,6 +209,7 @@
     border-radius: 3px;
   }
 
+  /* ===== BLOCKS ===== */
   .block {
     position: relative;
     margin-bottom: 24px;
@@ -104,11 +217,16 @@
     border-radius: 12px;
     border: 1px solid var(--border);
     overflow: hidden;
-    transition: transform 0.2s;
+    transition: opacity 0.5s ease, border-left-color 0.3s ease;
+    scroll-margin-top: 60px;
   }
 
-  .block:hover {
-    transform: translateX(4px);
+  .block.block-checked {
+    opacity: 0.35;
+  }
+
+  .block.block-checked .block-title {
+    text-decoration: line-through;
   }
 
   .block::before {
@@ -137,9 +255,11 @@
     padding: 14px 16px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     cursor: pointer;
     user-select: none;
+    min-height: 56px;
+    touch-action: manipulation;
   }
 
   .block.b1 .block-header { background: linear-gradient(90deg, rgba(248,113,113,0.15) 0%, transparent 100%); }
@@ -151,8 +271,39 @@
   .block.b7 .block-header { background: linear-gradient(90deg, rgba(251,146,60,0.15) 0%, transparent 100%); }
   .block.b8 .block-header { background: linear-gradient(90deg, rgba(167,139,250,0.15) 0%, transparent 100%); }
 
+  /* Check button in block header */
+  .block-check-btn {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--text-muted);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: transparent;
+    transition: all 0.3s ease;
+    padding: 0;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .block-check-btn.checked {
+    background: var(--accent-4);
+    border-color: var(--accent-4);
+    color: white;
+  }
+
+  .block-check-btn.partial {
+    border-color: var(--accent-3);
+    border-style: dashed;
+  }
+
   .time-badge {
-    font-size: 0.7rem;
+    font-size: 16px;
     font-weight: 700;
     padding: 4px 8px;
     border-radius: 6px;
@@ -172,14 +323,29 @@
 
   .block-title {
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 24px;
     flex: 1;
+    line-height: 1.3;
+  }
+
+  .block-progress {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    min-width: 28px;
+    text-align: center;
+  }
+
+  .block-progress.complete {
+    color: var(--accent-4);
   }
 
   .toggle-icon {
     font-size: 1.2rem;
     transition: transform 0.3s;
     color: var(--text-muted);
+    min-width: 20px;
+    text-align: center;
   }
 
   .block.open .toggle-icon {
@@ -187,45 +353,83 @@
   }
 
   .block-content {
-    display: none;
-    padding: 0 16px 16px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    padding: 0 20px;
   }
 
   .block.open .block-content {
-    display: block;
+    max-height: 5000px;
+    padding: 0 20px 20px;
   }
 
-  /* Sub-items */
+  /* ===== POINTS ===== */
   .point {
-    padding: 10px 12px;
-    margin: 8px 0;
+    padding: 12px 14px;
+    margin: 16px 0;
     background: var(--surface-2);
     border-radius: 8px;
     border-left: 3px solid var(--accent-1);
+    transition: opacity 0.3s ease;
+    touch-action: manipulation;
+    cursor: default;
+  }
+
+  .point.item-checked {
+    opacity: 0.35;
+  }
+
+  .point.item-checked .point-title {
+    text-decoration: line-through;
   }
 
   .point-title {
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 20px;
     margin-bottom: 4px;
     display: flex;
     align-items: center;
     gap: 6px;
+    line-height: 1.3;
   }
 
   .point-body {
-    font-size: 0.82rem;
+    font-size: 18px;
     color: var(--text-muted);
-    line-height: 1.5;
+    line-height: 1.7;
   }
 
+  /* ===== SPEAK ===== */
+  .speak {
+    font-family: 'Merriweather', serif;
+    font-style: italic;
+    color: var(--accent-4);
+    font-size: 20px;
+    padding: 10px 14px;
+    border-left: 4px solid var(--accent-4);
+    margin: 16px 0;
+    background: rgba(52,211,153,0.05);
+    border-radius: 0 6px 6px 0;
+    line-height: 1.8;
+    transition: opacity 0.3s ease;
+    touch-action: manipulation;
+    cursor: default;
+  }
+
+  .speak.item-checked {
+    opacity: 0.35;
+    border-left-color: var(--text-muted);
+  }
+
+  /* ===== VERSE ===== */
   .verse {
     display: inline-block;
     background: rgba(108,140,255,0.15);
     color: var(--accent-1);
     padding: 2px 8px;
     border-radius: 4px;
-    font-size: 0.78rem;
+    font-size: 15px;
     font-weight: 600;
     margin: 2px 2px;
     white-space: nowrap;
@@ -234,28 +438,27 @@
   .verse.primary {
     background: rgba(245,158,11,0.2);
     color: var(--accent-3);
+    padding: 3px 10px;
+    font-size: 16px;
+    font-weight: 700;
   }
 
-  .speak {
-    font-family: 'Merriweather', serif;
-    font-style: italic;
-    color: var(--accent-4);
-    font-size: 0.85rem;
-    padding: 8px 12px;
-    border-left: 2px solid var(--accent-4);
-    margin: 8px 0;
-    background: rgba(52,211,153,0.05);
-    border-radius: 0 6px 6px 0;
-  }
-
+  /* ===== COUPLE CARDS ===== */
   .couple-card {
     display: flex;
     gap: 10px;
-    padding: 10px;
-    margin: 6px 0;
+    padding: 12px;
+    margin: 16px 0;
     background: var(--surface-2);
     border-radius: 8px;
     align-items: flex-start;
+    transition: opacity 0.3s ease;
+    touch-action: manipulation;
+    cursor: default;
+  }
+
+  .couple-card.item-checked {
+    opacity: 0.35;
   }
 
   .couple-icon {
@@ -270,36 +473,48 @@
 
   .couple-name {
     font-weight: 700;
-    font-size: 0.88rem;
+    font-size: 20px;
+    line-height: 1.3;
   }
 
   .couple-lesson {
-    font-size: 0.8rem;
+    font-size: 17px;
     color: var(--text-muted);
     margin-top: 2px;
+    line-height: 1.7;
   }
 
+  /* ===== LANGUAGE CARDS ===== */
   .lang-card {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 8px 12px;
-    padding: 10px 12px;
-    margin: 6px 0;
+    padding: 12px 14px;
+    margin: 16px 0;
     background: var(--surface-2);
     border-radius: 8px;
     align-items: center;
+    transition: opacity 0.3s ease;
+    touch-action: manipulation;
+    cursor: default;
+  }
+
+  .lang-card.item-checked {
+    opacity: 0.35;
   }
 
   .lang-icon { font-size: 1.3rem; }
 
   .lang-info .lang-name {
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 20px;
+    line-height: 1.3;
   }
 
   .lang-info .lang-bible {
-    font-size: 0.78rem;
+    font-size: 17px;
     color: var(--text-muted);
+    line-height: 1.7;
   }
 
   .divider {
@@ -309,41 +524,44 @@
   }
 
   .note {
-    font-size: 0.78rem;
+    font-size: 16px;
+    font-weight: 500;
     color: var(--accent-3);
-    padding: 6px 10px;
+    padding: 8px 12px;
     background: rgba(245,158,11,0.08);
     border-radius: 6px;
-    margin-top: 8px;
+    margin-top: 16px;
+    line-height: 1.5;
   }
 
   .greek-box {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    margin: 8px 0;
+    gap: 8px;
+    margin: 16px 0;
   }
 
   .greek-item {
-    padding: 8px;
+    padding: 10px;
     background: var(--surface-2);
     border-radius: 6px;
     text-align: center;
   }
 
   .greek-word {
-    font-size: 1rem;
+    font-size: 22px;
     font-weight: 700;
     color: var(--accent-2);
+    line-height: 1.3;
   }
 
   .greek-trans {
-    font-size: 0.72rem;
+    font-size: 13px;
     color: var(--text-muted);
   }
 
   .greek-meaning {
-    font-size: 0.75rem;
+    font-size: 15px;
     color: var(--text);
     margin-top: 2px;
   }
@@ -352,14 +570,14 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 4px;
-    margin: 8px 0;
+    margin: 16px 0;
   }
 
   .season {
     text-align: center;
     padding: 6px 4px;
     border-radius: 6px;
-    font-size: 0.72rem;
+    font-size: 13px;
     font-weight: 600;
   }
 
@@ -390,11 +608,59 @@
     font-style: italic;
   }
 
-  /* Print */
+  /* ===== QUICK REFERENCE MODE ===== */
+  body.quick-mode .point,
+  body.quick-mode .greek-box,
+  body.quick-mode .season-bar,
+  body.quick-mode .divider {
+    display: none !important;
+  }
+
+  body.quick-mode .speak {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  body.quick-mode .couple-card .couple-lesson {
+    display: none;
+  }
+
+  body.quick-mode .lang-card .lang-bible {
+    display: none;
+  }
+
+  /* ===== HOVER ONLY FOR MOUSE DEVICES ===== */
+  @media (hover: hover) {
+    .block-header:hover {
+      filter: brightness(1.1);
+    }
+    #toolbar button:hover {
+      background: var(--surface-2);
+    }
+  }
+
+  /* ===== FOCUS VISIBLE ===== */
+  :focus-visible {
+    outline: 3px solid var(--accent-1);
+    outline-offset: 2px;
+  }
+
+  /* ===== REDUCED MOTION ===== */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ===== PRINT ===== */
   @media print {
+    #toolbar, #progress-bar { display: none !important; }
     body { background: #fff; color: #111; max-width: 100%; }
     .block { break-inside: avoid; border-color: #ddd; }
-    .block-content { display: block !important; }
+    .block-content { max-height: none !important; padding: 0 16px 16px !important; }
     .block-header { background: #f5f5f5 !important; }
     .header { background: #f0f0f5; }
     .header h1 { color: #333; -webkit-text-fill-color: #333; }
@@ -402,20 +668,52 @@
     .verse { background: #eef; color: #336; }
     .verse.primary { background: #fef3cd; color: #856404; }
     .speak { color: #28a745; border-color: #28a745; }
-    .toggle-icon { display: none; }
+    .toggle-icon, .block-check-btn { display: none; }
   }
 
   @media (max-width: 600px) {
-    body { padding: 10px; }
+    body { padding: 0 10px 10px; }
     .header h1 { font-size: 1.3rem; }
     .timeline { padding-left: 30px; }
     .timeline::before { left: 12px; }
     .block::before { left: -23px; width: 12px; height: 12px; }
     .greek-box { grid-template-columns: 1fr 1fr; }
+    .block-title { font-size: 20px; }
+  }
+
+  @media (max-width: 480px) {
+    .timeline::before { display: none; }
+    .timeline { padding-left: 0; }
+    .block::before { display: none; }
+    #toolbar {
+      height: auto;
+      min-height: 48px;
+      flex-wrap: wrap;
+      padding: 4px 8px;
+    }
   }
 </style>
 </head>
 <body>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Toolbar -->
+<div id="toolbar">
+  <div class="toolbar-group">
+    <button id="btn-font-down" aria-label="Diminuir fonte">A-</button>
+    <span class="font-display" id="font-display" title="Tap para resetar">100%</span>
+    <button id="btn-font-up" aria-label="Aumentar fonte">A+</button>
+  </div>
+  <span class="block-indicator" id="block-indicator"></span>
+  <div class="toolbar-group">
+    <span id="timer-display">00:00</span>
+    <button id="btn-quick" aria-label="Modo rapido" title="Quick Reference">Q</button>
+    <button id="btn-reset" aria-label="Resetar checks" title="Reset All">R</button>
+    <button id="btn-wake" aria-label="Manter tela ligada" title="Keep Awake">W</button>
+  </div>
+</div>
 
 <div class="header">
   <h1>Amor e Casamento</h1>
@@ -430,23 +728,25 @@
 <div class="timeline">
 
   <!-- BLOCO 1: ABERTURA (0-5 min) -->
-  <div class="block b1 open">
-    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+  <div class="block b1" id="block-1">
+    <div class="block-header">
+      <button class="block-check-btn" data-block="1" aria-label="Marcar bloco como feito"></button>
       <span class="time-badge">0-5 min</span>
       <span class="block-title">ABERTURA — A Cultura Fala de Amor, Mas Nao Entende</span>
+      <span class="block-progress" data-block="1"></span>
       <span class="toggle-icon">&#9660;</span>
     </div>
     <div class="block-content">
-      <div class="speak">"A cultura fala de amor 24h — musicas, filmes, series, redes sociais. Mas por que tantas pessoas se sentem sozinhas e nao amadas?"</div>
+      <div class="speak" data-item="1-s1">"A cultura fala de amor 24h — musicas, filmes, series, redes sociais. Mas por que tantas pessoas se sentem sozinhas e nao amadas?"</div>
 
-      <div class="point">
+      <div class="point" data-item="1-p1">
         <div class="point-title">Gancho: Chapman sobre a obsessao cultural</div>
         <div class="point-body">
           Das 20 revistas na prateleira, 17 tinham "amor" na capa. Das 12 musicas no radio, 10 falavam de amor. MAS: "milhares de criancas vao para a cama sem se sentir amadas, e milhares de casais tambem."
         </div>
       </div>
 
-      <div class="point">
+      <div class="point" data-item="1-p2">
         <div class="point-title">Diagnostico biblico</div>
         <div class="point-body">
           A Biblia ja havia diagnosticado o problema:
@@ -456,7 +756,7 @@
         </div>
       </div>
 
-      <div class="speak">"O problema nao e que falta amor no mundo. O problema e que o mundo chama de amor algo que NAO e amor."</div>
+      <div class="speak" data-item="1-s2">"O problema nao e que falta amor no mundo. O problema e que o mundo chama de amor algo que NAO e amor."</div>
 
       <div class="note">TRANSICAO: "Mas entao, o que e amor DE VERDADE? Vamos olhar o que a Biblia ensina..."</div>
     </div>
@@ -464,16 +764,18 @@
 
   <div class="connector"><span class="arrow">&#8595;</span></div>
 
-  <!-- BLOCO 2: AMOR BÍBLICO (5-10 min) -->
-  <div class="block b2">
-    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+  <!-- BLOCO 2: AMOR BIBLICO (5-10 min) -->
+  <div class="block b2" id="block-2">
+    <div class="block-header">
+      <button class="block-check-btn" data-block="2" aria-label="Marcar bloco como feito"></button>
       <span class="time-badge">5-10 min</span>
       <span class="block-title">O AMOR NA VISAO BIBLICA — Verbo, Nao Sentimento</span>
+      <span class="block-progress" data-block="2"></span>
       <span class="toggle-icon">&#9660;</span>
     </div>
     <div class="block-content">
 
-      <div class="point">
+      <div class="point" data-item="2-p1">
         <div class="point-title">As 4 palavras gregas para "amor"</div>
         <div class="point-body">O portugues usa UMA palavra. O grego do NT tem QUATRO:</div>
       </div>
@@ -501,9 +803,9 @@
         </div>
       </div>
 
-      <div class="speak">"A cultura reduz TODO amor a eros — desejo, paixao, atracao. A Biblia eleva o amor a agape — decisao que permanece quando o sentimento vai embora."</div>
+      <div class="speak" data-item="2-s1">"A cultura reduz TODO amor a eros — desejo, paixao, atracao. A Biblia eleva o amor a agape — decisao que permanece quando o sentimento vai embora."</div>
 
-      <div class="point">
+      <div class="point" data-item="2-p2">
         <div class="point-title">Os 3 pilares do amor biblico</div>
         <div class="point-body">
           <strong>1. PACTO</strong> (nao contrato) — "Eu faco independente de voce fazer"
@@ -515,7 +817,7 @@
         </div>
       </div>
 
-      <div class="point">
+      <div class="point" data-item="2-p3">
         <div class="point-title">Definicao definitiva — 1 Corintios 13:4-8a</div>
         <div class="point-body">
           <span class="verse primary">1Co 13:4-8a</span> 15 caracteristicas. NENHUMA e sentimento. Todas sao VERBO.
@@ -530,16 +832,18 @@
 
   <div class="connector"><span class="arrow">&#8595;</span></div>
 
-  <!-- BLOCO 3: CASAIS BÍBLICOS (10-17 min) -->
-  <div class="block b3">
-    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+  <!-- BLOCO 3: CASAIS BIBLICOS (10-17 min) -->
+  <div class="block b3" id="block-3">
+    <div class="block-header">
+      <button class="block-check-btn" data-block="3" aria-label="Marcar bloco como feito"></button>
       <span class="time-badge">10-17 min</span>
       <span class="block-title">CASAIS BIBLICOS — Exemplos Reais de Amor</span>
+      <span class="block-progress" data-block="3"></span>
       <span class="toggle-icon">&#9660;</span>
     </div>
     <div class="block-content">
 
-      <div class="couple-card">
+      <div class="couple-card" data-item="3-c1">
         <div class="couple-icon">&#128141;</div>
         <div class="couple-info">
           <div class="couple-name">Isaque e Rebeca <span class="verse">Gn 24</span></div>
@@ -550,7 +854,7 @@
         </div>
       </div>
 
-      <div class="couple-card">
+      <div class="couple-card" data-item="3-c2">
         <div class="couple-icon">&#127793;</div>
         <div class="couple-info">
           <div class="couple-name">Boaz e Rute <span class="verse">Rt 2-4</span></div>
@@ -561,7 +865,7 @@
         </div>
       </div>
 
-      <div class="couple-card">
+      <div class="couple-card" data-item="3-c3">
         <div class="couple-icon">&#9971;</div>
         <div class="couple-info">
           <div class="couple-name">Aquila e Priscila <span class="verse">At 18; Rm 16:3-5</span></div>
@@ -572,7 +876,7 @@
         </div>
       </div>
 
-      <div class="couple-card">
+      <div class="couple-card" data-item="3-c4">
         <div class="couple-icon">&#11088;</div>
         <div class="couple-info">
           <div class="couple-name">Jose e Maria <span class="verse">Mt 1-2; Lc 1-2</span></div>
@@ -583,7 +887,7 @@
         </div>
       </div>
 
-      <div class="couple-card">
+      <div class="couple-card" data-item="3-c5">
         <div class="couple-icon">&#128148;</div>
         <div class="couple-info">
           <div class="couple-name">Abraao e Sara <span class="verse">Gn 12-23; Hb 11:8-12</span></div>
@@ -594,7 +898,7 @@
         </div>
       </div>
 
-      <div class="couple-card">
+      <div class="couple-card" data-item="3-c6">
         <div class="couple-icon">&#128153;</div>
         <div class="couple-info">
           <div class="couple-name">Oseias e Gomer <span class="verse">Os 1-3</span> (guardar para o climax!)</div>
@@ -611,16 +915,18 @@
 
   <div class="connector"><span class="arrow">&#8595;</span></div>
 
-  <!-- BLOCO 4: QUEM É CHAPMAN (17-20 min) -->
-  <div class="block b4">
-    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+  <!-- BLOCO 4: QUEM E CHAPMAN (17-20 min) -->
+  <div class="block b4" id="block-4">
+    <div class="block-header">
+      <button class="block-check-btn" data-block="4" aria-label="Marcar bloco como feito"></button>
       <span class="time-badge">17-20 min</span>
       <span class="block-title">QUEM E GARY CHAPMAN — E Por Que Pode Nos Ensinar</span>
+      <span class="block-progress" data-block="4"></span>
       <span class="toggle-icon">&#9660;</span>
     </div>
     <div class="block-content">
 
-      <div class="point">
+      <div class="point" data-item="4-p1">
         <div class="point-title">Credenciais (30 segundos)</div>
         <div class="point-body">
           <strong>Pastor batista ha 55+ anos</strong> (Calvary Baptist Church, NC, desde 1971)
@@ -631,12 +937,12 @@
         </div>
       </div>
 
-      <div class="speak">"Chapman nao e um psicologo secular que ignora Deus. Ele e pastor, formado em seminario, e no proprio livro cita Romanos 5:8 como base do amor incondicional."</div>
+      <div class="speak" data-item="4-s1">"Chapman nao e um psicologo secular que ignora Deus. Ele e pastor, formado em seminario, e no proprio livro cita Romanos 5:8 como base do amor incondicional."</div>
 
-      <div class="point">
+      <div class="point" data-item="4-p2">
         <div class="point-title">O conceito do Tanque Emocional</div>
         <div class="point-body">
-          Chapman descobriu que casais se amam mas NAO SE SENTEM amados. Cada pessoa tem um "tanque emocional" que precisa ser enchido. Tanque cheio = harmonia. Tanque vazio = conflito, frieza, comportamento impróprio.
+          Chapman descobriu que casais se amam mas NAO SE SENTEM amados. Cada pessoa tem um "tanque emocional" que precisa ser enchido. Tanque cheio = harmonia. Tanque vazio = conflito, frieza, comportamento improprio.
           <br><br><strong>Conexao biblica:</strong>
           <br><span class="verse primary">Gn 2:18</span> "Nao e bom que o homem esteja so" — fomos criados para ser amados
           <br><span class="verse primary">1Jo 4:19</span> "Nos amamos porque Ele nos amou primeiro" — a fonte e Deus
@@ -644,7 +950,7 @@
         </div>
       </div>
 
-      <div class="speak">"Antes de buscar alguem para encher seu tanque, deixe DEUS enche-lo primeiro. Quem entra no casamento com tanque vazio vai sugar o conjuge seco."</div>
+      <div class="speak" data-item="4-s2">"Antes de buscar alguem para encher seu tanque, deixe DEUS enche-lo primeiro. Quem entra no casamento com tanque vazio vai sugar o conjuge seco."</div>
 
       <div class="note">TRANSICAO: "Chapman descobriu que existem 5 formas diferentes de expressar e receber amor. E adivinha? A Biblia ja demonstrava todas as 5..."</div>
     </div>
@@ -653,15 +959,17 @@
   <div class="connector"><span class="arrow">&#8595;</span></div>
 
   <!-- BLOCO 5: AS 5 LINGUAGENS (20-28 min) -->
-  <div class="block b5">
-    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+  <div class="block b5" id="block-5">
+    <div class="block-header">
+      <button class="block-check-btn" data-block="5" aria-label="Marcar bloco como feito"></button>
       <span class="time-badge">20-28 min</span>
       <span class="block-title">AS 5 LINGUAGENS DO AMOR — Chapman + Biblia</span>
+      <span class="block-progress" data-block="5"></span>
       <span class="toggle-icon">&#9660;</span>
     </div>
     <div class="block-content">
 
-      <div class="lang-card">
+      <div class="lang-card" data-item="5-l1">
         <div class="lang-icon">&#128172;</div>
         <div class="lang-info">
           <div class="lang-name">1. Palavras de Afirmacao</div>
@@ -674,7 +982,7 @@
         </div>
       </div>
 
-      <div class="lang-card">
+      <div class="lang-card" data-item="5-l2">
         <div class="lang-icon">&#128736;</div>
         <div class="lang-info">
           <div class="lang-name">2. Atos de Servico</div>
@@ -686,7 +994,7 @@
         </div>
       </div>
 
-      <div class="lang-card">
+      <div class="lang-card" data-item="5-l3">
         <div class="lang-icon">&#127873;</div>
         <div class="lang-info">
           <div class="lang-name">3. Receber Presentes</div>
@@ -698,7 +1006,7 @@
         </div>
       </div>
 
-      <div class="lang-card">
+      <div class="lang-card" data-item="5-l4">
         <div class="lang-icon">&#9201;</div>
         <div class="lang-info">
           <div class="lang-name">4. Tempo de Qualidade</div>
@@ -711,7 +1019,7 @@
         </div>
       </div>
 
-      <div class="lang-card">
+      <div class="lang-card" data-item="5-l5">
         <div class="lang-icon">&#129309;</div>
         <div class="lang-info">
           <div class="lang-name">5. Toque Fisico</div>
@@ -724,9 +1032,9 @@
         </div>
       </div>
 
-      <div class="speak">"As 5 linguagens nao sao invencao humana — sao reflexo do carater de Deus. Ele ama em TODAS as 5 porque e amor completo. Nos temos tendencia a uma linguagem primaria — mas somos chamados a crescer em todas."</div>
+      <div class="speak" data-item="5-s1">"As 5 linguagens nao sao invencao humana — sao reflexo do carater de Deus. Ele ama em TODAS as 5 porque e amor completo. Nos temos tendencia a uma linguagem primaria — mas somos chamados a crescer em todas."</div>
 
-      <div class="point">
+      <div class="point" data-item="5-p1">
         <div class="point-title">Como descobrir sua linguagem?</div>
         <div class="point-body">
           <strong>Ouca as queixas!</strong> Cada reclamacao esconde uma necessidade:
@@ -746,16 +1054,18 @@
 
   <div class="connector"><span class="arrow">&#8595;</span></div>
 
-  <!-- BLOCO 6: TRANSIÇÃO CRÍTICA (28-33 min) -->
-  <div class="block b6">
-    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+  <!-- BLOCO 6: TRANSICAO CRITICA (28-33 min) -->
+  <div class="block b6" id="block-6">
+    <div class="block-header">
+      <button class="block-check-btn" data-block="6" aria-label="Marcar bloco como feito"></button>
       <span class="time-badge">28-33 min</span>
       <span class="block-title">A TRANSICAO CRITICA — Paixao Acaba, Amor Fica</span>
+      <span class="block-progress" data-block="6"></span>
       <span class="toggle-icon">&#9660;</span>
     </div>
     <div class="block-content">
 
-      <div class="point">
+      <div class="point" data-item="6-p1">
         <div class="point-title">A paixao e temporaria (Chapman: media de 2 anos)</div>
         <div class="point-body">
           "O estado de euforia do amor romantico e temporario. Pesquisas mostram que a duracao media e de dois anos."
@@ -766,7 +1076,7 @@
         </div>
       </div>
 
-      <div class="speak">"As borboletas no estomago sao reais e bonitas. Mas nao case POR borboletas. Case por carater, fe e compromisso — as borboletas sao bonus."</div>
+      <div class="speak" data-item="6-s1">"As borboletas no estomago sao reais e bonitas. Mas nao case POR borboletas. Case por carater, fe e compromisso — as borboletas sao bonus."</div>
 
       <div class="season-bar">
         <div class="season spring">PRIMAVERA<br><small>Paixao</small></div>
@@ -775,7 +1085,7 @@
         <div class="season winter">INVERNO<br><small>Crise</small></div>
       </div>
 
-      <div class="point">
+      <div class="point" data-item="6-p2">
         <div class="point-title">O que acontece quando NAO faz a transicao</div>
         <div class="point-body">
           Chapman: "60% dos divorciados casam de novo, e 60% desses divorciam de novo. Terceiro casamento: 75% de divorcio."
@@ -787,7 +1097,7 @@
         </div>
       </div>
 
-      <div class="point">
+      <div class="point" data-item="6-p3">
         <div class="point-title">O amor INTENCIONAL — a solucao biblica</div>
         <div class="point-body">
           <span class="verse primary">Ef 5:25</span> "Maridos, AMAI (agapate — imperativo!) vossa mulher como Cristo amou a igreja"
@@ -797,7 +1107,7 @@
         </div>
       </div>
 
-      <div class="point">
+      <div class="point" data-item="6-p4">
         <div class="point-title">Exemplo do livro: Rick e Brenda</div>
         <div class="point-body">
           Rick: caminhoneiro, dizia "amo voce" mas nao ajudava em casa. Linguagem de Brenda = Atos de Servico.
@@ -813,25 +1123,27 @@
 
   <div class="connector"><span class="arrow">&#8595;</span></div>
 
-  <!-- BLOCO 7: CLÍMAX (33-38 min) -->
-  <div class="block b7">
-    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+  <!-- BLOCO 7: CLIMAX (33-38 min) -->
+  <div class="block b7" id="block-7">
+    <div class="block-header">
+      <button class="block-check-btn" data-block="7" aria-label="Marcar bloco como feito"></button>
       <span class="time-badge">33-38 min</span>
       <span class="block-title">CLIMAX — O Amor Incondicional (Evangelho)</span>
+      <span class="block-progress" data-block="7"></span>
       <span class="toggle-icon">&#9660;</span>
     </div>
     <div class="block-content">
 
-      <div class="point" style="border-left-color: var(--accent-3);">
+      <div class="point" data-item="7-p1" style="border-left-color: var(--accent-3);">
         <div class="point-title" style="color: var(--accent-3);">CHAPMAN APONTA PARA O EVANGELHO</div>
         <div class="point-body">
           No proprio livro, Chapman escreve: "O amor incondicional e o tipo de amor que Deus tem por nos. Romanos 5:8 diz que Deus nos amou 'sendo nos ainda pecadores' e enviou Cristo para morrer por nos."
         </div>
       </div>
 
-      <div class="speak">"Aqui Chapman para de ser conselheiro e se torna pregador. Ele aponta para a cruz."</div>
+      <div class="speak" data-item="7-s1">"Aqui Chapman para de ser conselheiro e se torna pregador. Ele aponta para a cruz."</div>
 
-      <div class="point" style="border-left-color: var(--accent-5);">
+      <div class="point" data-item="7-p2" style="border-left-color: var(--accent-5);">
         <div class="point-title" style="color: var(--accent-5);">ROMANOS 5:8 — O TEXTO CENTRAL</div>
         <div class="point-body">
           <span class="verse primary">Rm 5:8</span> "Deus prova o seu proprio amor para conosco pelo fato de ter Cristo morrido por nos, <strong>sendo nos ainda pecadores</strong>."
@@ -842,7 +1154,7 @@
         </div>
       </div>
 
-      <div class="point" style="border-left-color: var(--accent-7);">
+      <div class="point" data-item="7-p3" style="border-left-color: var(--accent-7);">
         <div class="point-title" style="color: var(--accent-7);">OSEIAS E GOMER — A Imagem Mais Radical</div>
         <div class="point-body">
           <span class="verse primary">Os 3:1</span> Deus manda: "Vai outra vez, ama uma mulher adultera, como o SENHOR ama Israel"
@@ -854,7 +1166,7 @@
         </div>
       </div>
 
-      <div class="speak">"O amor que sustenta o casamento nos invernos mais frios nao vem de dentro de nos — vem de Deus derramado pelo Espirito. Se voce nao conhece o amor de Deus por voce, nao tem como amar outra pessoa como Deus ordena."</div>
+      <div class="speak" data-item="7-s2">"O amor que sustenta o casamento nos invernos mais frios nao vem de dentro de nos — vem de Deus derramado pelo Espirito. Se voce nao conhece o amor de Deus por voce, nao tem como amar outra pessoa como Deus ordena."</div>
 
       <div class="note">TRANSICAO: "Entao, o que isso significa pra voce — que e solteiro — HOJE?"</div>
     </div>
@@ -863,21 +1175,23 @@
   <div class="connector"><span class="arrow">&#8595;</span></div>
 
   <!-- BLOCO 8: APELO (38-40 min) -->
-  <div class="block b8">
-    <div class="block-header" onclick="this.parentElement.classList.toggle('open')">
+  <div class="block b8" id="block-8">
+    <div class="block-header">
+      <button class="block-check-btn" data-block="8" aria-label="Marcar bloco como feito"></button>
       <span class="time-badge">38-40 min</span>
       <span class="block-title">APELO AOS SOLTEIROS — Preparem-se Agora</span>
+      <span class="block-progress" data-block="8"></span>
       <span class="toggle-icon">&#9660;</span>
     </div>
     <div class="block-content">
 
-      <div class="point">
+      <div class="point" data-item="8-p1">
         <div class="point-title">5 aplicacoes praticas</div>
         <div class="point-body">
           <strong>1.</strong> Encha seu tanque em Deus primeiro — quem entra no casamento com tanque vazio vai sugar o conjuge seco
           <br><span class="verse">Sl 27:10</span> "Se pai e mae me desampararem, o Senhor me acolhera"
           <br><br><strong>2.</strong> Desenvolva CARATER agora — o casamento revela quem voce e, nao conserta
-          <br><span class="verse">2Pe 1:5-7</span> Escada: fe → virtude → conhecimento → dominio proprio → perseveranca → piedade → amor
+          <br><span class="verse">2Pe 1:5-7</span> Escada: fe -> virtude -> conhecimento -> dominio proprio -> perseveranca -> piedade -> amor
           <br><br><strong>3.</strong> Aprenda a amar intencionalmente HOJE — com pais, irmaos, amigos, irmaos na fe
           <br><span class="verse">Fp 4:9</span> "O que aprendestes... isso PRATICAI"
           <br><br><strong>4.</strong> Nao case por borboletas — case por carater, fe e compromisso
@@ -887,11 +1201,11 @@
         </div>
       </div>
 
-      <div class="speak">"Voces estao se preparando AGORA para o casamento que terao. Quem aprende a amar como Deus ama ANTES de casar esta se preparando para um casamento que honra a Deus. Primeiro receba o amor de Deus. Depois transborde."</div>
+      <div class="speak" data-item="8-s1">"Voces estao se preparando AGORA para o casamento que terao. Quem aprende a amar como Deus ama ANTES de casar esta se preparando para um casamento que honra a Deus. Primeiro receba o amor de Deus. Depois transborde."</div>
 
       <div class="divider"></div>
 
-      <div class="point" style="border-left-color: var(--accent-4);">
+      <div class="point" data-item="8-p2" style="border-left-color: var(--accent-4);">
         <div class="point-title">Encerramento — Chapman + Paulo</div>
         <div class="point-body">
           <strong>Chapman:</strong> "O amor e a arma mais poderosa no mundo para o bem. Ele pode derreter o mais frio dos invernos e trazer as flores da primavera."
@@ -900,7 +1214,7 @@
         </div>
       </div>
 
-      <div class="speak">"Vamos orar. Pai, ensina esses jovens a amar como o Senhor ama..."</div>
+      <div class="speak" data-item="8-s2">"Vamos orar. Pai, ensina esses jovens a amar como o Senhor ama..."</div>
     </div>
   </div>
 
@@ -912,8 +1226,436 @@
 </footer>
 
 <script>
-  // All blocks start closed except the first
-  document.querySelectorAll('.block:not(:first-child)').forEach(b => b.classList.remove('open'));
+(function() {
+  'use strict';
+
+  const TOTAL_BLOCKS = 8;
+  const STORAGE_CHECKS = 'preacher-checks';
+  const STORAGE_FONT = 'preacher-font-scale';
+  const STORAGE_QUICK = 'preacher-quick-mode';
+
+  // ===== STATE =====
+  let fontScale = parseInt(localStorage.getItem(STORAGE_FONT)) || 100;
+  let checks = JSON.parse(localStorage.getItem(STORAGE_CHECKS) || '{}');
+  let quickMode = localStorage.getItem(STORAGE_QUICK) === 'true';
+  let wakeLock = null;
+  let timerStarted = false;
+  let timerStart = 0;
+  let timerInterval = null;
+
+  // ===== INIT =====
+  function init() {
+    applyFontScale();
+    applyQuickMode();
+    restoreChecks();
+    updateAllProgress();
+    updateBlockIndicator();
+    setupAccordion();
+    setupCheckSystem();
+    setupToolbar();
+    requestWakeLock();
+    setupTimer();
+
+    // Close all blocks except first
+    document.querySelectorAll('.block').forEach((b, i) => {
+      if (i > 0) b.classList.remove('open');
+      else b.classList.add('open');
+    });
+  }
+
+  // ===== FONT SCALE =====
+  function applyFontScale() {
+    document.documentElement.style.setProperty('--font-scale', fontScale / 100);
+    document.getElementById('font-display').textContent = fontScale + '%';
+    localStorage.setItem(STORAGE_FONT, fontScale);
+  }
+
+  // ===== QUICK MODE =====
+  function applyQuickMode() {
+    document.body.classList.toggle('quick-mode', quickMode);
+    const btn = document.getElementById('btn-quick');
+    btn.classList.toggle('active', quickMode);
+  }
+
+  // ===== ACCORDION =====
+  function setupAccordion() {
+    document.querySelectorAll('.block-header').forEach(header => {
+      header.addEventListener('click', function(e) {
+        // Don't toggle if clicking the check button
+        if (e.target.closest('.block-check-btn')) return;
+
+        const block = this.parentElement;
+        const wasOpen = block.classList.contains('open');
+
+        // Close all blocks
+        document.querySelectorAll('.block.open').forEach(b => b.classList.remove('open'));
+
+        // Open this one if it was closed
+        if (!wasOpen) {
+          block.classList.add('open');
+          // Auto-scroll
+          setTimeout(() => {
+            block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 50);
+        }
+
+        updateBlockIndicator();
+      });
+    });
+  }
+
+  // ===== CHECK SYSTEM =====
+  function getBlockItems(blockNum) {
+    const block = document.getElementById('block-' + blockNum);
+    if (!block) return [];
+    return block.querySelectorAll('[data-item]');
+  }
+
+  function setupCheckSystem() {
+    // Long-press on items (points, speaks, couple-cards, lang-cards)
+    document.querySelectorAll('[data-item]').forEach(el => {
+      let pressTimer = null;
+      let moved = false;
+
+      el.addEventListener('touchstart', function(e) {
+        moved = false;
+        pressTimer = setTimeout(() => {
+          if (!moved) {
+            toggleItemCheck(this);
+            if (navigator.vibrate) navigator.vibrate(50);
+          }
+        }, 500);
+      }, { passive: true });
+
+      el.addEventListener('touchmove', function() {
+        moved = true;
+        clearTimeout(pressTimer);
+      }, { passive: true });
+
+      el.addEventListener('touchend', function() {
+        clearTimeout(pressTimer);
+      });
+
+      el.addEventListener('touchcancel', function() {
+        clearTimeout(pressTimer);
+      });
+
+      // Mouse long-press fallback
+      el.addEventListener('mousedown', function(e) {
+        if (e.target.closest('.block-check-btn')) return;
+        moved = false;
+        pressTimer = setTimeout(() => {
+          if (!moved) {
+            toggleItemCheck(this);
+          }
+        }, 500);
+      });
+
+      el.addEventListener('mousemove', function() {
+        moved = true;
+        clearTimeout(pressTimer);
+      });
+
+      el.addEventListener('mouseup', function() {
+        clearTimeout(pressTimer);
+      });
+    });
+
+    // Block check buttons
+    document.querySelectorAll('.block-check-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const blockNum = this.dataset.block;
+        toggleBlockCheck(blockNum);
+        if (navigator.vibrate) navigator.vibrate(50);
+      });
+    });
+  }
+
+  function toggleItemCheck(el) {
+    const itemId = el.dataset.item;
+    if (!itemId) return;
+
+    const isChecked = el.classList.toggle('item-checked');
+    if (!checks.items) checks.items = {};
+    checks.items[itemId] = isChecked;
+    saveChecks();
+
+    // Start timer on first interaction
+    if (!timerStarted) startTimer();
+
+    // Update block progress
+    const blockNum = itemId.split('-')[0];
+    updateBlockProgress(blockNum);
+    updateGlobalProgress();
+    updateBlockIndicator();
+  }
+
+  function toggleBlockCheck(blockNum) {
+    const block = document.getElementById('block-' + blockNum);
+    if (!block) return;
+
+    if (!checks.blocks) checks.blocks = {};
+    const isNowChecked = !checks.blocks[blockNum];
+    checks.blocks[blockNum] = isNowChecked;
+
+    // Mark/unmark all items in block
+    if (!checks.items) checks.items = {};
+    block.querySelectorAll('[data-item]').forEach(el => {
+      checks.items[el.dataset.item] = isNowChecked;
+      el.classList.toggle('item-checked', isNowChecked);
+    });
+
+    // Visual update
+    block.classList.toggle('block-checked', isNowChecked);
+    const btn = block.querySelector('.block-check-btn');
+    btn.classList.toggle('checked', isNowChecked);
+    btn.textContent = isNowChecked ? '\u2713' : '';
+
+    // Collapse if checked
+    if (isNowChecked) {
+      block.classList.remove('open');
+
+      // Expand next unchecked block
+      setTimeout(() => {
+        const nextBlock = document.getElementById('block-' + (parseInt(blockNum) + 1));
+        if (nextBlock && !nextBlock.classList.contains('block-checked')) {
+          // Close all
+          document.querySelectorAll('.block.open').forEach(b => b.classList.remove('open'));
+          nextBlock.classList.add('open');
+          setTimeout(() => {
+            nextBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 50);
+        }
+      }, 200);
+    }
+
+    // Start timer on first interaction
+    if (!timerStarted) startTimer();
+
+    saveChecks();
+    updateBlockProgress(blockNum);
+    updateGlobalProgress();
+    updateBlockIndicator();
+  }
+
+  function saveChecks() {
+    localStorage.setItem(STORAGE_CHECKS, JSON.stringify(checks));
+  }
+
+  function restoreChecks() {
+    if (!checks.items) checks.items = {};
+    if (!checks.blocks) checks.blocks = {};
+
+    // Restore item checks
+    Object.keys(checks.items).forEach(id => {
+      if (checks.items[id]) {
+        const el = document.querySelector('[data-item="' + id + '"]');
+        if (el) el.classList.add('item-checked');
+      }
+    });
+
+    // Restore block checks
+    Object.keys(checks.blocks).forEach(num => {
+      if (checks.blocks[num]) {
+        const block = document.getElementById('block-' + num);
+        if (block) {
+          block.classList.add('block-checked');
+          block.classList.remove('open');
+          const btn = block.querySelector('.block-check-btn');
+          btn.classList.add('checked');
+          btn.textContent = '\u2713';
+        }
+      }
+    });
+  }
+
+  // ===== PROGRESS =====
+  function updateBlockProgress(blockNum) {
+    const block = document.getElementById('block-' + blockNum);
+    if (!block) return;
+
+    const items = block.querySelectorAll('[data-item]');
+    const total = items.length;
+    let done = 0;
+    items.forEach(el => {
+      if (el.classList.contains('item-checked')) done++;
+    });
+
+    const progEl = block.querySelector('.block-progress');
+    if (progEl) {
+      progEl.textContent = done + '/' + total;
+      progEl.classList.toggle('complete', done === total);
+    }
+
+    // Update block check button partial state
+    const btn = block.querySelector('.block-check-btn');
+    if (done > 0 && done < total && !checks.blocks?.[blockNum]) {
+      btn.classList.add('partial');
+    } else {
+      btn.classList.remove('partial');
+    }
+  }
+
+  function updateAllProgress() {
+    for (let i = 1; i <= TOTAL_BLOCKS; i++) {
+      updateBlockProgress(i);
+    }
+    updateGlobalProgress();
+  }
+
+  function updateGlobalProgress() {
+    let checkedBlocks = 0;
+    for (let i = 1; i <= TOTAL_BLOCKS; i++) {
+      if (checks.blocks && checks.blocks[i]) checkedBlocks++;
+    }
+    const pct = (checkedBlocks / TOTAL_BLOCKS) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  }
+
+  function updateBlockIndicator() {
+    let current = 0;
+    let checkedCount = 0;
+    for (let i = 1; i <= TOTAL_BLOCKS; i++) {
+      if (checks.blocks && checks.blocks[i]) {
+        checkedCount++;
+      } else if (!current) {
+        current = i;
+      }
+    }
+    if (!current) current = TOTAL_BLOCKS;
+    document.getElementById('block-indicator').textContent = 'Bloco ' + current + '/' + TOTAL_BLOCKS;
+  }
+
+  // ===== TOOLBAR =====
+  function setupToolbar() {
+    document.getElementById('btn-font-up').addEventListener('click', () => {
+      if (fontScale < 150) {
+        fontScale += 10;
+        applyFontScale();
+      }
+    });
+
+    document.getElementById('btn-font-down').addEventListener('click', () => {
+      if (fontScale > 80) {
+        fontScale -= 10;
+        applyFontScale();
+      }
+    });
+
+    document.getElementById('font-display').addEventListener('click', () => {
+      fontScale = 100;
+      applyFontScale();
+    });
+
+    document.getElementById('btn-quick').addEventListener('click', () => {
+      quickMode = !quickMode;
+      localStorage.setItem(STORAGE_QUICK, quickMode);
+      applyQuickMode();
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      if (confirm('Limpar todos os checks? Isso reinicia o fluxo.')) {
+        checks = { items: {}, blocks: {} };
+        saveChecks();
+        document.querySelectorAll('.item-checked').forEach(el => el.classList.remove('item-checked'));
+        document.querySelectorAll('.block-checked').forEach(el => el.classList.remove('block-checked'));
+        document.querySelectorAll('.block-check-btn').forEach(btn => {
+          btn.classList.remove('checked', 'partial');
+          btn.textContent = '';
+        });
+        updateAllProgress();
+        updateGlobalProgress();
+        updateBlockIndicator();
+
+        // Reset timer
+        timerStarted = false;
+        clearInterval(timerInterval);
+        document.getElementById('timer-display').textContent = '00:00';
+        document.getElementById('timer-display').classList.remove('overtime');
+      }
+    });
+
+    document.getElementById('btn-wake').addEventListener('click', () => {
+      if (wakeLock) {
+        wakeLock.release();
+        wakeLock = null;
+        document.getElementById('btn-wake').classList.remove('active');
+      } else {
+        requestWakeLock();
+      }
+    });
+  }
+
+  // ===== WAKE LOCK =====
+  async function requestWakeLock() {
+    const btn = document.getElementById('btn-wake');
+    try {
+      if ('wakeLock' in navigator) {
+        wakeLock = await navigator.wakeLock.request('screen');
+        btn.classList.add('active');
+        wakeLock.addEventListener('release', () => {
+          btn.classList.remove('active');
+        });
+      } else {
+        btn.style.opacity = '0.4';
+        btn.title = 'Wake Lock nao suportado';
+      }
+    } catch (err) {
+      btn.style.opacity = '0.4';
+    }
+  }
+
+  // Re-acquire on visibility change
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && !wakeLock) {
+      requestWakeLock();
+    }
+  });
+
+  // ===== TIMER =====
+  function setupTimer() {
+    const timerEl = document.getElementById('timer-display');
+    timerEl.addEventListener('click', () => {
+      if (!timerStarted) {
+        startTimer();
+      }
+    });
+
+    // Long press to reset
+    let timerPressTimer = null;
+    timerEl.addEventListener('touchstart', () => {
+      timerPressTimer = setTimeout(() => {
+        timerStarted = false;
+        clearInterval(timerInterval);
+        timerEl.textContent = '00:00';
+        timerEl.classList.remove('overtime');
+      }, 1000);
+    }, { passive: true });
+    timerEl.addEventListener('touchend', () => clearTimeout(timerPressTimer));
+    timerEl.addEventListener('touchcancel', () => clearTimeout(timerPressTimer));
+  }
+
+  function startTimer() {
+    if (timerStarted) return;
+    timerStarted = true;
+    timerStart = Date.now();
+    const timerEl = document.getElementById('timer-display');
+
+    timerInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - timerStart) / 1000);
+      const m = Math.floor(elapsed / 60);
+      const s = elapsed % 60;
+      timerEl.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+      if (elapsed > 40 * 60) {
+        timerEl.classList.add('overtime');
+      }
+    }, 1000);
+  }
+
+  // ===== INIT =====
+  init();
+})();
 </script>
 
 </body>
