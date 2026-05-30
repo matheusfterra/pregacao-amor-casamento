@@ -1868,6 +1868,19 @@
         if (!wasOpen) {
           block.classList.add('open');
           var blockNum = parseInt(block.id.replace('block-', ''));
+
+          // Auto-mark all previous blocks as completed
+          for (var i = 1; i < blockNum; i++) {
+            if (!checks.blocks || !checks.blocks[i]) {
+              markBlockCompleted(i);
+            }
+          }
+
+          // If reopening a completed block, unmark it
+          if (checks.blocks && checks.blocks[blockNum]) {
+            unmarkBlockCompleted(blockNum);
+          }
+
           currentOpenBlock = blockNum;
           setTimeout(function() {
             block.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1940,6 +1953,46 @@
     updateBlockProgress(blockNum);
     updateGlobalProgress();
     updateBlockIndicator();
+  }
+
+  function markBlockCompleted(blockNum) {
+    var block = document.getElementById('block-' + blockNum);
+    if (!block) return;
+    if (!checks.blocks) checks.blocks = {};
+    if (!checks.items) checks.items = {};
+
+    checks.blocks[blockNum] = true;
+    block.querySelectorAll('[data-item]').forEach(function(el) {
+      checks.items[el.dataset.item] = true;
+      el.classList.add('item-checked');
+    });
+    block.classList.add('block-checked');
+    var btn = block.querySelector('.block-check-btn');
+    if (btn) { btn.classList.add('checked'); btn.textContent = '\u2713'; }
+
+    saveChecks();
+    updateBlockProgress(blockNum);
+    updateGlobalProgress();
+  }
+
+  function unmarkBlockCompleted(blockNum) {
+    var block = document.getElementById('block-' + blockNum);
+    if (!block) return;
+    if (!checks.blocks) checks.blocks = {};
+    if (!checks.items) checks.items = {};
+
+    checks.blocks[blockNum] = false;
+    block.querySelectorAll('[data-item]').forEach(function(el) {
+      checks.items[el.dataset.item] = false;
+      el.classList.remove('item-checked');
+    });
+    block.classList.remove('block-checked');
+    var btn = block.querySelector('.block-check-btn');
+    if (btn) { btn.classList.remove('checked'); btn.textContent = ''; }
+
+    saveChecks();
+    updateBlockProgress(blockNum);
+    updateGlobalProgress();
   }
 
   function toggleBlockCheck(blockNum) {
