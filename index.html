@@ -88,8 +88,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 6px;
-    flex-wrap: wrap;
+    gap: 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .toolbar-row::-webkit-scrollbar {
+    display: none;
   }
 
   .toolbar-group {
@@ -106,27 +112,28 @@
   }
 
   #toolbar button {
-    min-height: 48px;
-    padding: 6px 12px;
+    min-height: 44px;
+    padding: 6px 8px;
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--text);
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 3px;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     white-space: nowrap;
+    flex-shrink: 0;
   }
 
   #toolbar button.btn-icon-only {
-    min-width: 48px;
-    padding: 6px 10px;
+    min-width: 44px;
+    padding: 6px 8px;
   }
 
   #toolbar button:active {
@@ -817,6 +824,167 @@
     .timeline { padding-left: 0; }
     .block::before { display: none; }
   }
+
+  /* ===== MODE TOGGLE (Panel / Sketch) ===== */
+  #btn-mode-panel.active,
+  #btn-mode-sketch.active {
+    background: rgba(108, 140, 255, 0.2);
+    border-color: var(--accent-1);
+    color: var(--accent-1);
+  }
+
+  /* ===== SKETCH MODE ===== */
+  #sketch-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    background: #1a1d27;
+    flex-direction: column;
+  }
+
+  #sketch-container.visible {
+    display: flex;
+  }
+
+  #sketch-spacer {
+    flex-shrink: 0;
+  }
+
+  #sketch-canvas-wrap {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(rgba(46, 51, 68, 0.4) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(46, 51, 68, 0.4) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-color: #1a1d27;
+  }
+
+  #sketch-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    cursor: crosshair;
+  }
+
+  #sketch-toolbar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 10px;
+    padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
+    background: rgba(15, 17, 23, 0.97);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .sketch-tool-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .sketch-color-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    touch-action: manipulation;
+    padding: 0;
+  }
+
+  .sketch-color-btn.active {
+    border-color: #fff;
+    box-shadow: 0 0 6px rgba(255,255,255,0.4);
+  }
+
+  .sketch-size-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    padding: 0;
+  }
+
+  .sketch-size-btn.active {
+    border-color: var(--accent-1);
+    background: rgba(108, 140, 255, 0.2);
+  }
+
+  .sketch-size-dot {
+    border-radius: 50%;
+    background: var(--text);
+  }
+
+  .sketch-action-btn {
+    min-height: 36px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    touch-action: manipulation;
+    white-space: nowrap;
+  }
+
+  .sketch-action-btn.active {
+    background: rgba(248, 113, 113, 0.2);
+    border-color: var(--accent-5);
+    color: var(--accent-5);
+  }
+
+  .sketch-page-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 600;
+    user-select: none;
+  }
+
+  .sketch-page-nav button {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    padding: 0;
+  }
+
+  .sketch-sep {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    margin: 0 2px;
+  }
 </style>
 </head>
 <body>
@@ -849,9 +1017,12 @@
     </div>
   </div>
   <div class="toolbar-row">
-    <button id="btn-notes-toggle" aria-label="Mostrar ou ocultar notas">&#128214; Notas: Ocultar</button>
-    <button id="btn-reset" aria-label="Resetar checks">&#128260; Resetar Checks</button>
-    <button id="btn-wake" aria-label="Manter tela ligada">&#128161; Tela Ligada</button>
+    <button id="btn-mode-panel" class="active" aria-label="Modo painel">Painel</button>
+    <button id="btn-mode-sketch" aria-label="Modo rascunho">Rascunho</button>
+    <div class="toolbar-sep"></div>
+    <button id="btn-notes-toggle" aria-label="Mostrar ou ocultar notas">&#128214; Notas</button>
+    <button id="btn-reset" aria-label="Resetar checks">&#128260; Reset</button>
+    <button id="btn-wake" aria-label="Manter tela ligada">&#128161; Tela</button>
   </div>
 </div>
 
@@ -1360,6 +1531,41 @@
 
 </div>
 
+<!-- Sketch Mode Container -->
+<div id="sketch-container">
+  <div id="sketch-spacer"></div>
+  <div id="sketch-canvas-wrap">
+    <canvas id="sketch-canvas"></canvas>
+  </div>
+  <div id="sketch-toolbar">
+    <div class="sketch-tool-group">
+      <button class="sketch-color-btn active" data-color="#e4e7ef" style="background:#e4e7ef" title="Branco"></button>
+      <button class="sketch-color-btn" data-color="#f59e0b" style="background:#f59e0b" title="Amarelo"></button>
+      <button class="sketch-color-btn" data-color="#f87171" style="background:#f87171" title="Vermelho"></button>
+      <button class="sketch-color-btn" data-color="#6c8cff" style="background:#6c8cff" title="Azul"></button>
+      <button class="sketch-color-btn" data-color="#34d399" style="background:#34d399" title="Verde"></button>
+    </div>
+    <div class="sketch-sep"></div>
+    <div class="sketch-tool-group">
+      <button class="sketch-size-btn active" data-size="2" title="Fina"><span class="sketch-size-dot" style="width:4px;height:4px"></span></button>
+      <button class="sketch-size-btn" data-size="5" title="Media"><span class="sketch-size-dot" style="width:8px;height:8px"></span></button>
+      <button class="sketch-size-btn" data-size="10" title="Grossa"><span class="sketch-size-dot" style="width:14px;height:14px"></span></button>
+    </div>
+    <div class="sketch-sep"></div>
+    <div class="sketch-tool-group">
+      <button class="sketch-action-btn" id="sketch-eraser" title="Borracha">Borracha</button>
+      <button class="sketch-action-btn" id="sketch-clear" title="Limpar">Limpar</button>
+    </div>
+    <div class="sketch-sep"></div>
+    <div class="sketch-page-nav">
+      <button id="sketch-prev" title="Pagina anterior">&#8249;</button>
+      <span id="sketch-page-label">1/1</span>
+      <button id="sketch-next" title="Proxima pagina">&#8250;</button>
+      <button id="sketch-new" title="Nova pagina" style="font-size:14px">+</button>
+    </div>
+  </div>
+</div>
+
 <footer>
   Elaborado por LOGOS | "Minha autoridade e derivada — venho das Escrituras, nao as substituo."
   <br>Qualquer esboco que produzo deve ser submetido pelo pregador ao texto biblico e ao Espirito Santo que ilumina.
@@ -1374,6 +1580,8 @@
   const STORAGE_FONT = 'preacher-font-scale';
   const STORAGE_NOTES = 'preacher-notes';
   const STORAGE_NOTES_VISIBLE = 'preacher-notes-visible';
+  const STORAGE_DRAWINGS = 'preacher-drawings';
+  const MAX_SKETCH_PAGES = 5;
 
   // ===== STATE =====
   let fontScale = parseInt(localStorage.getItem(STORAGE_FONT)) || 110;
@@ -1386,6 +1594,18 @@
   let timerElapsed = 0; // seconds elapsed
   let timerLastTick = 0;
   let timerInterval = null;
+
+  // Sketch state
+  let sketchMode = false;
+  let sketchPages = [];
+  let sketchCurrentPage = 0;
+  let sketchColor = '#e4e7ef';
+  let sketchSize = 2;
+  let sketchEraser = false;
+  let sketchDrawing = false;
+  let sketchCtx = null;
+  let sketchLastX = 0;
+  let sketchLastY = 0;
 
   // ===== SAFE STORAGE =====
   function safeSave(key, value) {
@@ -1404,6 +1624,7 @@
     setupTimer();
     setupVerseOverlay();
     setupNotesSystem();
+    setupSketchMode();
     requestWakeLock();
 
     // Apply notes visibility
@@ -1668,7 +1889,7 @@
 
   function updateNotesToggleLabel() {
     var btn = document.getElementById('btn-notes-toggle');
-    btn.innerHTML = notesVisible ? '&#128214; Notas: Mostrar' : '&#128214; Notas: Ocultar';
+    btn.innerHTML = notesVisible ? '&#128214; Ocultar' : '&#128214; Mostrar';
     btn.classList.toggle('active', notesVisible);
   }
 
@@ -1838,6 +2059,262 @@
       el.appendChild(noteBtn);
       el.appendChild(noteArea);
     });
+  }
+
+  // ===== SKETCH MODE =====
+  function setupSketchMode() {
+    // Load saved drawings
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_DRAWINGS) || '[]');
+      sketchPages = Array.isArray(saved) ? saved : [];
+    } catch (e) {
+      sketchPages = [];
+    }
+    if (sketchPages.length === 0) sketchPages.push(null);
+
+    const canvas = document.getElementById('sketch-canvas');
+    sketchCtx = canvas.getContext('2d');
+
+    // Mode toggle buttons
+    document.getElementById('btn-mode-panel').addEventListener('click', function() {
+      setSketchMode(false);
+    });
+    document.getElementById('btn-mode-sketch').addEventListener('click', function() {
+      setSketchMode(true);
+    });
+
+    // Color buttons
+    document.querySelectorAll('.sketch-color-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        sketchEraser = false;
+        document.getElementById('sketch-eraser').classList.remove('active');
+        sketchColor = this.dataset.color;
+        document.querySelectorAll('.sketch-color-btn').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+      });
+    });
+
+    // Size buttons
+    document.querySelectorAll('.sketch-size-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        sketchSize = parseInt(this.dataset.size);
+        document.querySelectorAll('.sketch-size-btn').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+      });
+    });
+
+    // Eraser
+    document.getElementById('sketch-eraser').addEventListener('click', function() {
+      sketchEraser = !sketchEraser;
+      this.classList.toggle('active', sketchEraser);
+    });
+
+    // Clear
+    document.getElementById('sketch-clear').addEventListener('click', function() {
+      if (confirm('Limpar esta pagina de rascunho?')) {
+        clearSketchCanvas();
+        saveCurrentSketchPage();
+      }
+    });
+
+    // Page navigation
+    document.getElementById('sketch-prev').addEventListener('click', function() {
+      if (sketchCurrentPage > 0) {
+        saveCurrentSketchPage();
+        sketchCurrentPage--;
+        loadSketchPage(sketchCurrentPage);
+        updateSketchPageLabel();
+      }
+    });
+
+    document.getElementById('sketch-next').addEventListener('click', function() {
+      if (sketchCurrentPage < sketchPages.length - 1) {
+        saveCurrentSketchPage();
+        sketchCurrentPage++;
+        loadSketchPage(sketchCurrentPage);
+        updateSketchPageLabel();
+      }
+    });
+
+    document.getElementById('sketch-new').addEventListener('click', function() {
+      if (sketchPages.length >= MAX_SKETCH_PAGES) {
+        alert('Maximo de ' + MAX_SKETCH_PAGES + ' paginas atingido.');
+        return;
+      }
+      saveCurrentSketchPage();
+      sketchPages.push(null);
+      sketchCurrentPage = sketchPages.length - 1;
+      clearSketchCanvas();
+      saveSketchPages();
+      updateSketchPageLabel();
+    });
+
+    // Pointer events for drawing
+    canvas.addEventListener('pointerdown', sketchPointerDown);
+    canvas.addEventListener('pointermove', sketchPointerMove);
+    canvas.addEventListener('pointerup', sketchPointerUp);
+    canvas.addEventListener('pointercancel', sketchPointerUp);
+    canvas.addEventListener('pointerleave', sketchPointerUp);
+
+    // Resize handler
+    window.addEventListener('resize', resizeSketchCanvas);
+  }
+
+  function setSketchMode(enabled) {
+    sketchMode = enabled;
+    const container = document.getElementById('sketch-container');
+    const panelBtn = document.getElementById('btn-mode-panel');
+    const sketchBtn = document.getElementById('btn-mode-sketch');
+    const mainContent = document.querySelector('.header');
+    const timeline = document.querySelector('.timeline');
+    const footer = document.querySelector('footer');
+
+    panelBtn.classList.toggle('active', !enabled);
+    sketchBtn.classList.toggle('active', enabled);
+
+    if (enabled) {
+      container.classList.add('visible');
+      // Set spacer height to match toolbar
+      const toolbar = document.getElementById('toolbar');
+      document.getElementById('sketch-spacer').style.height = toolbar.offsetHeight + 'px';
+      resizeSketchCanvas();
+      loadSketchPage(sketchCurrentPage);
+      updateSketchPageLabel();
+      // Hide main content
+      if (mainContent) mainContent.style.display = 'none';
+      if (timeline) timeline.style.display = 'none';
+      if (footer) footer.style.display = 'none';
+    } else {
+      saveCurrentSketchPage();
+      container.classList.remove('visible');
+      // Show main content
+      if (mainContent) mainContent.style.display = '';
+      if (timeline) timeline.style.display = '';
+      if (footer) footer.style.display = '';
+    }
+  }
+
+  function resizeSketchCanvas() {
+    const canvas = document.getElementById('sketch-canvas');
+    const wrap = document.getElementById('sketch-canvas-wrap');
+    const dpr = window.devicePixelRatio || 1;
+
+    // Save current drawing before resize
+    let imageData = null;
+    if (canvas.width > 0 && canvas.height > 0) {
+      try { imageData = canvas.toDataURL('image/png'); } catch (e) {}
+    }
+
+    canvas.width = wrap.clientWidth * dpr;
+    canvas.height = wrap.clientHeight * dpr;
+    canvas.style.width = wrap.clientWidth + 'px';
+    canvas.style.height = wrap.clientHeight + 'px';
+    sketchCtx.scale(dpr, dpr);
+    sketchCtx.lineCap = 'round';
+    sketchCtx.lineJoin = 'round';
+
+    // Restore drawing
+    if (imageData) {
+      const img = new Image();
+      img.onload = function() {
+        sketchCtx.drawImage(img, 0, 0, wrap.clientWidth, wrap.clientHeight);
+      };
+      img.src = imageData;
+    } else {
+      loadSketchPage(sketchCurrentPage);
+    }
+  }
+
+  function clearSketchCanvas() {
+    const canvas = document.getElementById('sketch-canvas');
+    const wrap = document.getElementById('sketch-canvas-wrap');
+    sketchCtx.clearRect(0, 0, wrap.clientWidth, wrap.clientHeight);
+  }
+
+  function saveCurrentSketchPage() {
+    const canvas = document.getElementById('sketch-canvas');
+    try {
+      const data = canvas.toDataURL('image/png');
+      sketchPages[sketchCurrentPage] = data;
+      saveSketchPages();
+    } catch (e) { /* canvas tainted or other error */ }
+  }
+
+  function loadSketchPage(index) {
+    clearSketchCanvas();
+    const data = sketchPages[index];
+    if (data) {
+      const img = new Image();
+      const wrap = document.getElementById('sketch-canvas-wrap');
+      img.onload = function() {
+        sketchCtx.drawImage(img, 0, 0, wrap.clientWidth, wrap.clientHeight);
+      };
+      img.src = data;
+    }
+  }
+
+  function saveSketchPages() {
+    safeSave(STORAGE_DRAWINGS, JSON.stringify(sketchPages));
+  }
+
+  function updateSketchPageLabel() {
+    document.getElementById('sketch-page-label').textContent =
+      (sketchCurrentPage + 1) + '/' + sketchPages.length;
+  }
+
+  function getSketchPos(e) {
+    const canvas = document.getElementById('sketch-canvas');
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      pressure: e.pressure || 0.5
+    };
+  }
+
+  function sketchPointerDown(e) {
+    e.preventDefault();
+    sketchDrawing = true;
+    const pos = getSketchPos(e);
+    sketchLastX = pos.x;
+    sketchLastY = pos.y;
+
+    sketchCtx.beginPath();
+    sketchCtx.arc(pos.x, pos.y, getSketchLineWidth(e) / 2, 0, Math.PI * 2);
+    sketchCtx.fillStyle = sketchEraser ? '#1a1d27' : sketchColor;
+    sketchCtx.fill();
+  }
+
+  function sketchPointerMove(e) {
+    if (!sketchDrawing) return;
+    e.preventDefault();
+    const pos = getSketchPos(e);
+
+    sketchCtx.beginPath();
+    sketchCtx.moveTo(sketchLastX, sketchLastY);
+    sketchCtx.lineTo(pos.x, pos.y);
+    sketchCtx.strokeStyle = sketchEraser ? '#1a1d27' : sketchColor;
+    sketchCtx.lineWidth = getSketchLineWidth(e);
+    sketchCtx.stroke();
+
+    sketchLastX = pos.x;
+    sketchLastY = pos.y;
+  }
+
+  function sketchPointerUp(e) {
+    if (sketchDrawing) {
+      sketchDrawing = false;
+      saveCurrentSketchPage();
+    }
+  }
+
+  function getSketchLineWidth(e) {
+    if (sketchEraser) return sketchSize * 4;
+    // Use pressure from stylus if available
+    if (e.pointerType === 'pen' && e.pressure > 0) {
+      return sketchSize * (0.5 + e.pressure * 1.5);
+    }
+    return sketchSize;
   }
 
   // ===== INIT =====
