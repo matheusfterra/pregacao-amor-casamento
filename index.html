@@ -313,6 +313,114 @@
     display: block;
   }
 
+  /* ===== NOTE TOOLBAR (mini-canvas tools like Rascunho) ===== */
+  .note-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 4px 6px;
+    background: rgba(15, 17, 23, 0.95);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    flex-wrap: wrap;
+    user-select: none;
+  }
+
+  .note-tool-sep {
+    width: 1px;
+    height: 18px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .note-color-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    touch-action: manipulation;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .note-color-btn.active {
+    border-color: #fff;
+    box-shadow: 0 0 4px rgba(255,255,255,0.4);
+  }
+
+  .note-size-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .note-size-btn.active {
+    border-color: var(--accent-1);
+    background: rgba(108, 140, 255, 0.2);
+  }
+
+  .note-size-dot {
+    border-radius: 50%;
+    background: var(--text);
+  }
+
+  .note-action-btn {
+    min-height: 26px;
+    padding: 2px 7px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    touch-action: manipulation;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .note-action-btn.active {
+    background: rgba(248, 113, 113, 0.2);
+    border-color: var(--accent-5);
+    color: var(--accent-5);
+  }
+
+  .note-zoom-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    min-width: 28px;
+    text-align: center;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .note-canvas-wrap {
+    position: relative;
+    overflow: auto;
+    max-height: 400px;
+  }
+
+  .note-area canvas {
+    border-radius: 0 0 8px 8px;
+  }
+
+  .note-area .note-canvas-clear {
+    top: auto;
+    bottom: 12px;
+  }
+
   /* Make items with note-btn position relative */
   .point, .speak, .couple-card, .lang-card {
     position: relative;
@@ -1180,7 +1288,7 @@
       <div class="couple-card" data-item="3-c1">
         <div class="couple-icon">&#128141;</div>
         <div class="couple-info">
-          <div class="couple-name">Isaque e Rebeca <span class="verse">Gn 24</span></div>
+          <div class="couple-name">Isaque e Rebeca <span class="verse" data-text="Abraao era ja velho e avancado em dias, e o SENHOR havia abencoado a Abraao em tudo. Disse Abraao ao seu servo mais velho: Poe a mao debaixo da minha coxa, para que eu te faca jurar pelo SENHOR, Deus dos ceus e Deus da terra, que nao tomaras esposa para meu filho das filhas dos cananeus, entre os quais habito; mas iras a minha parentela e dali tomaras esposa para Isaque, meu filho.">Gn 24</span></div>
           <div class="couple-lesson">
             <strong>Amor no proposito de Deus.</strong> Casamento guiado por oracao (servo orou em Gn 24:12). Rebeca tinha CARATER antes de ter marido (serviu agua para 10 camelos = ~1.000 litros). Amor cresceu DEPOIS do compromisso (Gn 24:67). 20 anos de esterilidade enfrentados com oracao (Gn 25:21). Carinho visivel apos decadas (<span class="verse" data-text="Tendo-se passado muito tempo, Abimeleque, rei dos filisteus, olhando pela janela, viu que Isaque acariciava a Rebeca, sua mulher.">Gn 26:8</span>).
             <br><strong>Aplicacao:</strong> Busque a Deus antes de buscar alguem. Desenvolva carater AGORA.
@@ -1191,7 +1299,7 @@
       <div class="couple-card" data-item="3-c2">
         <div class="couple-icon">&#127793;</div>
         <div class="couple-info">
-          <div class="couple-name">Boaz e Rute <span class="verse">Rt 2-4</span></div>
+          <div class="couple-name">Boaz e Rute <span class="verse" data-text="Disse Rute: Nao me instes para que te deixe e me obrigue a nao seguir-te; porque, aonde quer que fores, irei eu e, onde quer que pousares, ali pousarei eu; o teu povo e o meu povo, o teu Deus e o meu Deus. Onde quer que morreres, morrerei eu e ali serei sepultada. (Rt 1:16-17) — Respondeu Boaz: Bem me contaram tudo quanto fizeste a tua sogra, depois da morte de teu marido. (Rt 2:11)">Rt 2-4</span></div>
           <div class="couple-lesson">
             <strong>Amor pelo carater, nao pela aparencia.</strong> Boaz ouviu sobre a fidelidade de Rute ANTES de conhece-la (Rt 2:11). Rute TRABALHAVA — nao ficou esperando (Rt 2:2). Boaz PROTEGEU antes de cortejar (Rt 2:8-9). Processo com honra publica (Rt 4:1-10). Fruto: linhagem de Cristo (Mt 1:5).
             <br><strong>Aplicacao:</strong> Sua reputacao chega antes de voce. A pessoa certa te encontra no seu proposito.
@@ -1202,7 +1310,7 @@
       <div class="couple-card" data-item="3-c3">
         <div class="couple-icon">&#9971;</div>
         <div class="couple-info">
-          <div class="couple-name">Aquila e Priscila <span class="verse">At 18; Rm 16:3-5</span></div>
+          <div class="couple-name">Aquila e Priscila <span class="verse" data-text="Depois disto, Paulo partiu de Atenas e foi para Corinto. E, achando um certo judeu por nome Aquila, natural do Ponto, que havia pouco tinha vindo da Italia, com Priscila, sua mulher, foi ter com eles; e, como era do mesmo oficio, ficou com eles e trabalhava; pois o oficio deles era fazer tendas. (At 18:1-3) — Saudai a Priscila e a Aquila, meus cooperadores em Cristo Jesus, os quais pela minha vida expuseram a sua cabeca; a quem nao somente eu agradeco, mas tambem todas as igrejas dos gentios. Saudai igualmente a igreja que esta na casa deles. (Rm 16:3-5)">At 18; Rm 16:3-5</span></div>
           <div class="couple-lesson">
             <strong>O casal que ministrava junto.</strong> SEMPRE mencionados juntos (6x no NT). Trabalhavam juntos (fabricantes de tendas). Ensinavam juntos (corrigiram Apolo — At 18:26). Arriscaram a vida um pelo outro (Rm 16:4). Igreja em casa (Rm 16:5).
             <br><strong>Aplicacao:</strong> Casamento e parceria — os dois crescem, servem e arriscam juntos.
@@ -1213,7 +1321,7 @@
       <div class="couple-card" data-item="3-c4">
         <div class="couple-icon">&#11088;</div>
         <div class="couple-info">
-          <div class="couple-name">Jose e Maria <span class="verse">Mt 1-2; Lc 1-2</span></div>
+          <div class="couple-name">Jose e Maria <span class="verse" data-text="Ora, o nascimento de Jesus Cristo foi assim: Estando Maria, sua mae, desposada com Jose, sem que tivessem antes coabitado, achou-se gravida pelo Espirito Santo. Jose, seu esposo, sendo justo e nao a querendo infamar, resolveu deixa-la secretamente. Enquanto ponderava nestas coisas, eis que lhe apareceu, em sonho, um anjo do Senhor, dizendo: Jose, filho de Davi, nao temas receber Maria, tua mulher, porque o que nela foi gerado e do Espirito Santo. (Mt 1:18-20) — Disse, porem, Maria: Aqui esta a serva do Senhor; que se cumpra em mim conforme a tua palavra. (Lc 1:38)">Mt 1-2; Lc 1-2</span></div>
           <div class="couple-lesson">
             <strong>Obediencia radical.</strong> Jose: justo E misericordioso — protegeu a honra de Maria (Mt 1:19). Maria: disse SIM a Deus sem entender (Lc 1:38). Enfrentaram crise atras de crise JUNTOS (sem hospedaria, fuga ao Egito, pobreza). Criaram filhos na fe (Lc 2:41).
             <br><strong>Aplicacao:</strong> Ser homem de Deus = proteger. Submissao a Deus vem antes de qualquer relacionamento.
@@ -1224,7 +1332,7 @@
       <div class="couple-card" data-item="3-c5">
         <div class="couple-icon">&#128148;</div>
         <div class="couple-info">
-          <div class="couple-name">Abraao e Sara <span class="verse">Gn 12-23; Hb 11:8-12</span></div>
+          <div class="couple-name">Abraao e Sara <span class="verse" data-text="Pela fe, Abraao, quando chamado, obedeceu, a fim de ir para um lugar que devia receber por heranca; e partiu sem saber aonde ia. Pela fe, tambem, a propria Sara recebeu poder para ser mae, nao obstante o avanco da sua idade, pois teve por fiel aquele que lhe havia feito a promessa. (Hb 11:8,11) — Visitou o SENHOR a Sara, como lhe dissera, e lhe fez como lhe havia prometido. Sara concebeu e deu a luz um filho a Abraao na sua velhice, ao tempo determinado. (Gn 21:1-2)">Gn 12-23; Hb 11:8-12</span></div>
           <div class="couple-lesson">
             <strong>Falhou, esperou, foi restaurado.</strong> Abraao mentiu 2x sobre Sara (Gn 12:13; 20:2). Sara deu Agar — impaciencia com Deus (Gn 16:2). MAS Deus restaurou: Isaque nasceu aos 100/90 anos (Gn 21:1-5). Pedro elogia a fe de Sara (1Pe 3:6).
             <br><strong>Aplicacao:</strong> Ate herois da fe falham. Deus nao descarta quem falha — restaura quem cre.
@@ -1235,7 +1343,7 @@
       <div class="couple-card" data-item="3-c6">
         <div class="couple-icon">&#128153;</div>
         <div class="couple-info">
-          <div class="couple-name">Oseias e Gomer <span class="verse">Os 1-3</span> (guardar para o climax!)</div>
+          <div class="couple-name">Oseias e Gomer <span class="verse" data-text="Quando o SENHOR falou pela primeira vez por intermedio de Oseias, disse-lhe: Vai, toma uma mulher de prostituicoes e filhos de prostituicao, porque a terra se prostituiu, desviando-se do SENHOR. Foi, pois, e tomou a Gomer, filha de Diblaim; e ela concebeu e lhe deu um filho. (Os 1:2-3) — Disse-me o SENHOR: Vai outra vez, ama uma mulher, amada de seu amigo e adultera, como o SENHOR ama os filhos de Israel. (Os 3:1)">Os 1-3</span> (guardar para o climax!)</div>
           <div class="couple-lesson">
             <strong>O amor incondicional = imagem do evangelho.</strong> Deus manda amar mulher infiel (<span class="verse" data-text="Disse-me o SENHOR: Vai outra vez, ama uma mulher, amada de seu amigo e adultera, como o SENHOR ama os filhos de Israel, embora eles olhem para outros deuses.">Os 3:1</span>). Oseias COMPRA DE VOLTA sua propria esposa (<span class="verse" data-text="Comprei-a, pois, para mim por quinze siclos de prata e um omer e meio de cevada.">Os 3:2</span>). Retrato de Rm 5:8 no AT.
             <br><strong>Usar no BLOCO 7 (climax) — nao aqui!</strong>
@@ -2014,11 +2122,100 @@
     });
   }
 
-  // ===== NOTES SYSTEM (Mini Drawing Canvas) =====
+  // ===== NOTES SYSTEM (Mini Drawing Canvas with Toolbar) =====
+  var NOTE_COLORS = ['#e4e7ef', '#f59e0b', '#f87171', '#6c8cff', '#34d399'];
+  var NOTE_SIZES = [2, 5, 10];
+  var NOTE_ZOOM_LEVELS = [50, 75, 100, 125, 150, 200];
+  var NOTE_BG = '#1a1d27';
+
+  function createNoteToolbar() {
+    var toolbar = document.createElement('div');
+    toolbar.className = 'note-toolbar';
+
+    // Colors
+    NOTE_COLORS.forEach(function(color, i) {
+      var btn = document.createElement('button');
+      btn.className = 'note-color-btn' + (i === 1 ? ' active' : '');
+      btn.style.background = color;
+      btn.dataset.color = color;
+      btn.title = ['Branco','Amarelo','Vermelho','Azul','Verde'][i];
+      toolbar.appendChild(btn);
+    });
+
+    toolbar.appendChild(createNoteSep());
+
+    // Sizes
+    NOTE_SIZES.forEach(function(size, i) {
+      var btn = document.createElement('button');
+      btn.className = 'note-size-btn' + (i === 0 ? ' active' : '');
+      btn.dataset.size = size;
+      var dot = document.createElement('span');
+      dot.className = 'note-size-dot';
+      var dotSize = [4, 8, 14][i];
+      dot.style.width = dotSize + 'px';
+      dot.style.height = dotSize + 'px';
+      btn.appendChild(dot);
+      toolbar.appendChild(btn);
+    });
+
+    toolbar.appendChild(createNoteSep());
+
+    // Eraser
+    var eraserBtn = document.createElement('button');
+    eraserBtn.className = 'note-action-btn';
+    eraserBtn.textContent = 'Borracha';
+    eraserBtn.dataset.role = 'eraser';
+    toolbar.appendChild(eraserBtn);
+
+    // Clear
+    var clearBtn = document.createElement('button');
+    clearBtn.className = 'note-action-btn';
+    clearBtn.textContent = 'Limpar';
+    clearBtn.dataset.role = 'clear';
+    toolbar.appendChild(clearBtn);
+
+    toolbar.appendChild(createNoteSep());
+
+    // Zoom
+    var zoomOut = document.createElement('button');
+    zoomOut.className = 'note-action-btn';
+    zoomOut.textContent = '-';
+    zoomOut.dataset.role = 'zoom-out';
+    toolbar.appendChild(zoomOut);
+
+    var zoomLabel = document.createElement('span');
+    zoomLabel.className = 'note-zoom-label';
+    zoomLabel.textContent = '100%';
+    zoomLabel.dataset.role = 'zoom-reset';
+    toolbar.appendChild(zoomLabel);
+
+    var zoomIn = document.createElement('button');
+    zoomIn.className = 'note-action-btn';
+    zoomIn.textContent = '+';
+    zoomIn.dataset.role = 'zoom-in';
+    toolbar.appendChild(zoomIn);
+
+    return toolbar;
+  }
+
+  function createNoteSep() {
+    var sep = document.createElement('div');
+    sep.className = 'note-tool-sep';
+    return sep;
+  }
+
   function setupNotesSystem() {
     var items = document.querySelectorAll('[data-item]');
     items.forEach(function(el) {
       var itemId = el.dataset.item;
+
+      // Per-note state
+      var noteState = {
+        color: '#f59e0b',
+        size: 2,
+        eraser: false,
+        zoom: 100
+      };
 
       // Add note button
       var noteBtn = document.createElement('button');
@@ -2027,25 +2224,28 @@
       noteBtn.title = 'Desenhar nota';
       noteBtn.setAttribute('aria-label', 'Desenhar nota');
 
-      // Add note area with mini canvas
+      // Add note area with toolbar + canvas wrapper
       var noteArea = document.createElement('div');
       noteArea.className = 'note-area';
+
+      // Toolbar
+      var toolbar = createNoteToolbar();
+      noteArea.appendChild(toolbar);
+
+      // Canvas wrapper (for zoom scrolling)
+      var canvasWrap = document.createElement('div');
+      canvasWrap.className = 'note-canvas-wrap';
 
       var noteCanvas = document.createElement('canvas');
       noteCanvas.className = 'note-mini-canvas';
       noteCanvas.style.width = '100%';
       noteCanvas.style.height = '120px';
 
-      var clearBtn = document.createElement('button');
-      clearBtn.className = 'note-canvas-clear';
-      clearBtn.innerHTML = '&#128465;';
-      clearBtn.title = 'Limpar desenho';
+      canvasWrap.appendChild(noteCanvas);
+      noteArea.appendChild(canvasWrap);
 
       var resizeHandle = document.createElement('div');
       resizeHandle.className = 'note-canvas-resize';
-
-      noteArea.appendChild(noteCanvas);
-      noteArea.appendChild(clearBtn);
       noteArea.appendChild(resizeHandle);
 
       // Restore saved note (dataURL)
@@ -2053,6 +2253,87 @@
         noteArea.classList.add('has-content');
         noteBtn.classList.add('has-note');
       }
+
+      // === Toolbar event handlers ===
+
+      // Colors
+      toolbar.querySelectorAll('.note-color-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          noteState.eraser = false;
+          noteState.color = btn.dataset.color;
+          toolbar.querySelectorAll('.note-color-btn').forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          toolbar.querySelector('[data-role="eraser"]').classList.remove('active');
+        });
+      });
+
+      // Sizes
+      toolbar.querySelectorAll('.note-size-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          noteState.size = parseInt(btn.dataset.size);
+          toolbar.querySelectorAll('.note-size-btn').forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+        });
+      });
+
+      // Eraser
+      var eraserBtn = toolbar.querySelector('[data-role="eraser"]');
+      eraserBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        noteState.eraser = !noteState.eraser;
+        eraserBtn.classList.toggle('active', noteState.eraser);
+      });
+
+      // Clear
+      toolbar.querySelector('[data-role="clear"]').addEventListener('click', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        if (confirm('Limpar este desenho?')) {
+          var ctx = noteCanvas.getContext('2d');
+          ctx.clearRect(0, 0, noteCanvas.width, noteCanvas.height);
+          delete notes[itemId];
+          noteArea.classList.remove('has-content');
+          noteBtn.classList.remove('has-note');
+          if (noteCanvas._resetHasDrawn) noteCanvas._resetHasDrawn();
+          safeSave(STORAGE_NOTES, JSON.stringify(notes));
+        }
+      });
+
+      // Zoom
+      var zoomLabel = toolbar.querySelector('.note-zoom-label');
+
+      function applyNoteZoom() {
+        var scale = noteState.zoom / 100;
+        noteCanvas.style.transform = 'scale(' + scale + ')';
+        noteCanvas.style.transformOrigin = 'top left';
+        zoomLabel.textContent = noteState.zoom + '%';
+      }
+
+      toolbar.querySelector('[data-role="zoom-in"]').addEventListener('click', function(e) {
+        e.stopPropagation();
+        var idx = NOTE_ZOOM_LEVELS.indexOf(noteState.zoom);
+        if (idx < NOTE_ZOOM_LEVELS.length - 1) {
+          noteState.zoom = NOTE_ZOOM_LEVELS[idx + 1];
+          applyNoteZoom();
+        }
+      });
+
+      toolbar.querySelector('[data-role="zoom-out"]').addEventListener('click', function(e) {
+        e.stopPropagation();
+        var idx = NOTE_ZOOM_LEVELS.indexOf(noteState.zoom);
+        if (idx > 0) {
+          noteState.zoom = NOTE_ZOOM_LEVELS[idx - 1];
+          applyNoteZoom();
+        }
+      });
+
+      zoomLabel.addEventListener('click', function(e) {
+        e.stopPropagation();
+        noteState.zoom = 100;
+        applyNoteZoom();
+      });
 
       // Toggle note area on button click
       noteBtn.addEventListener('click', function(e) {
@@ -2064,28 +2345,19 @@
         }
       });
 
-      // Clear button
-      clearBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        var ctx = noteCanvas.getContext('2d');
-        ctx.clearRect(0, 0, noteCanvas.width, noteCanvas.height);
-        delete notes[itemId];
-        noteArea.classList.remove('has-content');
-        noteBtn.classList.remove('has-note');
-        if (noteCanvas._resetHasDrawn) noteCanvas._resetHasDrawn();
-        safeSave(STORAGE_NOTES, JSON.stringify(notes));
-      });
-
       // Resize handle
       setupNoteCanvasResize(resizeHandle, noteCanvas, itemId);
 
-      // Drawing on mini canvas
-      setupMiniCanvasDrawing(noteCanvas, itemId, noteArea, noteBtn);
+      // Drawing on mini canvas (with state)
+      setupMiniCanvasDrawing(noteCanvas, itemId, noteArea, noteBtn, noteState);
 
       // Prevent long-press from triggering check
       noteCanvas.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: false });
       noteCanvas.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+
+      // Stop toolbar interactions from bubbling
+      toolbar.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: false });
+      toolbar.addEventListener('mousedown', function(e) { e.stopPropagation(); });
 
       el.appendChild(noteBtn);
       el.appendChild(noteArea);
@@ -2133,12 +2405,22 @@
     } catch (e) { /* canvas error */ }
   }
 
-  function setupMiniCanvasDrawing(canvas, itemId, noteArea, noteBtn) {
+  function setupMiniCanvasDrawing(canvas, itemId, noteArea, noteBtn, noteState) {
     var drawing = false;
     var hasDrawn = !!notes[itemId]; // true if restored from saved data
     var lastX = 0, lastY = 0;
-    var DRAW_COLOR = '#f59e0b';
-    var DRAW_SIZE = 3;
+
+    function getDrawColor() {
+      return noteState.eraser ? NOTE_BG : noteState.color;
+    }
+    function getDrawSize(e) {
+      var base = noteState.size;
+      if (noteState.eraser) return base * 4;
+      if (e && e.pointerType === 'pen' && e.pressure > 0) {
+        return base * (0.5 + e.pressure * 1.5);
+      }
+      return base;
+    }
 
     canvas.addEventListener('pointerdown', function(e) {
       e.preventDefault();
@@ -2146,13 +2428,13 @@
       initMiniCanvas(canvas, itemId);
       drawing = true;
       hasDrawn = true;
-      var pos = getMiniCanvasPos(canvas, e);
+      var pos = getMiniCanvasPos(canvas, e, noteState);
       lastX = pos.x;
       lastY = pos.y;
       var ctx = canvas.getContext('2d');
       ctx.beginPath();
-      ctx.arc(pos.x, pos.y, DRAW_SIZE / 2, 0, Math.PI * 2);
-      ctx.fillStyle = DRAW_COLOR;
+      ctx.arc(pos.x, pos.y, getDrawSize(e) / 2, 0, Math.PI * 2);
+      ctx.fillStyle = getDrawColor();
       ctx.fill();
     });
 
@@ -2160,13 +2442,13 @@
       if (!drawing) return;
       e.preventDefault();
       e.stopPropagation();
-      var pos = getMiniCanvasPos(canvas, e);
+      var pos = getMiniCanvasPos(canvas, e, noteState);
       var ctx = canvas.getContext('2d');
       ctx.beginPath();
       ctx.moveTo(lastX, lastY);
       ctx.lineTo(pos.x, pos.y);
-      ctx.strokeStyle = DRAW_COLOR;
-      ctx.lineWidth = DRAW_SIZE;
+      ctx.strokeStyle = getDrawColor();
+      ctx.lineWidth = getDrawSize(e);
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       ctx.stroke();
@@ -2189,11 +2471,12 @@
     canvas._resetHasDrawn = function() { hasDrawn = false; };
   }
 
-  function getMiniCanvasPos(canvas, e) {
+  function getMiniCanvasPos(canvas, e, noteState) {
     var rect = canvas.getBoundingClientRect();
+    var scale = (noteState && noteState.zoom) ? noteState.zoom / 100 : 1;
     return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
+      x: (e.clientX - rect.left) / scale,
+      y: (e.clientY - rect.top) / scale
     };
   }
 
