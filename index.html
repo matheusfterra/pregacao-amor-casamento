@@ -416,6 +416,33 @@
     flex-shrink: 0;
   }
 
+  .note-page-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 600;
+    user-select: none;
+  }
+
+  .note-page-nav button {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    padding: 0;
+  }
+
   /* Make items with note-btn position relative */
   .point, .speak, .couple-card, .lang-card {
     position: relative;
@@ -1157,6 +1184,14 @@
       <button class="note-action-btn" id="note-zoom-out" title="Zoom -">-</button>
       <span class="note-zoom-label" id="note-zoom-label">100%</span>
       <button class="note-action-btn" id="note-zoom-in" title="Zoom +">+</button>
+    </div>
+    <div class="note-tool-sep"></div>
+    <div class="note-page-nav">
+      <button id="note-prev" title="Pagina anterior">&#8249;</button>
+      <span id="note-page-label">1/1</span>
+      <button id="note-next" title="Proxima pagina">&#8250;</button>
+      <button id="note-new" title="Nova pagina" style="font-size:14px">+</button>
+      <button id="note-delete" title="Deletar pagina" style="font-size:14px;color:var(--accent-5);">&#128465;</button>
     </div>
   </div>
 </div>
@@ -2154,9 +2189,10 @@
     });
   }
 
-  // ===== NOTES SYSTEM (Modal Drawing Popup) =====
+  // ===== NOTES SYSTEM (Modal with Multi-Page Drawing) =====
   var NOTE_BG = '#1a1d27';
   var NOTE_ZOOM_LEVELS = [50, 75, 100, 125, 150, 200];
+  var MAX_NOTE_PAGES = 10;
 
   // Modal state
   var noteModalState = {
@@ -2167,18 +2203,33 @@
     eraser: false,
     zoom: 100,
     drawing: false,
-    hasDrawn: false,
     lastX: 0,
     lastY: 0,
     ctx: null,
-    saveTimer: null
+    saveTimer: null,
+    currentPage: 0,
+    pages: []    // array of dataURL strings (one per page)
   };
 
+  // Migrate old single-string notes to array format
+  function migrateNotes() {
+    Object.keys(notes).forEach(function(key) {
+      if (typeof notes[key] === 'string' && notes[key].startsWith('data:')) {
+        notes[key] = [notes[key]];
+      }
+    });
+    safeSave(STORAGE_NOTES, JSON.stringify(notes));
+  }
+
+  function hasNoteContent(itemId) {
+    var data = notes[itemId];
+    return Array.isArray(data) && data.length > 0 && data.some(function(p) { return !!p; });
+  }
+
   function setupNotesSystem() {
-    // Setup the shared modal
+    migrateNotes();
     setupNoteModal();
 
-    // Add note buttons to each item
     var items = document.querySelectorAll('[data-item]');
     items.forEach(function(el) {
       var itemId = el.dataset.item;
@@ -2189,12 +2240,10 @@
       noteBtn.title = 'Abrir nota';
       noteBtn.setAttribute('aria-label', 'Abrir nota');
 
-      // Mark if has saved note
-      if (notes[itemId] && notes[itemId].startsWith('data:')) {
+      if (hasNoteContent(itemId)) {
         noteBtn.classList.add('has-note');
       }
 
-      // Open modal on click
       noteBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -2206,19 +2255,16 @@
   }
 
   function setupNoteModal() {
-    var modal = document.getElementById('note-modal');
     var canvas = document.getElementById('note-modal-canvas');
     var wrap = document.getElementById('note-modal-canvas-wrap');
     var toolbar = document.getElementById('note-modal-toolbar');
     var st = noteModalState;
     st.ctx = canvas.getContext('2d');
 
-    // Close button
-    document.getElementById('note-modal-close').addEventListener('click', function() {
-      closeNoteModal();
-    });
+    // Close
+    document.getElementById('note-modal-close').addEventListener('click', closeNoteModal);
 
-    // Color buttons
+    // Colors
     toolbar.querySelectorAll('.note-color-btn').forEach(function(btn) {
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -2230,7 +2276,7 @@
       });
     });
 
-    // Size buttons
+    // Sizes
     toolbar.querySelectorAll('.note-size-btn').forEach(function(btn) {
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -2247,17 +2293,13 @@
       this.classList.toggle('active', st.eraser);
     });
 
-    // Clear
+    // Clear (current page only)
     document.getElementById('note-clear').addEventListener('click', function(e) {
       e.stopPropagation();
-      if (confirm('Limpar este desenho?')) {
-        st.ctx.clearRect(0, 0, wrap.clientWidth, wrap.clientHeight);
-        st.hasDrawn = false;
-        if (st.itemId) {
-          delete notes[st.itemId];
-          if (st.noteBtn) st.noteBtn.classList.remove('has-note');
-          safeSave(STORAGE_NOTES, JSON.stringify(notes));
-        }
+      if (confirm('Limpar esta pagina?')) {
+        clearNoteCanvas();
+        st.pages[st.currentPage] = null;
+        saveNotePages();
       }
     });
 
@@ -2265,23 +2307,71 @@
     document.getElementById('note-zoom-in').addEventListener('click', function(e) {
       e.stopPropagation();
       var idx = NOTE_ZOOM_LEVELS.indexOf(st.zoom);
-      if (idx < NOTE_ZOOM_LEVELS.length - 1) {
-        st.zoom = NOTE_ZOOM_LEVELS[idx + 1];
-        applyNoteModalZoom();
-      }
+      if (idx < NOTE_ZOOM_LEVELS.length - 1) { st.zoom = NOTE_ZOOM_LEVELS[idx + 1]; applyNoteZoom(); }
     });
     document.getElementById('note-zoom-out').addEventListener('click', function(e) {
       e.stopPropagation();
       var idx = NOTE_ZOOM_LEVELS.indexOf(st.zoom);
-      if (idx > 0) {
-        st.zoom = NOTE_ZOOM_LEVELS[idx - 1];
-        applyNoteModalZoom();
-      }
+      if (idx > 0) { st.zoom = NOTE_ZOOM_LEVELS[idx - 1]; applyNoteZoom(); }
     });
     document.getElementById('note-zoom-label').addEventListener('click', function(e) {
       e.stopPropagation();
       st.zoom = 100;
-      applyNoteModalZoom();
+      applyNoteZoom();
+    });
+
+    // Page navigation
+    document.getElementById('note-prev').addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (st.currentPage > 0) {
+        saveCurrentNotePage();
+        st.currentPage--;
+        loadNotePage(st.currentPage);
+        updateNotePageLabel();
+      }
+    });
+
+    document.getElementById('note-next').addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (st.currentPage < st.pages.length - 1) {
+        saveCurrentNotePage();
+        st.currentPage++;
+        loadNotePage(st.currentPage);
+        updateNotePageLabel();
+      }
+    });
+
+    document.getElementById('note-new').addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (st.pages.length >= MAX_NOTE_PAGES) {
+        alert('Maximo de ' + MAX_NOTE_PAGES + ' paginas por nota.');
+        return;
+      }
+      saveCurrentNotePage();
+      st.pages.push(null);
+      st.currentPage = st.pages.length - 1;
+      clearNoteCanvas();
+      saveNotePages();
+      updateNotePageLabel();
+    });
+
+    document.getElementById('note-delete').addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (st.pages.length <= 1) {
+        if (confirm('Limpar a unica pagina?')) {
+          clearNoteCanvas();
+          st.pages[0] = null;
+          saveNotePages();
+        }
+        return;
+      }
+      if (confirm('Deletar pagina ' + (st.currentPage + 1) + '?')) {
+        st.pages.splice(st.currentPage, 1);
+        if (st.currentPage >= st.pages.length) st.currentPage = st.pages.length - 1;
+        loadNotePage(st.currentPage);
+        saveNotePages();
+        updateNotePageLabel();
+      }
     });
 
     // Drawing events
@@ -2290,56 +2380,57 @@
     canvas.addEventListener('pointerup', notePointerUp);
     canvas.addEventListener('pointercancel', notePointerUp);
     canvas.addEventListener('pointerleave', notePointerUp);
+
+    // Resize handler
+    window.addEventListener('resize', function() {
+      if (document.getElementById('note-modal').classList.contains('visible')) {
+        resizeNoteCanvas();
+      }
+    });
   }
 
   function openNoteModal(itemId, noteBtn) {
     var modal = document.getElementById('note-modal');
-    var canvas = document.getElementById('note-modal-canvas');
-    var wrap = document.getElementById('note-modal-canvas-wrap');
     var st = noteModalState;
 
     st.itemId = itemId;
     st.noteBtn = noteBtn;
-    st.hasDrawn = !!notes[itemId];
     st.zoom = 100;
     st.eraser = false;
 
+    // Load pages for this item (or create first empty page)
+    var data = notes[itemId];
+    if (Array.isArray(data) && data.length > 0) {
+      st.pages = data.slice(); // copy
+    } else {
+      st.pages = [null];
+    }
+    st.currentPage = 0;
+
     // Reset toolbar UI
     var toolbar = document.getElementById('note-modal-toolbar');
-    toolbar.querySelectorAll('.note-color-btn').forEach(function(b, i) {
-      b.classList.toggle('active', i === 0);
-    });
-    toolbar.querySelectorAll('.note-size-btn').forEach(function(b, i) {
-      b.classList.toggle('active', i === 0);
-    });
+    toolbar.querySelectorAll('.note-color-btn').forEach(function(b, i) { b.classList.toggle('active', i === 0); });
+    toolbar.querySelectorAll('.note-size-btn').forEach(function(b, i) { b.classList.toggle('active', i === 0); });
     st.color = '#e4e7ef';
     st.size = 2;
     document.getElementById('note-eraser').classList.remove('active');
     document.getElementById('note-zoom-label').textContent = '100%';
 
-    // Set title
+    // Title
     var itemEl = document.querySelector('[data-item="' + itemId + '"]');
     var titleText = 'Nota';
     if (itemEl) {
       var point = itemEl.querySelector('.point-text, .speak-text, .couple-name, .lang-name, strong');
       if (point) titleText = point.textContent.substring(0, 60);
     }
-    document.getElementById('note-modal-title').textContent = '📝 ' + titleText;
+    document.getElementById('note-modal-title').textContent = '\ud83d\udcdd ' + titleText;
 
-    // Show modal
     modal.classList.add('visible');
+    updateNotePageLabel();
 
-    // Size canvas after modal is visible
     requestAnimationFrame(function() {
-      resizeNoteModalCanvas();
-      // Load saved drawing
-      if (notes[itemId] && notes[itemId].startsWith('data:')) {
-        var img = new Image();
-        img.onload = function() {
-          st.ctx.drawImage(img, 0, 0, wrap.clientWidth, wrap.clientHeight);
-        };
-        img.src = notes[itemId];
-      }
+      resizeNoteCanvas();
+      loadNotePage(st.currentPage);
     });
   }
 
@@ -2347,25 +2438,27 @@
     var modal = document.getElementById('note-modal');
     var st = noteModalState;
 
-    // Save current drawing
-    saveNoteModalCanvas();
+    saveCurrentNotePage();
+    saveNotePages();
 
     modal.classList.remove('visible');
     st.itemId = null;
     st.noteBtn = null;
   }
 
-  function resizeNoteModalCanvas() {
+  function resizeNoteCanvas() {
     var canvas = document.getElementById('note-modal-canvas');
     var wrap = document.getElementById('note-modal-canvas-wrap');
     var st = noteModalState;
     var dpr = window.devicePixelRatio || 1;
 
-    // Save current drawing before resize
     var imageData = null;
     if (canvas.width > 0 && canvas.height > 0) {
       try { imageData = canvas.toDataURL('image/png'); } catch (e) {}
     }
+
+    var prevZoom = st.zoom;
+    if (st.zoom !== 100) { st.zoom = 100; canvas.style.transform = ''; document.getElementById('note-zoom-label').textContent = '100%'; }
 
     canvas.width = wrap.clientWidth * dpr;
     canvas.height = wrap.clientHeight * dpr;
@@ -2376,17 +2469,62 @@
     st.ctx.lineCap = 'round';
     st.ctx.lineJoin = 'round';
 
-    // Restore
     if (imageData) {
       var img = new Image();
-      img.onload = function() {
-        st.ctx.drawImage(img, 0, 0, wrap.clientWidth, wrap.clientHeight);
-      };
+      img.onload = function() { st.ctx.drawImage(img, 0, 0, wrap.clientWidth, wrap.clientHeight); };
       img.src = imageData;
     }
   }
 
-  function applyNoteModalZoom() {
+  function clearNoteCanvas() {
+    var wrap = document.getElementById('note-modal-canvas-wrap');
+    var st = noteModalState;
+    st.ctx.clearRect(0, 0, wrap.clientWidth, wrap.clientHeight);
+  }
+
+  function saveCurrentNotePage() {
+    var canvas = document.getElementById('note-modal-canvas');
+    var st = noteModalState;
+    if (!st.itemId) return;
+    try {
+      var data = canvas.toDataURL('image/png');
+      st.pages[st.currentPage] = data;
+    } catch (e) {}
+  }
+
+  function loadNotePage(index) {
+    var wrap = document.getElementById('note-modal-canvas-wrap');
+    var st = noteModalState;
+    clearNoteCanvas();
+    var data = st.pages[index];
+    if (data) {
+      var img = new Image();
+      img.onload = function() { st.ctx.drawImage(img, 0, 0, wrap.clientWidth, wrap.clientHeight); };
+      img.src = data;
+    }
+  }
+
+  function saveNotePages() {
+    var st = noteModalState;
+    if (!st.itemId) return;
+    // Check if any page has content
+    var hasContent = st.pages.some(function(p) { return !!p; });
+    if (hasContent) {
+      notes[st.itemId] = st.pages.slice();
+      if (st.noteBtn) st.noteBtn.classList.add('has-note');
+    } else {
+      delete notes[st.itemId];
+      if (st.noteBtn) st.noteBtn.classList.remove('has-note');
+    }
+    safeSave(STORAGE_NOTES, JSON.stringify(notes));
+  }
+
+  function updateNotePageLabel() {
+    var st = noteModalState;
+    document.getElementById('note-page-label').textContent = (st.currentPage + 1) + '/' + st.pages.length;
+  }
+
+  function applyNoteZoom() {
     var canvas = document.getElementById('note-modal-canvas');
     var wrap = document.getElementById('note-modal-canvas-wrap');
     var st = noteModalState;
@@ -2398,25 +2536,10 @@
     document.getElementById('note-zoom-label').textContent = st.zoom + '%';
   }
 
-  function saveNoteModalCanvas() {
-    var canvas = document.getElementById('note-modal-canvas');
-    var st = noteModalState;
-    if (!st.itemId) return;
-    try {
-      if (st.hasDrawn) {
-        var data = canvas.toDataURL('image/png');
-        notes[st.itemId] = data;
-        if (st.noteBtn) st.noteBtn.classList.add('has-note');
-      }
-      safeSave(STORAGE_NOTES, JSON.stringify(notes));
-    } catch (e) { /* canvas error */ }
-  }
-
   function getNoteModalPos(e) {
     var canvas = document.getElementById('note-modal-canvas');
     var rect = canvas.getBoundingClientRect();
-    var st = noteModalState;
-    var scale = st.zoom / 100;
+    var scale = noteModalState.zoom / 100;
     return {
       x: (e.clientX - rect.left) / scale,
       y: (e.clientY - rect.top) / scale,
@@ -2437,7 +2560,6 @@
     e.preventDefault();
     var st = noteModalState;
     st.drawing = true;
-    st.hasDrawn = true;
     var pos = getNoteModalPos(e);
     st.lastX = pos.x;
     st.lastY = pos.y;
@@ -2470,7 +2592,10 @@
     if (st.drawing) {
       st.drawing = false;
       clearTimeout(st.saveTimer);
-      st.saveTimer = setTimeout(function() { saveNoteModalCanvas(); }, 2000);
+      st.saveTimer = setTimeout(function() {
+        saveCurrentNotePage();
+        saveNotePages();
+      }, 2000);
     }
   }
 
