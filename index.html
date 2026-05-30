@@ -498,7 +498,7 @@
   }
 
   .block-progress {
-    font-size: 12px;
+    font-size: calc(12px * var(--font-scale));
     color: var(--text-muted);
     white-space: nowrap;
     min-width: 28px;
@@ -738,12 +738,12 @@
   }
 
   .greek-trans {
-    font-size: 13px;
+    font-size: calc(13px * var(--font-scale));
     color: var(--text-muted);
   }
 
   .greek-meaning {
-    font-size: 15px;
+    font-size: calc(15px * var(--font-scale));
     color: var(--text);
     margin-top: 2px;
   }
@@ -759,7 +759,7 @@
     text-align: center;
     padding: 6px 4px;
     border-radius: 6px;
-    font-size: 13px;
+    font-size: calc(13px * var(--font-scale));
     font-weight: 600;
   }
 
@@ -837,7 +837,7 @@
     .timeline::before { left: 12px; }
     .block::before { left: -23px; width: 12px; height: 12px; }
     .greek-box { grid-template-columns: 1fr 1fr; }
-    .block-title { font-size: 20px; }
+    .block-title { font-size: calc(20px * var(--font-scale)); }
   }
 
   @media (max-width: 480px) {
@@ -1706,7 +1706,7 @@
       var moved = false;
 
       el.addEventListener('touchstart', function(e) {
-        if (e.target.closest('.note-btn') || e.target.closest('.note-area')) return;
+        if (e.target.closest('.note-btn') || e.target.closest('.note-area') || e.target.closest('.note-canvas-resize')) return;
         moved = false;
         var self = this;
         pressTimer = setTimeout(function() {
@@ -1726,7 +1726,7 @@
       el.addEventListener('touchcancel', function() { clearTimeout(pressTimer); });
 
       el.addEventListener('mousedown', function(e) {
-        if (e.target.closest('.block-check-btn') || e.target.closest('.note-btn') || e.target.closest('.note-area') || e.target.closest('.verse')) return;
+        if (e.target.closest('.block-check-btn') || e.target.closest('.note-btn') || e.target.closest('.note-area') || e.target.closest('.note-canvas-resize') || e.target.closest('.verse')) return;
         moved = false;
         var self = this;
         pressTimer = setTimeout(function() {
@@ -2073,6 +2073,7 @@
         delete notes[itemId];
         noteArea.classList.remove('has-content');
         noteBtn.classList.remove('has-note');
+        if (noteCanvas._resetHasDrawn) noteCanvas._resetHasDrawn();
         safeSave(STORAGE_NOTES, JSON.stringify(notes));
       });
 
@@ -2120,24 +2121,13 @@
     }
   }
 
-  function saveMiniCanvas(canvas, itemId, noteArea, noteBtn) {
+  function saveMiniCanvas(canvas, itemId, noteArea, noteBtn, hasDrawn) {
     try {
-      var data = canvas.toDataURL('image/png');
-      // Check if canvas is blank
-      var ctx = canvas.getContext('2d');
-      var pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-      var hasContent = false;
-      for (var i = 3; i < pixels.length; i += 4) {
-        if (pixels[i] > 0) { hasContent = true; break; }
-      }
-      if (hasContent) {
+      if (hasDrawn) {
+        var data = canvas.toDataURL('image/png');
         notes[itemId] = data;
         noteArea.classList.add('has-content');
         noteBtn.classList.add('has-note');
-      } else {
-        delete notes[itemId];
-        noteArea.classList.remove('has-content');
-        noteBtn.classList.remove('has-note');
       }
       safeSave(STORAGE_NOTES, JSON.stringify(notes));
     } catch (e) { /* canvas error */ }
@@ -2145,6 +2135,7 @@
 
   function setupMiniCanvasDrawing(canvas, itemId, noteArea, noteBtn) {
     var drawing = false;
+    var hasDrawn = !!notes[itemId]; // true if restored from saved data
     var lastX = 0, lastY = 0;
     var DRAW_COLOR = '#f59e0b';
     var DRAW_SIZE = 3;
@@ -2154,6 +2145,7 @@
       e.stopPropagation();
       initMiniCanvas(canvas, itemId);
       drawing = true;
+      hasDrawn = true;
       var pos = getMiniCanvasPos(canvas, e);
       lastX = pos.x;
       lastY = pos.y;
@@ -2185,13 +2177,16 @@
     var endDraw = function(e) {
       if (drawing) {
         drawing = false;
-        saveMiniCanvas(canvas, itemId, noteArea, noteBtn);
+        saveMiniCanvas(canvas, itemId, noteArea, noteBtn, hasDrawn);
       }
     };
 
     canvas.addEventListener('pointerup', endDraw);
     canvas.addEventListener('pointercancel', endDraw);
     canvas.addEventListener('pointerleave', endDraw);
+
+    // Expose hasDrawn reset for clear button
+    canvas._resetHasDrawn = function() { hasDrawn = false; };
   }
 
   function getMiniCanvasPos(canvas, e) {
@@ -2425,6 +2420,14 @@
     const wrap = document.getElementById('sketch-canvas-wrap');
     const dpr = window.devicePixelRatio || 1;
 
+    // Reset zoom to 100% before resize to avoid distortion
+    var prevZoom = sketchZoom;
+    if (sketchZoom !== 100) {
+      sketchZoom = 100;
+      canvas.style.transform = '';
+      document.getElementById('sketch-zoom-label').textContent = '100%';
+    }
+
     // Save current drawing before resize
     let imageData = null;
     if (canvas.width > 0 && canvas.height > 0) {
@@ -2435,6 +2438,8 @@
     canvas.height = wrap.clientHeight * dpr;
     canvas.style.width = wrap.clientWidth + 'px';
     canvas.style.height = wrap.clientHeight + 'px';
+    // Reset accumulated transforms before applying new scale
+    sketchCtx.setTransform(1, 0, 0, 1, 0, 0);
     sketchCtx.scale(dpr, dpr);
     sketchCtx.lineCap = 'round';
     sketchCtx.lineJoin = 'round';
@@ -2458,8 +2463,10 @@
   }
 
   function saveCurrentSketchPage() {
+    clearTimeout(sketchSaveTimer); // flush any pending debounce
     const canvas = document.getElementById('sketch-canvas');
     try {
+      // Always save at native resolution (zoom is CSS-only, doesn't affect backing buffer)
       const data = canvas.toDataURL('image/png');
       sketchPages[sketchCurrentPage] = data;
       saveSketchPages();
@@ -2467,11 +2474,19 @@
   }
 
   function loadSketchPage(index) {
-    clearSketchCanvas();
+    const canvas = document.getElementById('sketch-canvas');
+    const wrap = document.getElementById('sketch-canvas-wrap');
+    const dpr = window.devicePixelRatio || 1;
+    // Reset context transforms to avoid accumulation
+    sketchCtx.setTransform(1, 0, 0, 1, 0, 0);
+    sketchCtx.scale(dpr, dpr);
+    sketchCtx.lineCap = 'round';
+    sketchCtx.lineJoin = 'round';
+    // Clear at correct coordinates
+    sketchCtx.clearRect(0, 0, wrap.clientWidth, wrap.clientHeight);
     const data = sketchPages[index];
     if (data) {
       const img = new Image();
-      const wrap = document.getElementById('sketch-canvas-wrap');
       img.onload = function() {
         sketchCtx.drawImage(img, 0, 0, wrap.clientWidth, wrap.clientHeight);
       };
@@ -2540,10 +2555,13 @@
     sketchLastY = pos.y;
   }
 
+  var sketchSaveTimer = null;
   function sketchPointerUp(e) {
     if (sketchDrawing) {
       sketchDrawing = false;
-      saveCurrentSketchPage();
+      // Debounce save to avoid excessive localStorage writes
+      clearTimeout(sketchSaveTimer);
+      sketchSaveTimer = setTimeout(function() { saveCurrentSketchPage(); }, 2000);
     }
   }
 
