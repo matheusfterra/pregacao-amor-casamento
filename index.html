@@ -971,63 +971,6 @@
     color: var(--accent-3);
   }
 
-  /* ===== BLOCK NAV (bottom floating) ===== */
-  #block-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 90;
-    display: none;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 16px;
-    padding-bottom: max(10px, env(safe-area-inset-bottom, 10px));
-    background: rgba(15, 17, 23, 0.97);
-    backdrop-filter: blur(8px);
-    border-top: 1px solid var(--border);
-  }
-
-  #block-nav.visible {
-    display: flex;
-  }
-
-  #block-nav button {
-    min-height: 56px;
-    min-width: 56px;
-    padding: 8px 20px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    touch-action: manipulation;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    flex: 1;
-    max-width: 200px;
-  }
-
-  #block-nav button:active {
-    background: var(--surface-2);
-  }
-
-  #block-nav button.nav-disabled {
-    opacity: 0.3;
-    pointer-events: none;
-  }
-
-  #block-nav .nav-label {
-    font-size: 14px;
-    color: var(--text-muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
 
   /* ===== HOVER ONLY FOR MOUSE DEVICES ===== */
   @media (hover: hover) {
@@ -1055,7 +998,7 @@
 
   /* ===== PRINT ===== */
   @media print {
-    #toolbar, #progress-bar, #block-nav, #format-toolbar { display: none !important; }
+    #toolbar, #progress-bar, #format-toolbar { display: none !important; }
     body { background: #fff; color: #111; }
     .block { break-inside: avoid; border-color: #ddd; }
     .block-content { max-height: none !important; padding: 0 16px 16px !important; }
@@ -1297,11 +1240,9 @@
     </div>
     <div class="note-tool-sep"></div>
     <div class="note-page-nav">
-      <button id="note-prev" title="Pagina anterior">&#8249;</button>
+      <button id="note-prev" title="Nota anterior">&#8249;</button>
       <span id="note-page-label">1/1</span>
-      <button id="note-next" title="Proxima pagina">&#8250;</button>
-      <button id="note-new" title="Nova pagina" style="font-size:14px">+</button>
-      <button id="note-delete" title="Deletar pagina" style="font-size:14px;color:var(--accent-5);">&#128465;</button>
+      <button id="note-next" title="Proxima nota">&#8250;</button>
     </div>
   </div>
 </div>
@@ -1783,13 +1724,6 @@
 
 </div>
 
-<!-- Block Navigation (bottom floating) -->
-<div id="block-nav">
-  <button id="nav-prev" aria-label="Bloco anterior">&#8249; Anterior</button>
-  <span class="nav-label" id="nav-current">1/7</span>
-  <button id="nav-next" aria-label="Proximo bloco">Proximo &#8250;</button>
-</div>
-
 <!-- Sketch Mode Container -->
 <div id="sketch-container">
   <div id="sketch-spacer"></div>
@@ -1901,7 +1835,6 @@
     setupNotesSystem();
     setupSketchMode();
     setupFormatToolbar();
-    setupBlockNav();
     requestWakeLock();
 
     document.body.classList.add('notes-visible');
@@ -1912,7 +1845,6 @@
       else b.classList.add('open');
     });
 
-    updateBlockNav();
   }
 
   // ===== FONT SCALE =====
@@ -1943,7 +1875,6 @@
         }
 
         updateBlockIndicator();
-        updateBlockNav();
       });
     });
   }
@@ -2039,7 +1970,6 @@
           nextBlock.classList.add('open');
           currentOpenBlock = parseInt(blockNum) + 1;
           setTimeout(function() { nextBlock.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
-          updateBlockNav();
         }
       }, 200);
     }
@@ -2260,45 +2190,6 @@
     });
   }
 
-  // ===== BLOCK NAVIGATION (bottom bar) =====
-  function setupBlockNav() {
-    var nav = document.getElementById('block-nav');
-    nav.classList.add('visible');
-
-    document.getElementById('nav-prev').addEventListener('click', function() {
-      if (currentOpenBlock > 1) {
-        navigateToBlock(currentOpenBlock - 1);
-      }
-    });
-
-    document.getElementById('nav-next').addEventListener('click', function() {
-      if (currentOpenBlock < TOTAL_BLOCKS) {
-        navigateToBlock(currentOpenBlock + 1);
-      }
-    });
-  }
-
-  function navigateToBlock(num) {
-    document.querySelectorAll('.block.open').forEach(function(b) { b.classList.remove('open'); });
-    var block = document.getElementById('block-' + num);
-    if (block) {
-      block.classList.add('open');
-      currentOpenBlock = num;
-      setTimeout(function() {
-        block.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 50);
-      updateBlockNav();
-    }
-  }
-
-  function updateBlockNav() {
-    document.getElementById('nav-current').textContent = currentOpenBlock + '/' + TOTAL_BLOCKS;
-    var prevBtn = document.getElementById('nav-prev');
-    var nextBtn = document.getElementById('nav-next');
-    prevBtn.classList.toggle('nav-disabled', currentOpenBlock <= 1);
-    nextBtn.classList.toggle('nav-disabled', currentOpenBlock >= TOTAL_BLOCKS);
-  }
-
   // ===== FORMAT TOOLBAR (inline text editing) =====
   function setupFormatToolbar() {
     var ftb = document.getElementById('format-toolbar');
@@ -2449,7 +2340,10 @@
     ctx: null,
     saveTimer: null,
     currentPage: 0,
-    pages: []
+    pages: [],
+    allNoteItems: [],
+    currentNoteIndex: 0,
+    skipRestore: false
   };
 
   function migrateNotes() {
@@ -2556,54 +2450,23 @@
 
     document.getElementById('note-prev').addEventListener('click', function(e) {
       e.stopPropagation();
-      if (st.currentPage > 0) {
+      if (st.currentNoteIndex > 0) {
         saveCurrentNotePage();
-        st.currentPage--;
-        loadNotePage(st.currentPage);
-        updateNotePageLabel();
+        saveNotePages();
+        st.currentNoteIndex--;
+        var newItemId = st.allNoteItems[st.currentNoteIndex];
+        switchToNoteItem(newItemId);
       }
     });
 
     document.getElementById('note-next').addEventListener('click', function(e) {
       e.stopPropagation();
-      if (st.currentPage < st.pages.length - 1) {
+      if (st.currentNoteIndex < st.allNoteItems.length - 1) {
         saveCurrentNotePage();
-        st.currentPage++;
-        loadNotePage(st.currentPage);
-        updateNotePageLabel();
-      }
-    });
-
-    document.getElementById('note-new').addEventListener('click', function(e) {
-      e.stopPropagation();
-      if (st.pages.length >= MAX_NOTE_PAGES) {
-        alert('Maximo de ' + MAX_NOTE_PAGES + ' paginas por nota.');
-        return;
-      }
-      saveCurrentNotePage();
-      st.pages.push(null);
-      st.currentPage = st.pages.length - 1;
-      clearNoteCanvas();
-      saveNotePages();
-      updateNotePageLabel();
-    });
-
-    document.getElementById('note-delete').addEventListener('click', function(e) {
-      e.stopPropagation();
-      if (st.pages.length <= 1) {
-        if (confirm('Limpar a unica pagina?')) {
-          clearNoteCanvas();
-          st.pages[0] = null;
-          saveNotePages();
-        }
-        return;
-      }
-      if (confirm('Deletar pagina ' + (st.currentPage + 1) + '?')) {
-        st.pages.splice(st.currentPage, 1);
-        if (st.currentPage >= st.pages.length) st.currentPage = st.pages.length - 1;
-        loadNotePage(st.currentPage);
         saveNotePages();
-        updateNotePageLabel();
+        st.currentNoteIndex++;
+        var newItemId = st.allNoteItems[st.currentNoteIndex];
+        switchToNoteItem(newItemId);
       }
     });
 
@@ -2624,18 +2487,28 @@
     var modal = document.getElementById('note-modal');
     var st = noteModalState;
 
-    st.itemId = itemId;
-    st.noteBtn = noteBtn;
+    // Save previous note if switching
+    if (st.itemId) {
+      saveCurrentNotePage();
+      saveNotePages();
+    }
+
     st.zoom = 100;
     st.eraser = false;
 
-    var data = notes[itemId];
-    if (Array.isArray(data) && data.length > 0) {
-      st.pages = data.slice();
-    } else {
-      st.pages = [null];
-    }
-    st.currentPage = 0;
+    // Build list of ALL items for pagination
+    var allItems = [];
+    document.querySelectorAll('[data-item]').forEach(function(el) {
+      allItems.push(el.dataset.item);
+    });
+    st.allNoteItems = allItems;
+
+    // Find index of current item
+    var idx = allItems.indexOf(itemId);
+    st.currentNoteIndex = idx >= 0 ? idx : 0;
+
+    // Load note data for this item
+    loadNoteDataForItem(itemId, noteBtn);
 
     var toolbar = document.getElementById('note-modal-toolbar');
     toolbar.querySelectorAll('.note-color-btn').forEach(function(b, i) { b.classList.toggle('active', i === 0); });
@@ -2645,21 +2518,54 @@
     document.getElementById('note-eraser').classList.remove('active');
     document.getElementById('note-zoom-label').textContent = '100%';
 
-    var itemEl = document.querySelector('[data-item="' + itemId + '"]');
-    var titleText = 'Nota';
-    if (itemEl) {
-      var point = itemEl.querySelector('.point-title, .couple-name, .lang-name');
-      if (point) titleText = point.textContent.substring(0, 60);
-    }
-    document.getElementById('note-modal-title').textContent = titleText;
-
     modal.classList.add('visible');
     updateNotePageLabel();
 
+    st.skipRestore = true;
     requestAnimationFrame(function() {
       resizeNoteCanvas();
-      loadNotePage(st.currentPage);
+      loadNotePage(0);
     });
+  }
+
+  function loadNoteDataForItem(itemId, noteBtn) {
+    var st = noteModalState;
+    st.itemId = itemId;
+    st.noteBtn = noteBtn || document.querySelector('[data-item="' + itemId + '"] .note-btn');
+
+    var data = notes[itemId];
+    if (Array.isArray(data) && data.length > 0) {
+      st.pages = [data[0]];
+    } else {
+      st.pages = [null];
+    }
+    st.currentPage = 0;
+
+    // Update title with block context
+    var itemEl = document.querySelector('[data-item="' + itemId + '"]');
+    var titleText = 'Nota';
+    if (itemEl) {
+      var blockEl = itemEl.closest('.block');
+      var blockTitle = blockEl ? blockEl.querySelector('.block-title') : null;
+      var point = itemEl.querySelector('.point-title, .couple-name, .lang-name');
+      if (blockTitle && point) {
+        titleText = blockTitle.textContent.trim() + ' > ' + point.textContent.substring(0, 40);
+      } else if (blockTitle) {
+        titleText = blockTitle.textContent.trim();
+      } else if (point) {
+        titleText = point.textContent.substring(0, 60);
+      }
+    }
+    document.getElementById('note-modal-title').textContent = titleText;
+  }
+
+  function switchToNoteItem(newItemId) {
+    var st = noteModalState;
+    loadNoteDataForItem(newItemId);
+    st.skipRestore = true;
+    resizeNoteCanvas();
+    loadNotePage(0);
+    updateNotePageLabel();
   }
 
   function closeNoteModal() {
@@ -2681,9 +2587,11 @@
     var dpr = window.devicePixelRatio || 1;
 
     var imageData = null;
-    if (canvas.width > 0 && canvas.height > 0) {
+    // Only preserve canvas when resizing, NOT when switching notes
+    if (!st.skipRestore && canvas.width > 0 && canvas.height > 0) {
       try { imageData = canvas.toDataURL('image/png'); } catch (e) {}
     }
+    st.skipRestore = false;
 
     if (st.zoom !== 100) { st.zoom = 100; canvas.style.transform = ''; document.getElementById('note-zoom-label').textContent = '100%'; }
 
@@ -2747,7 +2655,8 @@
 
   function updateNotePageLabel() {
     var st = noteModalState;
-    document.getElementById('note-page-label').textContent = (st.currentPage + 1) + '/' + st.pages.length;
+    var label = (st.currentNoteIndex + 1) + '/' + st.allNoteItems.length;
+    document.getElementById('note-page-label').textContent = label;
   }
 
   function applyNoteZoom() {
@@ -2960,7 +2869,6 @@
     const mainContent = document.querySelector('.header');
     const timeline = document.querySelector('.timeline');
     const footer = document.querySelector('footer');
-    const blockNav = document.getElementById('block-nav');
 
     panelBtn.classList.toggle('active', !enabled);
     sketchBtn.classList.toggle('active', enabled);
@@ -2975,14 +2883,12 @@
       if (mainContent) mainContent.style.display = 'none';
       if (timeline) timeline.style.display = 'none';
       if (footer) footer.style.display = 'none';
-      if (blockNav) blockNav.style.display = 'none';
     } else {
       saveCurrentSketchPage();
       container.classList.remove('visible');
       if (mainContent) mainContent.style.display = '';
       if (timeline) timeline.style.display = '';
       if (footer) footer.style.display = '';
-      if (blockNav) blockNav.style.display = '';
     }
   }
 
