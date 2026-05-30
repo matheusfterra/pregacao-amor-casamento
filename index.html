@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0f1117">
 <title>Fluxograma — Pregacao: Amor e Casamento</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap');
@@ -32,7 +33,7 @@
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 60px;
+    scroll-padding-top: 110px;
     scroll-padding-bottom: 100px;
     overscroll-behavior: contain;
   }
@@ -42,12 +43,10 @@
     background: var(--bg);
     color: var(--text);
     line-height: 1.7;
-    padding: 0 20px 20px;
-    padding-left: max(20px, env(safe-area-inset-left, 20px));
-    padding-right: max(20px, env(safe-area-inset-right, 20px));
+    padding: 0 16px 20px;
+    padding-left: max(16px, env(safe-area-inset-left, 16px));
+    padding-right: max(16px, env(safe-area-inset-right, 16px));
     padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
-    max-width: 900px;
-    margin: 0 auto;
     font-size: calc(16px * var(--font-scale));
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
@@ -70,44 +69,64 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(15, 17, 23, 0.95);
+    background: rgba(15, 17, 23, 0.97);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    height: 48px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 4px;
-    padding: 0 8px;
-    margin: 0 -20px;
-    padding-left: max(8px, env(safe-area-inset-left, 8px));
-    padding-right: max(8px, env(safe-area-inset-right, 8px));
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px;
+    margin: 0 -16px;
+    padding-left: max(10px, env(safe-area-inset-left, 10px));
+    padding-right: max(10px, env(safe-area-inset-right, 10px));
     border-bottom: 1px solid var(--border);
     font-size: 14px;
     user-select: none;
   }
 
-  #toolbar .toolbar-group {
+  .toolbar-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-group {
     display: flex;
     align-items: center;
     gap: 4px;
   }
 
+  .toolbar-sep {
+    width: 1px;
+    height: 28px;
+    background: var(--border);
+    margin: 0 4px;
+  }
+
   #toolbar button {
-    width: 44px;
-    height: 44px;
+    min-height: 48px;
+    padding: 6px 12px;
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--text);
     border-radius: 8px;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 4px;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    white-space: nowrap;
+  }
+
+  #toolbar button.btn-icon-only {
+    min-width: 48px;
+    padding: 6px 10px;
   }
 
   #toolbar button:active {
@@ -121,32 +140,154 @@
   }
 
   #toolbar .font-display {
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 700;
     color: var(--text-muted);
-    min-width: 36px;
+    min-width: 42px;
     text-align: center;
     cursor: pointer;
-  }
-
-  #toolbar .block-indicator {
-    font-size: 12px;
-    color: var(--text-muted);
-    white-space: nowrap;
   }
 
   #timer-display {
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
     color: var(--text-muted);
-    min-width: 40px;
+    min-width: 56px;
     text-align: center;
-    cursor: pointer;
     white-space: nowrap;
+    font-variant-numeric: tabular-nums;
   }
 
   #timer-display.overtime {
     color: var(--accent-5);
+  }
+
+  /* ===== VERSE OVERLAY ===== */
+  #verse-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 250;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    cursor: pointer;
+  }
+
+  #verse-overlay.visible {
+    display: flex;
+  }
+
+  #verse-overlay-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+  }
+
+  #verse-overlay-ref {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent-1);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  #verse-overlay-text {
+    font-family: 'Merriweather', serif;
+    font-size: 22px;
+    line-height: 1.8;
+    color: var(--text);
+    font-style: italic;
+  }
+
+  /* ===== NOTES SYSTEM ===== */
+  .note-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    cursor: pointer;
+    opacity: 0.4;
+    z-index: 5;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+  }
+
+  .note-btn:hover, .note-btn:active {
+    opacity: 1;
+    background: var(--surface);
+  }
+
+  .note-btn.has-note {
+    opacity: 0.8;
+  }
+
+  .note-area {
+    display: none;
+    margin-top: 10px;
+  }
+
+  .note-area.visible {
+    display: block;
+  }
+
+  .note-area textarea {
+    width: 100%;
+    min-height: 60px;
+    max-height: 200px;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+  }
+
+  .note-area textarea:focus {
+    border-color: var(--accent-3);
+  }
+
+  .note-area textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+
+  /* Notes visibility toggle */
+  body:not(.notes-visible) .note-area.visible {
+    /* still visible when individual note is open */
+  }
+
+  body:not(.notes-visible) .note-area.has-content:not(.visible) {
+    display: none;
+  }
+
+  body.notes-visible .note-area.has-content {
+    display: block;
+  }
+
+  /* Make items with note-btn position relative */
+  .point, .speak, .couple-card, .lang-card {
+    position: relative;
   }
 
   /* ===== HEADER ===== */
@@ -218,7 +359,7 @@
     border: 1px solid var(--border);
     overflow: hidden;
     transition: opacity 0.5s ease, border-left-color 0.3s ease;
-    scroll-margin-top: 60px;
+    scroll-margin-top: 110px;
   }
 
   .block.block-checked {
@@ -273,9 +414,9 @@
 
   /* Check button in block header */
   .block-check-btn {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
     border-radius: 50%;
     border: 2px solid var(--text-muted);
     background: transparent;
@@ -367,6 +508,7 @@
   /* ===== POINTS ===== */
   .point {
     padding: 12px 14px;
+    padding-right: 40px;
     margin: 16px 0;
     background: var(--surface-2);
     border-radius: 8px;
@@ -407,6 +549,7 @@
     color: var(--accent-4);
     font-size: 20px;
     padding: 10px 14px;
+    padding-right: 40px;
     border-left: 4px solid var(--accent-4);
     margin: 16px 0;
     background: rgba(52,211,153,0.05);
@@ -433,6 +576,11 @@
     font-weight: 600;
     margin: 2px 2px;
     white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .verse[data-text]:hover {
+    background: rgba(108,140,255,0.3);
   }
 
   .verse.primary {
@@ -443,11 +591,16 @@
     font-weight: 700;
   }
 
+  .verse.primary[data-text]:hover {
+    background: rgba(245,158,11,0.35);
+  }
+
   /* ===== COUPLE CARDS ===== */
   .couple-card {
     display: flex;
     gap: 10px;
     padding: 12px;
+    padding-right: 40px;
     margin: 16px 0;
     background: var(--surface-2);
     border-radius: 8px;
@@ -490,6 +643,7 @@
     grid-template-columns: auto 1fr;
     gap: 8px 12px;
     padding: 12px 14px;
+    padding-right: 40px;
     margin: 16px 0;
     background: var(--surface-2);
     border-radius: 8px;
@@ -608,29 +762,6 @@
     font-style: italic;
   }
 
-  /* ===== QUICK REFERENCE MODE ===== */
-  body.quick-mode .point,
-  body.quick-mode .greek-box,
-  body.quick-mode .season-bar,
-  body.quick-mode .divider {
-    display: none !important;
-  }
-
-  body.quick-mode .speak {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-  }
-
-  body.quick-mode .couple-card .couple-lesson {
-    display: none;
-  }
-
-  body.quick-mode .lang-card .lang-bible {
-    display: none;
-  }
-
   /* ===== HOVER ONLY FOR MOUSE DEVICES ===== */
   @media (hover: hover) {
     .block-header:hover {
@@ -658,7 +789,7 @@
   /* ===== PRINT ===== */
   @media print {
     #toolbar, #progress-bar { display: none !important; }
-    body { background: #fff; color: #111; max-width: 100%; }
+    body { background: #fff; color: #111; }
     .block { break-inside: avoid; border-color: #ddd; }
     .block-content { max-height: none !important; padding: 0 16px 16px !important; }
     .block-header { background: #f5f5f5 !important; }
@@ -668,7 +799,7 @@
     .verse { background: #eef; color: #336; }
     .verse.primary { background: #fef3cd; color: #856404; }
     .speak { color: #28a745; border-color: #28a745; }
-    .toggle-icon, .block-check-btn { display: none; }
+    .toggle-icon, .block-check-btn, .note-btn { display: none; }
   }
 
   @media (max-width: 600px) {
@@ -685,12 +816,6 @@
     .timeline::before { display: none; }
     .timeline { padding-left: 0; }
     .block::before { display: none; }
-    #toolbar {
-      height: auto;
-      min-height: 48px;
-      flex-wrap: wrap;
-      padding: 4px 8px;
-    }
   }
 </style>
 </head>
@@ -699,19 +824,34 @@
 <!-- Progress Bar -->
 <div id="progress-bar"></div>
 
+<!-- Verse Overlay -->
+<div id="verse-overlay">
+  <div id="verse-overlay-content">
+    <div id="verse-overlay-ref"></div>
+    <div id="verse-overlay-text"></div>
+  </div>
+</div>
+
 <!-- Toolbar -->
 <div id="toolbar">
-  <div class="toolbar-group">
-    <button id="btn-font-down" aria-label="Diminuir fonte">A-</button>
-    <span class="font-display" id="font-display" title="Tap para resetar">100%</span>
-    <button id="btn-font-up" aria-label="Aumentar fonte">A+</button>
+  <div class="toolbar-row">
+    <div class="toolbar-group">
+      <button id="btn-font-down" class="btn-icon-only" aria-label="Diminuir fonte">A-</button>
+      <span class="font-display" id="font-display" title="Tap para resetar">110%</span>
+      <button id="btn-font-up" class="btn-icon-only" aria-label="Aumentar fonte">A+</button>
+    </div>
+    <div class="toolbar-sep"></div>
+    <div class="toolbar-group">
+      <button id="btn-timer-play" aria-label="Iniciar cronometro">&#9654; Play</button>
+      <span id="timer-display">00:00</span>
+      <button id="btn-timer-pause" aria-label="Pausar cronometro">&#9208; Pause</button>
+      <button id="btn-timer-reset" class="btn-icon-only" aria-label="Resetar cronometro">&#8634;</button>
+    </div>
   </div>
-  <span class="block-indicator" id="block-indicator"></span>
-  <div class="toolbar-group">
-    <span id="timer-display">00:00</span>
-    <button id="btn-quick" aria-label="Modo rapido" title="Quick Reference">Q</button>
-    <button id="btn-reset" aria-label="Resetar checks" title="Reset All">R</button>
-    <button id="btn-wake" aria-label="Manter tela ligada" title="Keep Awake">W</button>
+  <div class="toolbar-row">
+    <button id="btn-notes-toggle" aria-label="Mostrar ou ocultar notas">&#128214; Notas: Ocultar</button>
+    <button id="btn-reset" aria-label="Resetar checks">&#128260; Resetar Checks</button>
+    <button id="btn-wake" aria-label="Manter tela ligada">&#128161; Tela Ligada</button>
   </div>
 </div>
 
@@ -750,9 +890,9 @@
         <div class="point-title">Diagnostico biblico</div>
         <div class="point-body">
           A Biblia ja havia diagnosticado o problema:
-          <br><span class="verse primary">Jr 17:9</span> "Enganoso e o coracao, mais do que todas as coisas"
-          <br><span class="verse">Rm 12:2</span> "Nao vos conformeis com este seculo"
-          <br><span class="verse">1Jo 2:15-16</span> O "amor" que o mundo vende e concupiscencia disfarcada
+          <br><span class="verse primary" data-text="Enganoso e o coracao, mais do que todas as coisas, e desesperadamente corrupto; quem o conhecera?">Jr 17:9</span> "Enganoso e o coracao, mais do que todas as coisas"
+          <br><span class="verse" data-text="E nao vos conformeis com este seculo, mas transformai-vos pela renovacao da vossa mente, para que experimenteis qual seja a boa, agradavel e perfeita vontade de Deus.">Rm 12:2</span> "Nao vos conformeis com este seculo"
+          <br><span class="verse" data-text="Nao ameis o mundo nem as coisas que ha no mundo. Se alguem amar o mundo, o amor do Pai nao esta nele. Porque tudo que ha no mundo, a concupiscencia da carne, a concupiscencia dos olhos e a soberba da vida, nao procede do Pai, mas procede do mundo.">1Jo 2:15-16</span> O "amor" que o mundo vende e concupiscencia disfarcada
         </div>
       </div>
 
@@ -809,18 +949,18 @@
         <div class="point-title">Os 3 pilares do amor biblico</div>
         <div class="point-body">
           <strong>1. PACTO</strong> (nao contrato) — "Eu faco independente de voce fazer"
-          <br><span class="verse">Ml 2:14</span> Deus e testemunha da alianca
+          <br><span class="verse" data-text="E perguntais: Por que? Porque o SENHOR foi testemunha da alianca entre ti e a mulher da tua mocidade, com a qual tu foste desleal, sendo ela a tua companheira e a mulher da tua alianca.">Ml 2:14</span> Deus e testemunha da alianca
           <br><strong>2. DECISAO</strong> (nao emocao) — Se fosse sentimento, nao precisaria ser ensinado
-          <br><span class="verse">Tt 2:4</span> "Ensinem as mais novas a amarem seus maridos"
+          <br><span class="verse" data-text="A fim de instruirem as jovens recem-casadas a amarem ao marido e a seus filhos.">Tt 2:4</span> "Ensinem as mais novas a amarem seus maridos"
           <br><strong>3. SACRIFICIO</strong> (nao consumo) — O amor do mundo consome; o de Deus se entrega
-          <br><span class="verse">Jo 15:13</span> "Dar a propria vida em favor dos seus amigos"
+          <br><span class="verse" data-text="Ninguem tem maior amor do que este: de dar alguem a propria vida em favor dos seus amigos.">Jo 15:13</span> "Dar a propria vida em favor dos seus amigos"
         </div>
       </div>
 
       <div class="point" data-item="2-p3">
         <div class="point-title">Definicao definitiva — 1 Corintios 13:4-8a</div>
         <div class="point-body">
-          <span class="verse primary">1Co 13:4-8a</span> 15 caracteristicas. NENHUMA e sentimento. Todas sao VERBO.
+          <span class="verse primary" data-text="O amor e paciente, e benigno; o amor nao arde em ciumes, nao se ufana, nao se ensoberbece, nao se conduz inconvenientemente, nao procura os seus interesses, nao se exaspera, nao se ressente do mal; nao se alegra com a injustica, mas regozija-se com a verdade; tudo sofre, tudo cre, tudo espera, tudo suporta. O amor jamais acaba.">1Co 13:4-8a</span> 15 caracteristicas. NENHUMA e sentimento. Todas sao VERBO.
           <br>Paciente, benigno, nao arde em ciumes, nao se ufana, nao se ensoberbece...
           <br><strong>"Tudo sofre, tudo cre, tudo espera, tudo suporta. O amor JAMAIS acaba."</strong>
         </div>
@@ -848,7 +988,7 @@
         <div class="couple-info">
           <div class="couple-name">Isaque e Rebeca <span class="verse">Gn 24</span></div>
           <div class="couple-lesson">
-            <strong>Amor no proposito de Deus.</strong> Casamento guiado por oracao (servo orou em Gn 24:12). Rebeca tinha CARATER antes de ter marido (serviu agua para 10 camelos = ~1.000 litros). Amor cresceu DEPOIS do compromisso (Gn 24:67). 20 anos de esterilidade enfrentados com oracao (Gn 25:21). Carinho visivel apos decadas (Gn 26:8).
+            <strong>Amor no proposito de Deus.</strong> Casamento guiado por oracao (servo orou em Gn 24:12). Rebeca tinha CARATER antes de ter marido (serviu agua para 10 camelos = ~1.000 litros). Amor cresceu DEPOIS do compromisso (Gn 24:67). 20 anos de esterilidade enfrentados com oracao (Gn 25:21). Carinho visivel apos decadas (<span class="verse" data-text="Tendo-se passado muito tempo, Abimeleque, rei dos filisteus, olhando pela janela, viu que Isaque acariciava a Rebeca, sua mulher.">Gn 26:8</span>).
             <br><strong>Aplicacao:</strong> Busque a Deus antes de buscar alguem. Desenvolva carater AGORA.
           </div>
         </div>
@@ -903,7 +1043,7 @@
         <div class="couple-info">
           <div class="couple-name">Oseias e Gomer <span class="verse">Os 1-3</span> (guardar para o climax!)</div>
           <div class="couple-lesson">
-            <strong>O amor incondicional = imagem do evangelho.</strong> Deus manda amar mulher infiel (Os 3:1). Oseias COMPRA DE VOLTA sua propria esposa (Os 3:2). Retrato de Rm 5:8 no AT.
+            <strong>O amor incondicional = imagem do evangelho.</strong> Deus manda amar mulher infiel (<span class="verse" data-text="Disse-me o SENHOR: Vai outra vez, ama uma mulher, amada de seu amigo e adultera, como o SENHOR ama os filhos de Israel, embora eles olhem para outros deuses.">Os 3:1</span>). Oseias COMPRA DE VOLTA sua propria esposa (<span class="verse" data-text="Comprei-a, pois, para mim por quinze siclos de prata e um omer e meio de cevada.">Os 3:2</span>). Retrato de Rm 5:8 no AT.
             <br><strong>Usar no BLOCO 7 (climax) — nao aqui!</strong>
           </div>
         </div>
@@ -944,9 +1084,9 @@
         <div class="point-body">
           Chapman descobriu que casais se amam mas NAO SE SENTEM amados. Cada pessoa tem um "tanque emocional" que precisa ser enchido. Tanque cheio = harmonia. Tanque vazio = conflito, frieza, comportamento improprio.
           <br><br><strong>Conexao biblica:</strong>
-          <br><span class="verse primary">Gn 2:18</span> "Nao e bom que o homem esteja so" — fomos criados para ser amados
-          <br><span class="verse primary">1Jo 4:19</span> "Nos amamos porque Ele nos amou primeiro" — a fonte e Deus
-          <br><span class="verse">Rm 5:5</span> "O amor de Deus e derramado em nosso coracao pelo Espirito Santo"
+          <br><span class="verse primary" data-text="Disse mais o SENHOR Deus: Nao e bom que o homem esteja so; far-lhe-ei uma auxiliadora que lhe seja idonea.">Gn 2:18</span> "Nao e bom que o homem esteja so" — fomos criados para ser amados
+          <br><span class="verse primary" data-text="Nos amamos porque ele nos amou primeiro.">1Jo 4:19</span> "Nos amamos porque Ele nos amou primeiro" — a fonte e Deus
+          <br><span class="verse" data-text="Ora, a esperanca nao confunde, porque o amor de Deus e derramado em nosso coracao pelo Espirito Santo, que nos foi outorgado.">Rm 5:5</span> "O amor de Deus e derramado em nosso coracao pelo Espirito Santo"
         </div>
       </div>
 
@@ -976,8 +1116,8 @@
           <div class="lang-bible">
             Elogios, gratidao, reconhecimento verbal
             <br><strong>Chapman:</strong> "Obrigada por levar o lixo" — genro de Chapman; palavras caem como chuva na terra seca
-            <br><strong>Biblia:</strong> <span class="verse">Pv 16:24</span> "Palavras agradaveis sao favo de mel" | <span class="verse">Pv 18:21</span> "Morte e vida no poder da lingua" | <span class="verse">Ct 4:1,7</span> Salomao afirmando sua esposa | <span class="verse">Ef 4:29</span> Toda palavra deve edificar
-            <br><strong>Deus pratica:</strong> <span class="verse primary">Mc 1:11</span> "Tu es o meu Filho amado; em ti me comprazo"
+            <br><strong>Biblia:</strong> <span class="verse" data-text="Palavras agradaveis sao como favo de mel: doces para a alma e medicina para o corpo.">Pv 16:24</span> "Palavras agradaveis sao favo de mel" | <span class="verse" data-text="A morte e a vida estao no poder da lingua; o que bem a utiliza come do seu fruto.">Pv 18:21</span> "Morte e vida no poder da lingua" | <span class="verse" data-text="Como es formosa, querida minha, como es formosa! Tu es toda formosa, querida minha, e em ti nao ha defeito.">Ct 4:1,7</span> Salomao afirmando sua esposa | <span class="verse" data-text="Nao saia da vossa boca nenhuma palavra torpe, e sim unicamente a que for boa para edificacao, conforme a necessidade, e, assim, transmita graca aos que ouvem.">Ef 4:29</span> Toda palavra deve edificar
+            <br><strong>Deus pratica:</strong> <span class="verse primary" data-text="Entao, foi ouvida uma voz dos ceus: Tu es o meu Filho amado, em ti me comprazo.">Mc 1:11</span> "Tu es o meu Filho amado; em ti me comprazo"
           </div>
         </div>
       </div>
@@ -989,7 +1129,7 @@
           <div class="lang-bible">
             Ajudar, aliviar a carga, atitudes praticas
             <br><strong>Chapman:</strong> Maxine frustrada — David dizia "amo voce" mas ficava no sofa vendo TV enquanto ela lavava louca. Quando ele aprendeu, casamento mudou em 1 mes
-            <br><strong>Biblia:</strong> <span class="verse primary">Jo 13:14-15</span> Jesus lavou os pes — o Senhor servindo | <span class="verse">Gl 5:13</span> "Servos uns dos outros pelo amor" | <span class="verse">Fp 2:3-4</span> Considerar o outro superior | <span class="verse">Mc 10:45</span> "Veio para servir"
+            <br><strong>Biblia:</strong> <span class="verse primary" data-text="Ora, se eu, sendo o Senhor e o Mestre, vos lavei os pes, tambem vos deveis lavar os pes uns dos outros. Porque eu vos dei o exemplo, para que, como eu vos fiz, facais vos tambem.">Jo 13:14-15</span> Jesus lavou os pes — o Senhor servindo | <span class="verse" data-text="Porque vos, irmaos, fostes chamados a liberdade; porem nao useis da liberdade para dar ocasiao a carne; sede, antes, servos uns dos outros, pelo amor.">Gl 5:13</span> "Servos uns dos outros pelo amor" | <span class="verse" data-text="Nada facais por partidarismo ou vangloria, mas por humildade, considerando cada um os outros superiores a si mesmo. Nao tenha cada um em vista o que e propriamente seu, senao tambem cada qual o que e dos outros.">Fp 2:3-4</span> Considerar o outro superior | <span class="verse" data-text="Pois o proprio Filho do Homem nao veio para ser servido, mas para servir e dar a sua vida em resgate por muitos.">Mc 10:45</span> "Veio para servir"
           </div>
         </div>
       </div>
@@ -1001,7 +1141,7 @@
           <div class="lang-bible">
             Intencao > preco. Simboliza lembranca e valor
             <br><strong>Chapman:</strong> Nao precisam ser caros — cartao caseiro, flores simples. E a intencao que conta
-            <br><strong>Biblia:</strong> <span class="verse primary">Jo 3:16</span> "Deus amou de tal maneira que DEU seu Filho" — o maior presente | <span class="verse">Mc 12:41-44</span> Viuva pobre — valor no sacrificio, nao no preco | <span class="verse">Mt 2:11</span> Magos: ouro, incenso, mirra
+            <br><strong>Biblia:</strong> <span class="verse primary" data-text="Porque Deus amou o mundo de tal maneira que deu o seu Filho unigenito, para que todo o que nele cre nao pereca, mas tenha a vida eterna.">Jo 3:16</span> "Deus amou de tal maneira que DEU seu Filho" — o maior presente | <span class="verse" data-text="Assentado diante do gazofilacio, observava como o povo lancava ali o dinheiro. E muitos ricos depositavam grandes quantias. Vindo uma viuva pobre, depositou duas pequenas moedas. Entao, chamando os discipulos, disse-lhes: Em verdade vos digo que esta viuva pobre depositou mais do que todos os ofertantes. Porque todos ofertaram do que lhes sobrava; ela, porem, da sua pobreza.">Mc 12:41-44</span> Viuva pobre — valor no sacrificio, nao no preco | <span class="verse" data-text="Entrando na casa, viram o menino com Maria, sua mae. Prostrando-se, o adoraram; e, abrindo os seus tesouros, entregaram-lhe suas ofertas: ouro, incenso e mirra.">Mt 2:11</span> Magos: ouro, incenso, mirra
           </div>
         </div>
       </div>
@@ -1013,8 +1153,8 @@
           <div class="lang-bible">
             Atencao total, sem distracao, estar PRESENTE
             <br><strong>Chapman:</strong> Desligar TV, guardar celular, olhar nos olhos. 20 min de atencao total = tanque recarregado
-            <br><strong>Biblia:</strong> <span class="verse">Tg 1:19</span> "Pronto para ouvir, tardio para falar" | <span class="verse">Ct 2:14</span> "Mostra-me o teu rosto, faze-me ouvir a tua voz" | <span class="verse">Lc 10:38-42</span> Maria escolheu a boa parte — presenca > produtividade
-            <br><strong>Deus pratica:</strong> <span class="verse primary">Ex 33:11</span> "Falava o SENHOR a Moises face a face, como amigo"
+            <br><strong>Biblia:</strong> <span class="verse" data-text="Sabeis estas coisas, meus amados irmaos. Todo homem, pois, seja pronto para ouvir, tardio para falar, tardio para se irar.">Tg 1:19</span> "Pronto para ouvir, tardio para falar" | <span class="verse" data-text="Pomba minha, que andas pelas fendas dos penhascos, nos esconderijos das rochas escarpadas, mostra-me o teu rosto, faze-me ouvir a tua voz, porque a tua voz e doce, e o teu rosto, amavel.">Ct 2:14</span> "Mostra-me o teu rosto, faze-me ouvir a tua voz" | <span class="verse" data-text="Indo eles de caminho, entrou Jesus num povoado. E certa mulher, chamada Marta, hospedou-o na sua casa. Tinha ela uma irma, chamada Maria, e esta ficou assentada aos pes do Senhor, ouvindo-lhe os ensinamentos. Marta agitava-se de um lado para outro, ocupada em muitos servicos. Entao, se aproximou de Jesus e disse: Senhor, nao te importas de que minha irma tenha deixado que eu fique a servir sozinha? Ordena-lhe, pois, que venha ajudar-me. Respondeu-lhe o Senhor: Marta! Marta! Andas inquieta e te preocupas com muitas coisas. Entretanto, pouco e necessario ou mesmo uma so coisa; Maria escolheu a boa parte, e esta nao lhe sera tirada.">Lc 10:38-42</span> Maria escolheu a boa parte — presenca > produtividade
+            <br><strong>Deus pratica:</strong> <span class="verse primary" data-text="Falava o SENHOR a Moises face a face, como qualquer fala a seu amigo.">Ex 33:11</span> "Falava o SENHOR a Moises face a face, como amigo"
           </div>
         </div>
       </div>
@@ -1026,8 +1166,8 @@
           <div class="lang-bible">
             Contato fisico afetuoso — abracos, maos dadas, carinho
             <br><strong>Chapman:</strong> Mao no ombro caminhando, tocar a perna no carro, andar de maos dadas, abracar, beijar
-            <br><strong>Biblia:</strong> <span class="verse">Ct 2:6</span> "Seu braco esquerdo debaixo da minha cabeca, o direito me abraca" | <span class="verse">Gn 26:8</span> Isaque acariciando Rebeca | <span class="verse">Lc 15:20</span> Pai do prodigo: correu, abracou, beijou
-            <br><strong>Deus pratica:</strong> <span class="verse primary">Mc 10:16</span> Jesus tomou criancas nos bracos e abencoo
+            <br><strong>Biblia:</strong> <span class="verse" data-text="O seu braco esquerdo esta debaixo da minha cabeca, e o seu direito me abraca.">Ct 2:6</span> "Seu braco esquerdo debaixo da minha cabeca, o direito me abraca" | <span class="verse" data-text="Tendo-se passado muito tempo, Abimeleque, rei dos filisteus, olhando pela janela, viu que Isaque acariciava a Rebeca, sua mulher.">Gn 26:8</span> Isaque acariciando Rebeca | <span class="verse" data-text="E, levantando-se, foi para seu pai. Vinha ele ainda longe, quando seu pai o avistou, e, compadecido dele, correndo, o abracou, e beijou.">Lc 15:20</span> Pai do prodigo: correu, abracou, beijou
+            <br><strong>Deus pratica:</strong> <span class="verse primary" data-text="Entao, tomando-as nos bracos e impondo-lhes as maos, as abencoava.">Mc 10:16</span> Jesus tomou criancas nos bracos e abencoo
           </div>
         </div>
       </div>
@@ -1043,8 +1183,8 @@
           <br>"Voce nem lembrou do meu aniversario" = <em>Presentes</em>
           <br>"Nunca fazemos nada juntos" = <em>Tempo de Qualidade</em>
           <br>"Voce nao me toca mais" = <em>Toque Fisico</em>
-          <br><span class="verse">Pv 20:5</span> "O prudente sabe descobrir os propositos do coracao"
-          <br><span class="verse">Pv 18:13</span> "O que responde antes de ouvir comete estulticia"
+          <br><span class="verse" data-text="Como aguas profundas, sao os propositos do coracao do homem; mas o prudente sabe descobri-los.">Pv 20:5</span> "O prudente sabe descobrir os propositos do coracao"
+          <br><span class="verse" data-text="O que responde antes de ouvir comete estulticia que e para vergonha.">Pv 18:13</span> "O que responde antes de ouvir comete estulticia"
         </div>
       </div>
 
@@ -1070,9 +1210,9 @@
         <div class="point-body">
           "O estado de euforia do amor romantico e temporario. Pesquisas mostram que a duracao media e de dois anos."
           <br><br><strong>Biblia confirma:</strong>
-          <br><span class="verse">Pv 31:30</span> "Enganosa e a graca, e va, a formosura"
-          <br><span class="verse">2Sm 13:15</span> Amnon "amou" Tamar — apos satisfazer desejo, odiou. <strong>Paixao sem pacto vira desprezo</strong>
-          <br><span class="verse">Ct 1:2; 2:10-13</span> Cantares celebra paixao — mas dentro do pacto!
+          <br><span class="verse" data-text="Enganosa e a graca, e va, a formosura; mas a mulher que teme ao SENHOR, essa sera louvada.">Pv 31:30</span> "Enganosa e a graca, e va, a formosura"
+          <br><span class="verse" data-text="Depois, Amnon sentiu por ela grande aversao, e maior era a aversao que sentiu do que o amor que lhe tivera.">2Sm 13:15</span> Amnon "amou" Tamar — apos satisfazer desejo, odiou. <strong>Paixao sem pacto vira desprezo</strong>
+          <br><span class="verse" data-text="Beije-me ele com os beijos de sua boca; porque melhor e o teu amor do que o vinho.">Ct 1:2</span>; <span class="verse" data-text="O meu amado fala e me diz: Levanta-te, querida minha, formosa minha, e vem. Porque eis que passou o inverno, cessou a chuva e se foi. Aparecem as flores na terra, chegou o tempo de cantarem as aves, e a voz da rola ouve-se em nossa terra.">Ct 2:10-13</span> Cantares celebra paixao — mas dentro do pacto!
         </div>
       </div>
 
@@ -1090,20 +1230,20 @@
         <div class="point-body">
           Chapman: "60% dos divorciados casam de novo, e 60% desses divorciam de novo. Terceiro casamento: 75% de divorcio."
           <br><br><strong>Biblia:</strong>
-          <br><span class="verse">Ef 4:26-27</span> Ira nao resolvida = espaco pro diabo
-          <br><span class="verse">Hb 12:15</span> Raiz de amargura cresce e contamina
-          <br><span class="verse">Ml 2:14-16</span> "Deus odeia o repudio" — casamento e alianca com Deus como testemunha
-          <br><span class="verse">Mt 19:6,8</span> "O que Deus ajuntou nao separe o homem" — divorcio existe por dureza de coracao
+          <br><span class="verse" data-text="Irai-vos e nao pequeis; nao se ponha o sol sobre a vossa ira, nem deis lugar ao diabo.">Ef 4:26-27</span> Ira nao resolvida = espaco pro diabo
+          <br><span class="verse" data-text="Atentando, diligentemente, por que ninguem seja faltoso, separando-se da graca de Deus; nem haja alguma raiz de amargura que, brotando, vos perturbe, e, por meio dela, muitos sejam contaminados.">Hb 12:15</span> Raiz de amargura cresce e contamina
+          <br><span class="verse" data-text="O SENHOR foi testemunha da alianca entre ti e a mulher da tua mocidade, com a qual tu foste desleal. Pois eu detesto o divorcio, diz o SENHOR, o Deus de Israel.">Ml 2:14-16</span> "Deus odeia o repudio" — casamento e alianca com Deus como testemunha
+          <br><span class="verse" data-text="De modo que ja nao sao mais dois, porem uma so carne. Portanto, o que Deus ajuntou nao o separe o homem. Por causa da dureza do vosso coracao e que Moises vos permitiu repudiar vossa mulher; entretanto, nao foi assim desde o principio.">Mt 19:6,8</span> "O que Deus ajuntou nao separe o homem" — divorcio existe por dureza de coracao
         </div>
       </div>
 
       <div class="point" data-item="6-p3">
         <div class="point-title">O amor INTENCIONAL — a solucao biblica</div>
         <div class="point-body">
-          <span class="verse primary">Ef 5:25</span> "Maridos, AMAI (agapate — imperativo!) vossa mulher como Cristo amou a igreja"
-          <br><span class="verse">Tt 2:4</span> "Ensinem as mais novas a AMAREM seus maridos" — amor se aprende!
-          <br><span class="verse">1Co 13:7</span> "Tudo SOFRE, tudo CRE, tudo ESPERA, tudo SUPORTA" — 4 verbos de esforco
-          <br><span class="verse">Gl 6:9</span> "Nao nos cansemos de fazer o bem" — plantar e esperar
+          <span class="verse primary" data-text="Maridos, amai vossa mulher, como tambem Cristo amou a igreja e a si mesmo se entregou por ela.">Ef 5:25</span> "Maridos, AMAI (agapate — imperativo!) vossa mulher como Cristo amou a igreja"
+          <br><span class="verse" data-text="A fim de instruirem as jovens recem-casadas a amarem ao marido e a seus filhos.">Tt 2:4</span> "Ensinem as mais novas a AMAREM seus maridos" — amor se aprende!
+          <br><span class="verse" data-text="Tudo sofre, tudo cre, tudo espera, tudo suporta.">1Co 13:7</span> "Tudo SOFRE, tudo CRE, tudo ESPERA, tudo SUPORTA" — 4 verbos de esforco
+          <br><span class="verse" data-text="E nao nos cansemos de fazer o bem, porque a seu tempo ceifaremos, se nao desfalecermos.">Gl 6:9</span> "Nao nos cansemos de fazer o bem" — plantar e esperar
         </div>
       </div>
 
@@ -1113,7 +1253,7 @@
           Rick: caminhoneiro, dizia "amo voce" mas nao ajudava em casa. Linguagem de Brenda = Atos de Servico.
           Brenda: criticava Rick constantemente. Linguagem dele = Palavras de Afirmacao.
           <br><strong>Resultado:</strong> Quando aprenderam a falar a linguagem certa, "saimos de uma estacao fria para uma quente de primavera."
-          <br><span class="verse">Ct 2:11-12</span> "Passou o inverno... aparecem as flores na terra"
+          <br><span class="verse" data-text="Eis que passou o inverno, cessou a chuva e se foi. Aparecem as flores na terra, chegou o tempo de cantarem as aves.">Ct 2:11-12</span> "Passou o inverno... aparecem as flores na terra"
         </div>
       </div>
 
@@ -1146,23 +1286,23 @@
       <div class="point" data-item="7-p2" style="border-left-color: var(--accent-5);">
         <div class="point-title" style="color: var(--accent-5);">ROMANOS 5:8 — O TEXTO CENTRAL</div>
         <div class="point-body">
-          <span class="verse primary">Rm 5:8</span> "Deus prova o seu proprio amor para conosco pelo fato de ter Cristo morrido por nos, <strong>sendo nos ainda pecadores</strong>."
+          <span class="verse primary" data-text="Mas Deus prova o seu proprio amor para conosco pelo fato de ter Cristo morrido por nos, sendo nos ainda pecadores.">Rm 5:8</span> "Deus prova o seu proprio amor para conosco pelo fato de ter Cristo morrido por nos, <strong>sendo nos ainda pecadores</strong>."
           <br><br>Deus NAO esperou que fossemos amaveis para nos amar. Ele nos amou quando eramos INIMIGOS.
-          <br><span class="verse">Rm 5:5</span> "O amor de Deus e DERRAMADO em nosso coracao pelo Espirito Santo" — ekkechytai (perfeito passivo) = acao completa e continua
-          <br><span class="verse">1Jo 4:10-11</span> "Nisto consiste o amor: nao em que nos tenhamos amado a Deus, mas em que Ele nos amou"
-          <br><span class="verse">1Jo 4:19</span> "Nos amamos porque Ele nos amou PRIMEIRO"
+          <br><span class="verse" data-text="Ora, a esperanca nao confunde, porque o amor de Deus e derramado em nosso coracao pelo Espirito Santo, que nos foi outorgado.">Rm 5:5</span> "O amor de Deus e DERRAMADO em nosso coracao pelo Espirito Santo" — ekkechytai (perfeito passivo) = acao completa e continua
+          <br><span class="verse" data-text="Nisto consiste o amor: nao em que nos tenhamos amado a Deus, mas em que ele nos amou e enviou o seu Filho como propiciacao pelos nossos pecados. Amados, se Deus de tal maneira nos amou, devemos nos tambem amar uns aos outros.">1Jo 4:10-11</span> "Nisto consiste o amor: nao em que nos tenhamos amado a Deus, mas em que Ele nos amou"
+          <br><span class="verse" data-text="Nos amamos porque ele nos amou primeiro.">1Jo 4:19</span> "Nos amamos porque Ele nos amou PRIMEIRO"
         </div>
       </div>
 
       <div class="point" data-item="7-p3" style="border-left-color: var(--accent-7);">
         <div class="point-title" style="color: var(--accent-7);">OSEIAS E GOMER — A Imagem Mais Radical</div>
         <div class="point-body">
-          <span class="verse primary">Os 3:1</span> Deus manda: "Vai outra vez, ama uma mulher adultera, como o SENHOR ama Israel"
-          <br><span class="verse">Os 3:2</span> Oseias COMPROU DE VOLTA sua propria esposa — pagou o preco por quem ja era dele
+          <span class="verse primary" data-text="Disse-me o SENHOR: Vai outra vez, ama uma mulher, amada de seu amigo e adultera, como o SENHOR ama os filhos de Israel, embora eles olhem para outros deuses.">Os 3:1</span> Deus manda: "Vai outra vez, ama uma mulher adultera, como o SENHOR ama Israel"
+          <br><span class="verse" data-text="Comprei-a, pois, para mim por quinze siclos de prata e um omer e meio de cevada.">Os 3:2</span> Oseias COMPROU DE VOLTA sua propria esposa — pagou o preco por quem ja era dele
           <br><br><strong>Isso e a cruz.</strong> Cristo nos comprou de volta. Pagou com sangue por quem ja era dele mas havia se prostituido com o mundo.
-          <br><br><span class="verse">1Pe 3:1-2</span> Amor que nao depende de reciprocidade — o comportamento pode transformar
-          <br><span class="verse">Lc 6:27,35</span> "Amai vossos INIMIGOS" — se devemos amar inimigos, quanto mais o conjuge?
-          <br><span class="verse">Rm 12:21</span> "Vence o mal com o BEM"
+          <br><br><span class="verse" data-text="Mulheres, sede submissas ao proprio marido, para que, se ele nao obedece a palavra, seja ganho, sem palavra, pelo procedimento de sua esposa, ao observar o vosso respeitoso comportamento.">1Pe 3:1-2</span> Amor que nao depende de reciprocidade — o comportamento pode transformar
+          <br><span class="verse" data-text="Amai os vossos inimigos, fazei o bem aos que vos odeiam. Amai, porem, os vossos inimigos, fazei o bem e emprestai, sem esperar nenhuma paga; sera grande o vosso galardao, e sereis filhos do Altissimo.">Lc 6:27,35</span> "Amai vossos INIMIGOS" — se devemos amar inimigos, quanto mais o conjuge?
+          <br><span class="verse" data-text="Nao te deixes vencer do mal, mas vence o mal com o bem.">Rm 12:21</span> "Vence o mal com o BEM"
         </div>
       </div>
 
@@ -1189,15 +1329,15 @@
         <div class="point-title">5 aplicacoes praticas</div>
         <div class="point-body">
           <strong>1.</strong> Encha seu tanque em Deus primeiro — quem entra no casamento com tanque vazio vai sugar o conjuge seco
-          <br><span class="verse">Sl 27:10</span> "Se pai e mae me desampararem, o Senhor me acolhera"
+          <br><span class="verse" data-text="Porque, se meu pai e minha mae me desampararem, o SENHOR me acolhera.">Sl 27:10</span> "Se pai e mae me desampararem, o Senhor me acolhera"
           <br><br><strong>2.</strong> Desenvolva CARATER agora — o casamento revela quem voce e, nao conserta
-          <br><span class="verse">2Pe 1:5-7</span> Escada: fe -> virtude -> conhecimento -> dominio proprio -> perseveranca -> piedade -> amor
+          <br><span class="verse" data-text="Reunindo toda a vossa diligencia, associai com a vossa fe a virtude; com a virtude, o conhecimento; com o conhecimento, o dominio proprio; com o dominio proprio, a perseveranca; com a perseveranca, a piedade; com a piedade, a fraternidade; com a fraternidade, o amor.">2Pe 1:5-7</span> Escada: fe -> virtude -> conhecimento -> dominio proprio -> perseveranca -> piedade -> amor
           <br><br><strong>3.</strong> Aprenda a amar intencionalmente HOJE — com pais, irmaos, amigos, irmaos na fe
-          <br><span class="verse">Fp 4:9</span> "O que aprendestes... isso PRATICAI"
+          <br><span class="verse" data-text="O que tambem aprendestes, e recebestes, e ouvistes, e vistes em mim, isso praticai; e o Deus da paz sera convosco.">Fp 4:9</span> "O que aprendestes... isso PRATICAI"
           <br><br><strong>4.</strong> Nao case por borboletas — case por carater, fe e compromisso
-          <br><span class="verse">Pv 4:23</span> "Guarda o coracao, porque dele procedem as fontes da vida"
+          <br><span class="verse" data-text="Sobre tudo o que se deve guardar, guarda o coracao, porque dele procedem as fontes da vida.">Pv 4:23</span> "Guarda o coracao, porque dele procedem as fontes da vida"
           <br><br><strong>5.</strong> Busque a Deus antes de buscar alguem — a pessoa certa te encontra no seu proposito
-          <br><span class="verse">Mt 6:33</span> "Buscai primeiro o Reino de Deus... e todas as coisas vos serao acrescentadas"
+          <br><span class="verse" data-text="Buscai, pois, em primeiro lugar, o seu reino e a sua justica, e todas estas coisas vos serao acrescentadas.">Mt 6:33</span> "Buscai primeiro o Reino de Deus... e todas as coisas vos serao acrescentadas"
         </div>
       </div>
 
@@ -1209,8 +1349,8 @@
         <div class="point-title">Encerramento — Chapman + Paulo</div>
         <div class="point-body">
           <strong>Chapman:</strong> "O amor e a arma mais poderosa no mundo para o bem. Ele pode derreter o mais frio dos invernos e trazer as flores da primavera."
-          <br><br><strong>Paulo:</strong> <span class="verse primary">1Co 13:8a,13</span> "O amor JAMAIS acaba... Agora, pois, permanecem a fe, a esperanca e o amor, estes tres; porem o maior destes e o AMOR."
-          <br><br><span class="verse primary">1Jo 4:12</span> "Se nos amarmos uns aos outros, Deus permanece em nos" — o casamento e vitrine do evangelho
+          <br><br><strong>Paulo:</strong> <span class="verse primary" data-text="O amor jamais acaba. Agora, pois, permanecem a fe, a esperanca e o amor, estes tres; porem o maior destes e o amor.">1Co 13:8a,13</span> "O amor JAMAIS acaba... Agora, pois, permanecem a fe, a esperanca e o amor, estes tres; porem o maior destes e o AMOR."
+          <br><br><span class="verse primary" data-text="Ninguem jamais viu a Deus; se nos amarmos uns aos outros, Deus permanece em nos, e o seu amor e, em nos, aperfeicoado.">1Jo 4:12</span> "Se nos amarmos uns aos outros, Deus permanece em nos" — o casamento e vitrine do evangelho
         </div>
       </div>
 
@@ -1232,32 +1372,46 @@
   const TOTAL_BLOCKS = 8;
   const STORAGE_CHECKS = 'preacher-checks';
   const STORAGE_FONT = 'preacher-font-scale';
-  const STORAGE_QUICK = 'preacher-quick-mode';
+  const STORAGE_NOTES = 'preacher-notes';
+  const STORAGE_NOTES_VISIBLE = 'preacher-notes-visible';
 
   // ===== STATE =====
-  let fontScale = parseInt(localStorage.getItem(STORAGE_FONT)) || 100;
-  let checks = JSON.parse(localStorage.getItem(STORAGE_CHECKS) || '{}');
-  let quickMode = localStorage.getItem(STORAGE_QUICK) === 'true';
+  let fontScale = parseInt(localStorage.getItem(STORAGE_FONT)) || 110;
+  let checks, notes;
+  try { checks = JSON.parse(localStorage.getItem(STORAGE_CHECKS) || '{}'); } catch (e) { checks = {}; localStorage.removeItem(STORAGE_CHECKS); }
+  try { notes = JSON.parse(localStorage.getItem(STORAGE_NOTES) || '{}'); } catch (e) { notes = {}; localStorage.removeItem(STORAGE_NOTES); }
+  let notesVisible = localStorage.getItem(STORAGE_NOTES_VISIBLE) !== 'false';
   let wakeLock = null;
-  let timerStarted = false;
-  let timerStart = 0;
+  let timerRunning = false;
+  let timerElapsed = 0; // seconds elapsed
+  let timerLastTick = 0;
   let timerInterval = null;
+
+  // ===== SAFE STORAGE =====
+  function safeSave(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) { /* quota exceeded — state lives in memory */ }
+  }
 
   // ===== INIT =====
   function init() {
     applyFontScale();
-    applyQuickMode();
     restoreChecks();
     updateAllProgress();
     updateBlockIndicator();
     setupAccordion();
     setupCheckSystem();
     setupToolbar();
-    requestWakeLock();
     setupTimer();
+    setupVerseOverlay();
+    setupNotesSystem();
+    requestWakeLock();
+
+    // Apply notes visibility
+    document.body.classList.toggle('notes-visible', notesVisible);
+    updateNotesToggleLabel();
 
     // Close all blocks except first
-    document.querySelectorAll('.block').forEach((b, i) => {
+    document.querySelectorAll('.block').forEach(function(b, i) {
       if (i > 0) b.classList.remove('open');
       else b.classList.add('open');
     });
@@ -1267,34 +1421,23 @@
   function applyFontScale() {
     document.documentElement.style.setProperty('--font-scale', fontScale / 100);
     document.getElementById('font-display').textContent = fontScale + '%';
-    localStorage.setItem(STORAGE_FONT, fontScale);
-  }
-
-  // ===== QUICK MODE =====
-  function applyQuickMode() {
-    document.body.classList.toggle('quick-mode', quickMode);
-    const btn = document.getElementById('btn-quick');
-    btn.classList.toggle('active', quickMode);
+    safeSave(STORAGE_FONT, fontScale);
   }
 
   // ===== ACCORDION =====
   function setupAccordion() {
-    document.querySelectorAll('.block-header').forEach(header => {
+    document.querySelectorAll('.block-header').forEach(function(header) {
       header.addEventListener('click', function(e) {
-        // Don't toggle if clicking the check button
         if (e.target.closest('.block-check-btn')) return;
 
-        const block = this.parentElement;
-        const wasOpen = block.classList.contains('open');
+        var block = this.parentElement;
+        var wasOpen = block.classList.contains('open');
 
-        // Close all blocks
-        document.querySelectorAll('.block.open').forEach(b => b.classList.remove('open'));
+        document.querySelectorAll('.block.open').forEach(function(b) { b.classList.remove('open'); });
 
-        // Open this one if it was closed
         if (!wasOpen) {
           block.classList.add('open');
-          // Auto-scroll
-          setTimeout(() => {
+          setTimeout(function() {
             block.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }, 50);
         }
@@ -1305,23 +1448,18 @@
   }
 
   // ===== CHECK SYSTEM =====
-  function getBlockItems(blockNum) {
-    const block = document.getElementById('block-' + blockNum);
-    if (!block) return [];
-    return block.querySelectorAll('[data-item]');
-  }
-
   function setupCheckSystem() {
-    // Long-press on items (points, speaks, couple-cards, lang-cards)
-    document.querySelectorAll('[data-item]').forEach(el => {
-      let pressTimer = null;
-      let moved = false;
+    document.querySelectorAll('[data-item]').forEach(function(el) {
+      var pressTimer = null;
+      var moved = false;
 
       el.addEventListener('touchstart', function(e) {
+        if (e.target.closest('.note-btn') || e.target.closest('.note-area')) return;
         moved = false;
-        pressTimer = setTimeout(() => {
+        var self = this;
+        pressTimer = setTimeout(function() {
           if (!moved) {
-            toggleItemCheck(this);
+            toggleItemCheck(self);
             if (navigator.vibrate) navigator.vibrate(50);
           }
         }, 500);
@@ -1332,106 +1470,76 @@
         clearTimeout(pressTimer);
       }, { passive: true });
 
-      el.addEventListener('touchend', function() {
-        clearTimeout(pressTimer);
-      });
+      el.addEventListener('touchend', function() { clearTimeout(pressTimer); });
+      el.addEventListener('touchcancel', function() { clearTimeout(pressTimer); });
 
-      el.addEventListener('touchcancel', function() {
-        clearTimeout(pressTimer);
-      });
-
-      // Mouse long-press fallback
       el.addEventListener('mousedown', function(e) {
-        if (e.target.closest('.block-check-btn')) return;
+        if (e.target.closest('.block-check-btn') || e.target.closest('.note-btn') || e.target.closest('.note-area') || e.target.closest('.verse')) return;
         moved = false;
-        pressTimer = setTimeout(() => {
-          if (!moved) {
-            toggleItemCheck(this);
-          }
+        var self = this;
+        pressTimer = setTimeout(function() {
+          if (!moved) { toggleItemCheck(self); }
         }, 500);
       });
 
-      el.addEventListener('mousemove', function() {
-        moved = true;
-        clearTimeout(pressTimer);
-      });
-
-      el.addEventListener('mouseup', function() {
-        clearTimeout(pressTimer);
-      });
+      el.addEventListener('mousemove', function() { moved = true; clearTimeout(pressTimer); });
+      el.addEventListener('mouseup', function() { clearTimeout(pressTimer); });
     });
 
-    // Block check buttons
-    document.querySelectorAll('.block-check-btn').forEach(btn => {
+    document.querySelectorAll('.block-check-btn').forEach(function(btn) {
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
-        const blockNum = this.dataset.block;
-        toggleBlockCheck(blockNum);
+        toggleBlockCheck(this.dataset.block);
         if (navigator.vibrate) navigator.vibrate(50);
       });
     });
   }
 
   function toggleItemCheck(el) {
-    const itemId = el.dataset.item;
+    var itemId = el.dataset.item;
     if (!itemId) return;
 
-    const isChecked = el.classList.toggle('item-checked');
+    var isChecked = el.classList.toggle('item-checked');
     if (!checks.items) checks.items = {};
     checks.items[itemId] = isChecked;
     saveChecks();
 
-    // Start timer on first interaction
-    if (!timerStarted) startTimer();
-
-    // Update block progress
-    const blockNum = itemId.split('-')[0];
+    var blockNum = itemId.split('-')[0];
     updateBlockProgress(blockNum);
     updateGlobalProgress();
     updateBlockIndicator();
   }
 
   function toggleBlockCheck(blockNum) {
-    const block = document.getElementById('block-' + blockNum);
+    var block = document.getElementById('block-' + blockNum);
     if (!block) return;
 
     if (!checks.blocks) checks.blocks = {};
-    const isNowChecked = !checks.blocks[blockNum];
+    var isNowChecked = !checks.blocks[blockNum];
     checks.blocks[blockNum] = isNowChecked;
 
-    // Mark/unmark all items in block
     if (!checks.items) checks.items = {};
-    block.querySelectorAll('[data-item]').forEach(el => {
+    block.querySelectorAll('[data-item]').forEach(function(el) {
       checks.items[el.dataset.item] = isNowChecked;
       el.classList.toggle('item-checked', isNowChecked);
     });
 
-    // Visual update
     block.classList.toggle('block-checked', isNowChecked);
-    const btn = block.querySelector('.block-check-btn');
+    var btn = block.querySelector('.block-check-btn');
     btn.classList.toggle('checked', isNowChecked);
     btn.textContent = isNowChecked ? '\u2713' : '';
 
-    // Collapse if checked
     if (isNowChecked) {
       block.classList.remove('open');
-
-      // Expand next unchecked block
-      setTimeout(() => {
-        const nextBlock = document.getElementById('block-' + (parseInt(blockNum) + 1));
+      setTimeout(function() {
+        var nextBlock = document.getElementById('block-' + (parseInt(blockNum) + 1));
         if (nextBlock && !nextBlock.classList.contains('block-checked')) {
-          // Close all
-          document.querySelectorAll('.block.open').forEach(b => b.classList.remove('open'));
+          document.querySelectorAll('.block.open').forEach(function(b) { b.classList.remove('open'); });
           nextBlock.classList.add('open');
-          setTimeout(() => {
-            nextBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 50);
+          setTimeout(function() { nextBlock.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
         }
       }, 200);
     }
-
-    // Start timer on first interaction
-    if (!timerStarted) startTimer();
 
     saveChecks();
     updateBlockProgress(blockNum);
@@ -1440,29 +1548,27 @@
   }
 
   function saveChecks() {
-    localStorage.setItem(STORAGE_CHECKS, JSON.stringify(checks));
+    safeSave(STORAGE_CHECKS, JSON.stringify(checks));
   }
 
   function restoreChecks() {
     if (!checks.items) checks.items = {};
     if (!checks.blocks) checks.blocks = {};
 
-    // Restore item checks
-    Object.keys(checks.items).forEach(id => {
+    Object.keys(checks.items).forEach(function(id) {
       if (checks.items[id]) {
-        const el = document.querySelector('[data-item="' + id + '"]');
+        var el = document.querySelector('[data-item="' + id + '"]');
         if (el) el.classList.add('item-checked');
       }
     });
 
-    // Restore block checks
-    Object.keys(checks.blocks).forEach(num => {
+    Object.keys(checks.blocks).forEach(function(num) {
       if (checks.blocks[num]) {
-        const block = document.getElementById('block-' + num);
+        var block = document.getElementById('block-' + num);
         if (block) {
           block.classList.add('block-checked');
           block.classList.remove('open');
-          const btn = block.querySelector('.block-check-btn');
+          var btn = block.querySelector('.block-check-btn');
           btn.classList.add('checked');
           btn.textContent = '\u2713';
         }
@@ -1472,24 +1578,21 @@
 
   // ===== PROGRESS =====
   function updateBlockProgress(blockNum) {
-    const block = document.getElementById('block-' + blockNum);
+    var block = document.getElementById('block-' + blockNum);
     if (!block) return;
 
-    const items = block.querySelectorAll('[data-item]');
-    const total = items.length;
-    let done = 0;
-    items.forEach(el => {
-      if (el.classList.contains('item-checked')) done++;
-    });
+    var items = block.querySelectorAll('[data-item]');
+    var total = items.length;
+    var done = 0;
+    items.forEach(function(el) { if (el.classList.contains('item-checked')) done++; });
 
-    const progEl = block.querySelector('.block-progress');
+    var progEl = block.querySelector('.block-progress');
     if (progEl) {
       progEl.textContent = done + '/' + total;
       progEl.classList.toggle('complete', done === total);
     }
 
-    // Update block check button partial state
-    const btn = block.querySelector('.block-check-btn');
+    var btn = block.querySelector('.block-check-btn');
     if (done > 0 && done < total && !checks.blocks?.[blockNum]) {
       btn.classList.add('partial');
     } else {
@@ -1498,85 +1601,54 @@
   }
 
   function updateAllProgress() {
-    for (let i = 1; i <= TOTAL_BLOCKS; i++) {
-      updateBlockProgress(i);
-    }
+    for (var i = 1; i <= TOTAL_BLOCKS; i++) { updateBlockProgress(i); }
     updateGlobalProgress();
   }
 
   function updateGlobalProgress() {
-    let checkedBlocks = 0;
-    for (let i = 1; i <= TOTAL_BLOCKS; i++) {
+    var checkedBlocks = 0;
+    for (var i = 1; i <= TOTAL_BLOCKS; i++) {
       if (checks.blocks && checks.blocks[i]) checkedBlocks++;
     }
-    const pct = (checkedBlocks / TOTAL_BLOCKS) * 100;
-    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-bar').style.width = (checkedBlocks / TOTAL_BLOCKS * 100) + '%';
   }
 
   function updateBlockIndicator() {
-    let current = 0;
-    let checkedCount = 0;
-    for (let i = 1; i <= TOTAL_BLOCKS; i++) {
-      if (checks.blocks && checks.blocks[i]) {
-        checkedCount++;
-      } else if (!current) {
-        current = i;
-      }
-    }
-    if (!current) current = TOTAL_BLOCKS;
-    document.getElementById('block-indicator').textContent = 'Bloco ' + current + '/' + TOTAL_BLOCKS;
+    // removed block indicator from toolbar
   }
 
   // ===== TOOLBAR =====
   function setupToolbar() {
-    document.getElementById('btn-font-up').addEventListener('click', () => {
-      if (fontScale < 150) {
-        fontScale += 10;
-        applyFontScale();
-      }
+    document.getElementById('btn-font-up').addEventListener('click', function() {
+      if (fontScale < 150) { fontScale += 10; applyFontScale(); }
     });
 
-    document.getElementById('btn-font-down').addEventListener('click', () => {
-      if (fontScale > 80) {
-        fontScale -= 10;
-        applyFontScale();
-      }
+    document.getElementById('btn-font-down').addEventListener('click', function() {
+      if (fontScale > 80) { fontScale -= 10; applyFontScale(); }
     });
 
-    document.getElementById('font-display').addEventListener('click', () => {
-      fontScale = 100;
+    document.getElementById('font-display').addEventListener('click', function() {
+      fontScale = 110;
       applyFontScale();
     });
 
-    document.getElementById('btn-quick').addEventListener('click', () => {
-      quickMode = !quickMode;
-      localStorage.setItem(STORAGE_QUICK, quickMode);
-      applyQuickMode();
-    });
-
-    document.getElementById('btn-reset').addEventListener('click', () => {
+    document.getElementById('btn-reset').addEventListener('click', function() {
       if (confirm('Limpar todos os checks? Isso reinicia o fluxo.')) {
         checks = { items: {}, blocks: {} };
         saveChecks();
-        document.querySelectorAll('.item-checked').forEach(el => el.classList.remove('item-checked'));
-        document.querySelectorAll('.block-checked').forEach(el => el.classList.remove('block-checked'));
-        document.querySelectorAll('.block-check-btn').forEach(btn => {
+        document.querySelectorAll('.item-checked').forEach(function(el) { el.classList.remove('item-checked'); });
+        document.querySelectorAll('.block-checked').forEach(function(el) { el.classList.remove('block-checked'); });
+        document.querySelectorAll('.block-check-btn').forEach(function(btn) {
           btn.classList.remove('checked', 'partial');
           btn.textContent = '';
         });
         updateAllProgress();
         updateGlobalProgress();
         updateBlockIndicator();
-
-        // Reset timer
-        timerStarted = false;
-        clearInterval(timerInterval);
-        document.getElementById('timer-display').textContent = '00:00';
-        document.getElementById('timer-display').classList.remove('overtime');
       }
     });
 
-    document.getElementById('btn-wake').addEventListener('click', () => {
+    document.getElementById('btn-wake').addEventListener('click', function() {
       if (wakeLock) {
         wakeLock.release();
         wakeLock = null;
@@ -1585,18 +1657,29 @@
         requestWakeLock();
       }
     });
+
+    document.getElementById('btn-notes-toggle').addEventListener('click', function() {
+      notesVisible = !notesVisible;
+      document.body.classList.toggle('notes-visible', notesVisible);
+      safeSave(STORAGE_NOTES_VISIBLE, notesVisible);
+      updateNotesToggleLabel();
+    });
+  }
+
+  function updateNotesToggleLabel() {
+    var btn = document.getElementById('btn-notes-toggle');
+    btn.innerHTML = notesVisible ? '&#128214; Notas: Mostrar' : '&#128214; Notas: Ocultar';
+    btn.classList.toggle('active', notesVisible);
   }
 
   // ===== WAKE LOCK =====
   async function requestWakeLock() {
-    const btn = document.getElementById('btn-wake');
+    var btn = document.getElementById('btn-wake');
     try {
       if ('wakeLock' in navigator) {
         wakeLock = await navigator.wakeLock.request('screen');
         btn.classList.add('active');
-        wakeLock.addEventListener('release', () => {
-          btn.classList.remove('active');
-        });
+        wakeLock.addEventListener('release', function() { btn.classList.remove('active'); });
       } else {
         btn.style.opacity = '0.4';
         btn.title = 'Wake Lock nao suportado';
@@ -1606,51 +1689,155 @@
     }
   }
 
-  // Re-acquire on visibility change
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && !wakeLock) {
-      requestWakeLock();
-    }
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible' && !wakeLock) { requestWakeLock(); }
   });
 
   // ===== TIMER =====
   function setupTimer() {
-    const timerEl = document.getElementById('timer-display');
-    timerEl.addEventListener('click', () => {
-      if (!timerStarted) {
-        startTimer();
+    document.getElementById('btn-timer-play').addEventListener('click', function() {
+      if (!timerRunning) {
+        timerRunning = true;
+        timerLastTick = Date.now();
+        clearInterval(timerInterval); // defensive clear
+        timerInterval = setInterval(tickTimer, 1000);
+        this.classList.add('active');
       }
     });
 
-    // Long press to reset
-    let timerPressTimer = null;
-    timerEl.addEventListener('touchstart', () => {
-      timerPressTimer = setTimeout(() => {
-        timerStarted = false;
+    document.getElementById('btn-timer-pause').addEventListener('click', function() {
+      if (timerRunning) {
+        timerRunning = false;
         clearInterval(timerInterval);
-        timerEl.textContent = '00:00';
-        timerEl.classList.remove('overtime');
-      }, 1000);
-    }, { passive: true });
-    timerEl.addEventListener('touchend', () => clearTimeout(timerPressTimer));
-    timerEl.addEventListener('touchcancel', () => clearTimeout(timerPressTimer));
+        // Add partial second
+        timerElapsed += (Date.now() - timerLastTick) / 1000;
+        timerElapsed = Math.floor(timerElapsed);
+        document.getElementById('btn-timer-play').classList.remove('active');
+      }
+    });
+
+    document.getElementById('btn-timer-reset').addEventListener('click', function() {
+      timerRunning = false;
+      clearInterval(timerInterval);
+      timerElapsed = 0;
+      updateTimerDisplay();
+      document.getElementById('btn-timer-play').classList.remove('active');
+      document.getElementById('timer-display').classList.remove('overtime');
+    });
   }
 
-  function startTimer() {
-    if (timerStarted) return;
-    timerStarted = true;
-    timerStart = Date.now();
-    const timerEl = document.getElementById('timer-display');
+  function tickTimer() {
+    var now = Date.now();
+    timerElapsed += (now - timerLastTick) / 1000;
+    timerLastTick = now;
+    updateTimerDisplay();
+  }
 
-    timerInterval = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - timerStart) / 1000);
-      const m = Math.floor(elapsed / 60);
-      const s = elapsed % 60;
-      timerEl.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-      if (elapsed > 40 * 60) {
-        timerEl.classList.add('overtime');
+  function updateTimerDisplay() {
+    var totalSecs = Math.floor(timerElapsed);
+    var m = Math.floor(totalSecs / 60);
+    var s = totalSecs % 60;
+    var display = document.getElementById('timer-display');
+    display.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    if (totalSecs > 40 * 60) {
+      display.classList.add('overtime');
+    } else {
+      display.classList.remove('overtime');
+    }
+  }
+
+  // ===== VERSE OVERLAY =====
+  function setupVerseOverlay() {
+    var overlay = document.getElementById('verse-overlay');
+
+    document.addEventListener('click', function(e) {
+      var verse = e.target.closest('.verse[data-text]');
+      if (verse) {
+        e.preventDefault();
+        e.stopPropagation();
+        document.getElementById('verse-overlay-ref').textContent = verse.textContent;
+        document.getElementById('verse-overlay-text').textContent = verse.getAttribute('data-text');
+        overlay.classList.add('visible');
+        return;
       }
-    }, 1000);
+
+      if (overlay.classList.contains('visible')) {
+        // Close if clicking outside content or on overlay itself
+        if (!e.target.closest('#verse-overlay-content') || e.target.closest('#verse-overlay')) {
+          overlay.classList.remove('visible');
+        }
+      }
+    });
+
+    overlay.addEventListener('click', function() {
+      overlay.classList.remove('visible');
+    });
+  }
+
+  // ===== NOTES SYSTEM =====
+  function setupNotesSystem() {
+    var items = document.querySelectorAll('[data-item]');
+    items.forEach(function(el) {
+      var itemId = el.dataset.item;
+
+      // Add note button
+      var noteBtn = document.createElement('button');
+      noteBtn.className = 'note-btn';
+      noteBtn.innerHTML = '&#128221;';
+      noteBtn.title = 'Adicionar nota';
+      noteBtn.setAttribute('aria-label', 'Adicionar nota');
+
+      // Add note area
+      var noteArea = document.createElement('div');
+      noteArea.className = 'note-area';
+      var textarea = document.createElement('textarea');
+      textarea.placeholder = 'Escreva sua nota aqui...';
+      textarea.setAttribute('rows', '2');
+      noteArea.appendChild(textarea);
+
+      // Restore saved note
+      if (notes[itemId]) {
+        textarea.value = notes[itemId];
+        noteArea.classList.add('has-content');
+        noteBtn.classList.add('has-note');
+      }
+
+      // Toggle note area on button click
+      noteBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var isVisible = noteArea.classList.toggle('visible');
+        if (isVisible) {
+          textarea.focus();
+        }
+      });
+
+      // Save note on input
+      textarea.addEventListener('input', function() {
+        var val = this.value.trim();
+        if (val) {
+          notes[itemId] = val;
+          noteArea.classList.add('has-content');
+          noteBtn.classList.add('has-note');
+        } else {
+          delete notes[itemId];
+          noteArea.classList.remove('has-content');
+          noteBtn.classList.remove('has-note');
+        }
+        safeSave(STORAGE_NOTES, JSON.stringify(notes));
+
+        // Auto-resize
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+      });
+
+      // Prevent long-press from triggering check
+      textarea.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: true });
+      textarea.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+
+      el.appendChild(noteBtn);
+      el.appendChild(noteArea);
+    });
   }
 
   // ===== INIT =====
