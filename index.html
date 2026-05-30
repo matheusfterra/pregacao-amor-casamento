@@ -2164,6 +2164,35 @@
   }
 
   // ===== VERSE OVERLAY =====
+  var BOOK_NAMES = {
+    'Gn':'Genesis','Ex':'Exodo','Lv':'Levitico','Nm':'Numeros','Dt':'Deuteronomio',
+    'Js':'Josue','Jz':'Juizes','Rt':'Rute','1Sm':'1 Samuel','2Sm':'2 Samuel',
+    '1Rs':'1 Reis','2Rs':'2 Reis','1Cr':'1 Cronicas','2Cr':'2 Cronicas',
+    'Ed':'Esdras','Ne':'Neemias','Et':'Ester','Jb':'Jo','Jo':'Joao',
+    'Sl':'Salmos','Pv':'Proverbios','Ec':'Eclesiastes','Ct':'Cantares',
+    'Is':'Isaias','Jr':'Jeremias','Lm':'Lamentacoes','Ez':'Ezequiel','Dn':'Daniel',
+    'Os':'Oseias','Jl':'Joel','Am':'Amos','Ob':'Obadias','Jn':'Jonas',
+    'Mq':'Miqueias','Na':'Naum','Hc':'Habacuque','Sf':'Sofonias','Ag':'Ageu',
+    'Zc':'Zacarias','Ml':'Malaquias',
+    'Mt':'Mateus','Mc':'Marcos','Lc':'Lucas',
+    'At':'Atos','Rm':'Romanos','1Co':'1 Corintios','2Co':'2 Corintios',
+    'Gl':'Galatas','Ef':'Efesios','Fp':'Filipenses','Cl':'Colossenses',
+    '1Ts':'1 Tessalonicenses','2Ts':'2 Tessalonicenses',
+    '1Tm':'1 Timoteo','2Tm':'2 Timoteo','Tt':'Tito','Fm':'Filemom',
+    'Hb':'Hebreus','Tg':'Tiago','1Pe':'1 Pedro','2Pe':'2 Pedro',
+    '1Jo':'1 Joao','2Jo':'2 Joao','3Jo':'3 Joao','Jd':'Judas','Ap':'Apocalipse'
+  };
+
+  function expandBookName(ref) {
+    // Match abbreviation at start: "1Co 13:4" -> book="1Co", rest=" 13:4"
+    var match = ref.match(/^(\d?\s?[A-Za-z]+)\s*(.*)/);
+    if (!match) return ref;
+    var abbr = match[1].trim();
+    var rest = match[2];
+    if (BOOK_NAMES[abbr]) return BOOK_NAMES[abbr] + ' ' + rest;
+    return ref;
+  }
+
   function setupVerseOverlay() {
     var overlay = document.getElementById('verse-overlay');
 
@@ -2172,7 +2201,7 @@
       if (verse) {
         e.preventDefault();
         e.stopPropagation();
-        document.getElementById('verse-overlay-ref').textContent = verse.textContent;
+        document.getElementById('verse-overlay-ref').textContent = expandBookName(verse.textContent.trim());
         document.getElementById('verse-overlay-text').textContent = verse.getAttribute('data-text');
         overlay.classList.add('visible');
         return;
