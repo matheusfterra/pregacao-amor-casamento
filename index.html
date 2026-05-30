@@ -112,8 +112,8 @@
   }
 
   #toolbar button {
-    min-height: 44px;
-    padding: 6px 8px;
+    min-height: 40px;
+    padding: 4px 8px;
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--text);
@@ -132,8 +132,8 @@
   }
 
   #toolbar button.btn-icon-only {
-    min-width: 44px;
-    padding: 6px 8px;
+    min-width: 40px;
+    padding: 4px 8px;
   }
 
   #toolbar button:active {
@@ -248,44 +248,65 @@
   .note-area {
     display: none;
     margin-top: 10px;
+    position: relative;
   }
 
   .note-area.visible {
     display: block;
   }
 
-  .note-area textarea {
+  .note-area canvas {
     width: 100%;
-    min-height: 60px;
-    max-height: 200px;
-    background: rgba(245, 158, 11, 0.08);
+    height: 120px;
+    background:
+      linear-gradient(rgba(46, 51, 68, 0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(46, 51, 68, 0.3) 1px, transparent 1px);
+    background-size: 16px 16px;
+    background-color: #1a1d27;
     border: 1px solid rgba(245, 158, 11, 0.3);
     border-radius: 8px;
-    padding: 10px 12px;
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    line-height: 1.6;
-    resize: vertical;
-    outline: none;
+    touch-action: none;
+    cursor: crosshair;
+    display: block;
   }
 
-  .note-area textarea:focus {
-    border-color: var(--accent-3);
-  }
-
-  .note-area textarea::placeholder {
+  .note-area .note-canvas-clear {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: rgba(0,0,0,0.5);
     color: var(--text-muted);
-    opacity: 0.5;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 6;
+    touch-action: manipulation;
+    opacity: 0.6;
   }
 
-  /* Notes visibility toggle */
-  body:not(.notes-visible) .note-area.visible {
-    /* still visible when individual note is open */
+  .note-area .note-canvas-clear:active {
+    opacity: 1;
   }
 
-  body:not(.notes-visible) .note-area.has-content:not(.visible) {
-    display: none;
+  .note-area .note-canvas-resize {
+    width: 100%;
+    height: 8px;
+    cursor: ns-resize;
+    background: transparent;
+    border: none;
+    padding: 0;
+    touch-action: none;
+  }
+
+  .note-area .note-canvas-resize:hover,
+  .note-area .note-canvas-resize:active {
+    background: rgba(245, 158, 11, 0.2);
   }
 
   body.notes-visible .note-area.has-content {
@@ -451,7 +472,7 @@
   }
 
   .time-badge {
-    font-size: 16px;
+    font-size: calc(16px * var(--font-scale));
     font-weight: 700;
     padding: 4px 8px;
     border-radius: 6px;
@@ -471,7 +492,7 @@
 
   .block-title {
     font-weight: 700;
-    font-size: 24px;
+    font-size: calc(24px * var(--font-scale));
     flex: 1;
     line-height: 1.3;
   }
@@ -535,7 +556,7 @@
 
   .point-title {
     font-weight: 600;
-    font-size: 20px;
+    font-size: calc(20px * var(--font-scale));
     margin-bottom: 4px;
     display: flex;
     align-items: center;
@@ -544,7 +565,7 @@
   }
 
   .point-body {
-    font-size: 18px;
+    font-size: calc(18px * var(--font-scale));
     color: var(--text-muted);
     line-height: 1.7;
   }
@@ -554,7 +575,7 @@
     font-family: 'Merriweather', serif;
     font-style: italic;
     color: var(--accent-4);
-    font-size: 20px;
+    font-size: calc(20px * var(--font-scale));
     padding: 10px 14px;
     padding-right: 40px;
     border-left: 4px solid var(--accent-4);
@@ -579,7 +600,7 @@
     color: var(--accent-1);
     padding: 2px 8px;
     border-radius: 4px;
-    font-size: 15px;
+    font-size: calc(15px * var(--font-scale));
     font-weight: 600;
     margin: 2px 2px;
     white-space: nowrap;
@@ -594,7 +615,7 @@
     background: rgba(245,158,11,0.2);
     color: var(--accent-3);
     padding: 3px 10px;
-    font-size: 16px;
+    font-size: calc(16px * var(--font-scale));
     font-weight: 700;
   }
 
@@ -633,12 +654,12 @@
 
   .couple-name {
     font-weight: 700;
-    font-size: 20px;
+    font-size: calc(20px * var(--font-scale));
     line-height: 1.3;
   }
 
   .couple-lesson {
-    font-size: 17px;
+    font-size: calc(17px * var(--font-scale));
     color: var(--text-muted);
     margin-top: 2px;
     line-height: 1.7;
@@ -668,12 +689,12 @@
 
   .lang-info .lang-name {
     font-weight: 700;
-    font-size: 20px;
+    font-size: calc(20px * var(--font-scale));
     line-height: 1.3;
   }
 
   .lang-info .lang-bible {
-    font-size: 17px;
+    font-size: calc(17px * var(--font-scale));
     color: var(--text-muted);
     line-height: 1.7;
   }
@@ -685,7 +706,7 @@
   }
 
   .note {
-    font-size: 16px;
+    font-size: calc(16px * var(--font-scale));
     font-weight: 500;
     color: var(--accent-3);
     padding: 8px 12px;
@@ -710,7 +731,7 @@
   }
 
   .greek-word {
-    font-size: 22px;
+    font-size: calc(22px * var(--font-scale));
     font-weight: 700;
     color: var(--accent-2);
     line-height: 1.3;
@@ -857,7 +878,7 @@
   #sketch-canvas-wrap {
     flex: 1;
     position: relative;
-    overflow: hidden;
+    overflow: auto;
     background:
       linear-gradient(rgba(46, 51, 68, 0.4) 1px, transparent 1px),
       linear-gradient(90deg, rgba(46, 51, 68, 0.4) 1px, transparent 1px);
@@ -1002,7 +1023,7 @@
 
 <!-- Toolbar -->
 <div id="toolbar">
-  <div class="toolbar-row">
+  <div class="toolbar-row" style="flex-wrap:nowrap !important;overflow:hidden;">
     <div class="toolbar-group">
       <button id="btn-font-down" class="btn-icon-only" aria-label="Diminuir fonte">A-</button>
       <span class="font-display" id="font-display" title="Tap para resetar">110%</span>
@@ -1010,19 +1031,21 @@
     </div>
     <div class="toolbar-sep"></div>
     <div class="toolbar-group">
-      <button id="btn-timer-play" aria-label="Iniciar cronometro">&#9654; Play</button>
+      <button id="btn-timer-play" class="btn-icon-only" aria-label="Iniciar cronometro">&#9654;</button>
       <span id="timer-display">00:00</span>
-      <button id="btn-timer-pause" aria-label="Pausar cronometro">&#9208; Pause</button>
+      <button id="btn-timer-pause" class="btn-icon-only" aria-label="Pausar cronometro">&#9208;</button>
       <button id="btn-timer-reset" class="btn-icon-only" aria-label="Resetar cronometro">&#8634;</button>
     </div>
-  </div>
-  <div class="toolbar-row">
-    <button id="btn-mode-panel" class="active" aria-label="Modo painel">Painel</button>
-    <button id="btn-mode-sketch" aria-label="Modo rascunho">Rascunho</button>
     <div class="toolbar-sep"></div>
-    <button id="btn-notes-toggle" aria-label="Mostrar ou ocultar notas">&#128214; Notas</button>
-    <button id="btn-reset" aria-label="Resetar checks">&#128260; Reset</button>
-    <button id="btn-wake" aria-label="Manter tela ligada">&#128161; Tela</button>
+    <div class="toolbar-group">
+      <button id="btn-mode-panel" class="active" aria-label="Modo painel">&#128203; Painel</button>
+      <button id="btn-mode-sketch" aria-label="Modo rascunho">&#9999;&#65039; Rascunho</button>
+    </div>
+    <div class="toolbar-sep"></div>
+    <div class="toolbar-group">
+      <button id="btn-reset" class="btn-icon-only" aria-label="Resetar checks" title="Resetar checks">&#128260;</button>
+      <button id="btn-wake" class="btn-icon-only" aria-label="Manter tela ligada" title="Tela ligada">&#128161;</button>
+    </div>
   </div>
 </div>
 
@@ -1557,11 +1580,18 @@
       <button class="sketch-action-btn" id="sketch-clear" title="Limpar">Limpar</button>
     </div>
     <div class="sketch-sep"></div>
+    <div class="sketch-tool-group">
+      <button class="sketch-action-btn" id="sketch-zoom-out" title="Zoom -">-</button>
+      <span id="sketch-zoom-label" style="font-size:12px;color:var(--text-muted);min-width:36px;text-align:center;font-weight:700;">100%</span>
+      <button class="sketch-action-btn" id="sketch-zoom-in" title="Zoom +">+</button>
+    </div>
+    <div class="sketch-sep"></div>
     <div class="sketch-page-nav">
       <button id="sketch-prev" title="Pagina anterior">&#8249;</button>
       <span id="sketch-page-label">1/1</span>
       <button id="sketch-next" title="Proxima pagina">&#8250;</button>
       <button id="sketch-new" title="Nova pagina" style="font-size:14px">+</button>
+      <button id="sketch-delete" title="Deletar pagina" style="font-size:14px;color:var(--accent-5);">&#128465;</button>
     </div>
   </div>
 </div>
@@ -1606,6 +1636,8 @@
   let sketchCtx = null;
   let sketchLastX = 0;
   let sketchLastY = 0;
+  let sketchZoom = 100;
+  const SKETCH_ZOOM_LEVELS = [50, 75, 100, 150, 200];
 
   // ===== SAFE STORAGE =====
   function safeSave(key, value) {
@@ -1627,9 +1659,8 @@
     setupSketchMode();
     requestWakeLock();
 
-    // Apply notes visibility
-    document.body.classList.toggle('notes-visible', notesVisible);
-    updateNotesToggleLabel();
+    // Apply notes visibility — always visible (notes are now inline drawing)
+    document.body.classList.add('notes-visible');
 
     // Close all blocks except first
     document.querySelectorAll('.block').forEach(function(b, i) {
@@ -1879,18 +1910,6 @@
       }
     });
 
-    document.getElementById('btn-notes-toggle').addEventListener('click', function() {
-      notesVisible = !notesVisible;
-      document.body.classList.toggle('notes-visible', notesVisible);
-      safeSave(STORAGE_NOTES_VISIBLE, notesVisible);
-      updateNotesToggleLabel();
-    });
-  }
-
-  function updateNotesToggleLabel() {
-    var btn = document.getElementById('btn-notes-toggle');
-    btn.innerHTML = notesVisible ? '&#128214; Ocultar' : '&#128214; Mostrar';
-    btn.classList.toggle('active', notesVisible);
   }
 
   // ===== WAKE LOCK =====
@@ -1995,7 +2014,7 @@
     });
   }
 
-  // ===== NOTES SYSTEM =====
+  // ===== NOTES SYSTEM (Mini Drawing Canvas) =====
   function setupNotesSystem() {
     var items = document.querySelectorAll('[data-item]');
     items.forEach(function(el) {
@@ -2005,20 +2024,32 @@
       var noteBtn = document.createElement('button');
       noteBtn.className = 'note-btn';
       noteBtn.innerHTML = '&#128221;';
-      noteBtn.title = 'Adicionar nota';
-      noteBtn.setAttribute('aria-label', 'Adicionar nota');
+      noteBtn.title = 'Desenhar nota';
+      noteBtn.setAttribute('aria-label', 'Desenhar nota');
 
-      // Add note area
+      // Add note area with mini canvas
       var noteArea = document.createElement('div');
       noteArea.className = 'note-area';
-      var textarea = document.createElement('textarea');
-      textarea.placeholder = 'Escreva sua nota aqui...';
-      textarea.setAttribute('rows', '2');
-      noteArea.appendChild(textarea);
 
-      // Restore saved note
-      if (notes[itemId]) {
-        textarea.value = notes[itemId];
+      var noteCanvas = document.createElement('canvas');
+      noteCanvas.className = 'note-mini-canvas';
+      noteCanvas.style.width = '100%';
+      noteCanvas.style.height = '120px';
+
+      var clearBtn = document.createElement('button');
+      clearBtn.className = 'note-canvas-clear';
+      clearBtn.innerHTML = '&#128465;';
+      clearBtn.title = 'Limpar desenho';
+
+      var resizeHandle = document.createElement('div');
+      resizeHandle.className = 'note-canvas-resize';
+
+      noteArea.appendChild(noteCanvas);
+      noteArea.appendChild(clearBtn);
+      noteArea.appendChild(resizeHandle);
+
+      // Restore saved note (dataURL)
+      if (notes[itemId] && notes[itemId].startsWith('data:')) {
         noteArea.classList.add('has-content');
         noteBtn.classList.add('has-note');
       }
@@ -2029,36 +2060,192 @@
         e.preventDefault();
         var isVisible = noteArea.classList.toggle('visible');
         if (isVisible) {
-          textarea.focus();
+          initMiniCanvas(noteCanvas, itemId);
         }
       });
 
-      // Save note on input
-      textarea.addEventListener('input', function() {
-        var val = this.value.trim();
-        if (val) {
-          notes[itemId] = val;
-          noteArea.classList.add('has-content');
-          noteBtn.classList.add('has-note');
-        } else {
-          delete notes[itemId];
-          noteArea.classList.remove('has-content');
-          noteBtn.classList.remove('has-note');
-        }
+      // Clear button
+      clearBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var ctx = noteCanvas.getContext('2d');
+        ctx.clearRect(0, 0, noteCanvas.width, noteCanvas.height);
+        delete notes[itemId];
+        noteArea.classList.remove('has-content');
+        noteBtn.classList.remove('has-note');
         safeSave(STORAGE_NOTES, JSON.stringify(notes));
-
-        // Auto-resize
-        this.style.height = 'auto';
-        this.style.height = Math.min(this.scrollHeight, 200) + 'px';
       });
+
+      // Resize handle
+      setupNoteCanvasResize(resizeHandle, noteCanvas, itemId);
+
+      // Drawing on mini canvas
+      setupMiniCanvasDrawing(noteCanvas, itemId, noteArea, noteBtn);
 
       // Prevent long-press from triggering check
-      textarea.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: true });
-      textarea.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+      noteCanvas.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: false });
+      noteCanvas.addEventListener('mousedown', function(e) { e.stopPropagation(); });
 
       el.appendChild(noteBtn);
       el.appendChild(noteArea);
     });
+  }
+
+  function initMiniCanvas(canvas, itemId) {
+    var dpr = window.devicePixelRatio || 1;
+    var rect = canvas.getBoundingClientRect();
+    if (canvas.width === rect.width * dpr && canvas.height === rect.height * dpr) {
+      // Already initialized at correct size, just restore
+      restoreMiniCanvas(canvas, itemId);
+      return;
+    }
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    restoreMiniCanvas(canvas, itemId);
+  }
+
+  function restoreMiniCanvas(canvas, itemId) {
+    if (notes[itemId] && notes[itemId].startsWith('data:')) {
+      var ctx = canvas.getContext('2d');
+      var rect = canvas.getBoundingClientRect();
+      var img = new Image();
+      img.onload = function() {
+        ctx.drawImage(img, 0, 0, rect.width, rect.height);
+      };
+      img.src = notes[itemId];
+    }
+  }
+
+  function saveMiniCanvas(canvas, itemId, noteArea, noteBtn) {
+    try {
+      var data = canvas.toDataURL('image/png');
+      // Check if canvas is blank
+      var ctx = canvas.getContext('2d');
+      var pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      var hasContent = false;
+      for (var i = 3; i < pixels.length; i += 4) {
+        if (pixels[i] > 0) { hasContent = true; break; }
+      }
+      if (hasContent) {
+        notes[itemId] = data;
+        noteArea.classList.add('has-content');
+        noteBtn.classList.add('has-note');
+      } else {
+        delete notes[itemId];
+        noteArea.classList.remove('has-content');
+        noteBtn.classList.remove('has-note');
+      }
+      safeSave(STORAGE_NOTES, JSON.stringify(notes));
+    } catch (e) { /* canvas error */ }
+  }
+
+  function setupMiniCanvasDrawing(canvas, itemId, noteArea, noteBtn) {
+    var drawing = false;
+    var lastX = 0, lastY = 0;
+    var DRAW_COLOR = '#f59e0b';
+    var DRAW_SIZE = 3;
+
+    canvas.addEventListener('pointerdown', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      initMiniCanvas(canvas, itemId);
+      drawing = true;
+      var pos = getMiniCanvasPos(canvas, e);
+      lastX = pos.x;
+      lastY = pos.y;
+      var ctx = canvas.getContext('2d');
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, DRAW_SIZE / 2, 0, Math.PI * 2);
+      ctx.fillStyle = DRAW_COLOR;
+      ctx.fill();
+    });
+
+    canvas.addEventListener('pointermove', function(e) {
+      if (!drawing) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var pos = getMiniCanvasPos(canvas, e);
+      var ctx = canvas.getContext('2d');
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.strokeStyle = DRAW_COLOR;
+      ctx.lineWidth = DRAW_SIZE;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+      lastX = pos.x;
+      lastY = pos.y;
+    });
+
+    var endDraw = function(e) {
+      if (drawing) {
+        drawing = false;
+        saveMiniCanvas(canvas, itemId, noteArea, noteBtn);
+      }
+    };
+
+    canvas.addEventListener('pointerup', endDraw);
+    canvas.addEventListener('pointercancel', endDraw);
+    canvas.addEventListener('pointerleave', endDraw);
+  }
+
+  function getMiniCanvasPos(canvas, e) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+
+  function setupNoteCanvasResize(handle, canvas, itemId) {
+    var startY = 0;
+    var startH = 0;
+
+    handle.addEventListener('pointerdown', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      startY = e.clientY;
+      startH = canvas.getBoundingClientRect().height;
+
+      var onMove = function(ev) {
+        ev.preventDefault();
+        var newH = Math.max(60, Math.min(400, startH + (ev.clientY - startY)));
+        canvas.style.height = newH + 'px';
+      };
+
+      var onUp = function(ev) {
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onUp);
+        // Re-init canvas at new size
+        var dpr = window.devicePixelRatio || 1;
+        var savedData = notes[itemId];
+        var rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        var ctx = canvas.getContext('2d');
+        ctx.scale(dpr, dpr);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        if (savedData && savedData.startsWith('data:')) {
+          var img = new Image();
+          img.onload = function() {
+            ctx.drawImage(img, 0, 0, rect.width, rect.height);
+          };
+          img.src = savedData;
+        }
+      };
+
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+    });
+
+    handle.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: false });
+    handle.addEventListener('mousedown', function(e) { e.stopPropagation(); });
   }
 
   // ===== SKETCH MODE =====
@@ -2147,6 +2334,45 @@
       clearSketchCanvas();
       saveSketchPages();
       updateSketchPageLabel();
+    });
+
+    // Delete page
+    document.getElementById('sketch-delete').addEventListener('click', function() {
+      if (sketchPages.length <= 1) {
+        if (confirm('Limpar a unica pagina?')) {
+          clearSketchCanvas();
+          sketchPages[0] = null;
+          saveSketchPages();
+        }
+        return;
+      }
+      if (confirm('Deletar pagina ' + (sketchCurrentPage + 1) + '?')) {
+        sketchPages.splice(sketchCurrentPage, 1);
+        if (sketchCurrentPage >= sketchPages.length) sketchCurrentPage = sketchPages.length - 1;
+        loadSketchPage(sketchCurrentPage);
+        saveSketchPages();
+        updateSketchPageLabel();
+      }
+    });
+
+    // Zoom controls
+    document.getElementById('sketch-zoom-in').addEventListener('click', function() {
+      var idx = SKETCH_ZOOM_LEVELS.indexOf(sketchZoom);
+      if (idx < SKETCH_ZOOM_LEVELS.length - 1) {
+        sketchZoom = SKETCH_ZOOM_LEVELS[idx + 1];
+        applySketchZoom();
+      }
+    });
+    document.getElementById('sketch-zoom-out').addEventListener('click', function() {
+      var idx = SKETCH_ZOOM_LEVELS.indexOf(sketchZoom);
+      if (idx > 0) {
+        sketchZoom = SKETCH_ZOOM_LEVELS[idx - 1];
+        applySketchZoom();
+      }
+    });
+    document.getElementById('sketch-zoom-label').addEventListener('click', function() {
+      sketchZoom = 100;
+      applySketchZoom();
     });
 
     // Pointer events for drawing
@@ -2262,12 +2488,25 @@
       (sketchCurrentPage + 1) + '/' + sketchPages.length;
   }
 
+  function applySketchZoom() {
+    const canvas = document.getElementById('sketch-canvas');
+    const scale = sketchZoom / 100;
+    canvas.style.transform = 'scale(' + scale + ')';
+    canvas.style.transformOrigin = 'top left';
+    // Update canvas wrapper scroll area
+    const wrap = document.getElementById('sketch-canvas-wrap');
+    canvas.style.width = wrap.clientWidth + 'px';
+    canvas.style.height = wrap.clientHeight + 'px';
+    document.getElementById('sketch-zoom-label').textContent = sketchZoom + '%';
+  }
+
   function getSketchPos(e) {
     const canvas = document.getElementById('sketch-canvas');
     const rect = canvas.getBoundingClientRect();
+    const scale = sketchZoom / 100;
     return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: (e.clientX - rect.left) / scale,
+      y: (e.clientY - rect.top) / scale,
       pressure: e.pressure || 0.5
     };
   }
